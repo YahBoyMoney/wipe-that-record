@@ -11,12 +11,14 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js';
-import { usePayloadAPI } from '@payloadcms/next/utilities';
+import useSWR from 'swr';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
+const fetcher = (url: string) => fetch(url).then((r) => r.json());
+
 export default function AdminDashboard() {
-  const { data, isLoading } = usePayloadAPI('/api/analytics');
+  const { data, isLoading } = useSWR('/api/analytics', fetcher);
 
   // Fallbacks while loading
   if (isLoading) return <p style={{ padding: 32 }}>Loading …</p>;
@@ -25,7 +27,7 @@ export default function AdminDashboard() {
   const leads = data?.overview?.totalLeads ?? 0;
   const revenue = data?.overview?.totalRevenue ?? 0;
 
-  const chartData = {
+  const chartData: any = {
     labels: ['DIY', 'Review', 'Full'],
     datasets: [
       {
