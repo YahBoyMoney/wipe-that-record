@@ -3,9 +3,10 @@ import payload from 'payload';
 
 export async function POST(req: NextRequest) {
   try {
-    const leadData = await req.json();
+    console.log('🔍 Lead API called');
     
-    console.log('🔍 Received lead data:', leadData);
+    const leadData = await req.json();
+    console.log('🔍 Received lead data:', JSON.stringify(leadData, null, 2));
     
     // Extract and validate required fields
     const { 
@@ -32,7 +33,7 @@ export async function POST(req: NextRequest) {
     
     // Validate required fields
     if (!fullName || !email) {
-      console.log('❌ Missing required fields');
+      console.log('❌ Missing required fields:', { fullName: !!fullName, email: !!email });
       return NextResponse.json({ error: 'Name and email are required' }, { status: 400 });
     }
     
@@ -117,7 +118,7 @@ export async function POST(req: NextRequest) {
       urgency: urgency || undefined,
       budget: budget || undefined,
       previousAttempts: previousAttempts || undefined,
-      interests: Array.isArray(interests) ? interests.join(', ') : interests || undefined,
+      interests: Array.isArray(interests) ? interests.join(', ') : (interests || undefined),
       employmentGoals: employmentGoals || undefined,
       leadScore,
       leadSegment,
@@ -129,7 +130,7 @@ export async function POST(req: NextRequest) {
       utmCampaign: utmCampaign || undefined,
       utmSource: utmSource || undefined,
       utmMedium: utmMedium || undefined,
-      deviceType: deviceType as 'desktop' | 'mobile' | 'tablet' || 'desktop',
+      deviceType: (deviceType as 'desktop' | 'mobile' | 'tablet') || 'desktop',
       timeOnSite: timeOnSite ? timeOnSite.toString() : undefined,
       pagesViewed: pagesViewed || undefined,
       conversionStage: 'lead' as const,
@@ -139,9 +140,17 @@ export async function POST(req: NextRequest) {
       lifetimeValue: 0
     };
 
+    console.log('🔍 Lead payload prepared:', JSON.stringify(leadPayload, null, 2));
     console.log('🔍 Creating lead with score:', leadScore, 'segment:', leadSegment);
 
+    // Check if payload is initialized
+    if (!payload) {
+      console.error('❌ Payload not initialized');
+      return NextResponse.json({ error: 'System not ready' }, { status: 500 });
+    }
+
     // Create lead in Payload
+    console.log('🔍 Attempting to create lead in database...');
     const lead = await payload.create({
       collection: 'leads',
       data: leadPayload,
@@ -151,6 +160,7 @@ export async function POST(req: NextRequest) {
 
     // Trigger email automation based on segment and sequence
     try {
+      console.log('🔍 Triggering email automation...');
       await triggerEmailAutomation(lead.id, email, first, emailSequence, leadSegment, leadData);
     } catch (emailError) {
       console.error('⚠️ Email automation failed (non-blocking):', emailError);
@@ -171,11 +181,14 @@ export async function POST(req: NextRequest) {
     console.error('❌ Error creating lead:', error);
     
     if (error instanceof Error) {
-      console.error('Error details:', error.message);
+      console.error('Error name:', error.name);
+      console.error('Error message:', error.message);
+      console.error('Error stack:', error.stack);
       
       return NextResponse.json({ 
         error: 'Failed to create lead',
-        details: process.env.NODE_ENV === 'development' ? error.message : 'Internal server error'
+        details: process.env.NODE_ENV === 'development' ? error.message : 'Internal server error',
+        errorType: error.name
       }, { status: 500 });
     }
     
