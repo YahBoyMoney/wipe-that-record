@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import Image from 'next/image'
+import { LeadCaptureForm } from './LeadCaptureForm'
 
 interface HeroProps {
   variant?: 'a' | 'b'
@@ -219,72 +220,19 @@ export function Hero({ variant = 'a' }: HeroProps) {
         </div>
       </div>
 
-      {/* Eligibility modal */}
+      {/* Enhanced eligibility modal with lead capture form */}
       {showModal && (
         <motion.div 
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4"
         >
-          <motion.div 
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            className="bg-white dark:bg-slate-800 rounded-2xl max-w-md w-full p-8 shadow-2xl"
-          >
-            <div className="text-center mb-6">
-              <h3 className="text-2xl font-bold mb-2 text-slate-900 dark:text-white">Check Your Eligibility</h3>
-              <p className="text-slate-600 dark:text-slate-300">Get your free assessment in under 2 minutes</p>
-            </div>
-            
-            <form className="space-y-4" onSubmit={(e) => {
-              e.preventDefault()
-              // Handle form submission
-              setShowModal(false)
-              window.location.href = '/api/checkout/upgrade?type=full'
-            }}>
-              <div>
-                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                  Email Address
-                </label>
-                <input
-                  type="email"
-                  placeholder="your@email.com"
-                  className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-slate-700 dark:text-white transition-all"
-                  required
-                />
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2">
-                  Type of Conviction
-                </label>
-                <select className="w-full px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-slate-700 dark:text-white">
-                  <option>Select conviction type</option>
-                  <option>Misdemeanor</option>
-                  <option>DUI/DWI</option>
-                  <option>Drug Possession</option>
-                  <option>Theft/Shoplifting</option>
-                  <option>Other</option>
-                </select>
-              </div>
-              
-              <div className="flex gap-3 pt-4">
-                <button
-                  type="submit"
-                  className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold transition-colors"
-                >
-                  Check Eligibility
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setShowModal(false)}
-                  className="flex-1 border border-slate-300 dark:border-slate-600 hover:bg-slate-50 dark:hover:bg-slate-700 py-3 rounded-lg font-semibold text-slate-700 dark:text-slate-300 transition-colors"
-                >
-                  Cancel
-                </button>
-              </div>
-            </form>
-          </motion.div>
+          <LeadCaptureForm 
+            variant="modal"
+            leadMagnet="eligibility-check"
+            onClose={() => setShowModal(false)}
+            className="relative"
+          />
         </motion.div>
       )}
     </section>
