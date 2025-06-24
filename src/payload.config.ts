@@ -19,7 +19,7 @@ export default buildConfig({
     components: {
       views: {
         dashboard: {
-          Component: './views/Dashboard',
+          Component: './views/AdminDashboard',
         },
       },
     },
