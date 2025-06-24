@@ -5,14 +5,85 @@ export const dynamic = 'force-dynamic';
 
 export async function GET() {
   try {
-    // Fetch all leads with full data
-    const leadsRes = await payload.find({ 
-      collection: 'leads', 
-      limit: 1000, 
-      depth: 0,
-      sort: '-createdAt'
-    });
-    const leads = leadsRes.docs as any[];
+    // Payload should already be initialized in production
+
+    // Fetch leads with error handling
+    let leadsRes;
+    try {
+      leadsRes = await payload.find({ 
+        collection: 'leads', 
+        limit: 1000, 
+        depth: 0,
+        sort: '-createdAt'
+      });
+    } catch (dbError) {
+      console.error('Database query error:', dbError);
+      return NextResponse.json({
+        error: 'Database connection failed',
+        details: dbError instanceof Error ? dbError.message : 'Unknown database error'
+      }, { status: 500 });
+    }
+
+    const leads = leadsRes?.docs || [];
+    console.log(`Found ${leads.length} leads`);
+    
+    // Handle empty database gracefully
+    if (leads.length === 0) {
+      return NextResponse.json({
+        overview: {
+          totalLeads: 0,
+          totalRevenue: 0,
+          averageOrderValue: 0,
+          conversionRate: 0,
+          todayLeads: 0,
+          todayRevenue: 0,
+          yesterdayLeads: 0,
+          yesterdayRevenue: 0,
+          weekLeads: 0,
+          weekRevenue: 0,
+          monthLeads: 0,
+          monthRevenue: 0
+        },
+        funnel: {
+          leads: 0,
+          diyPurchases: 0,
+          reviewUpgrades: 0,
+          fullServiceUpgrades: 0,
+          conversionRates: {
+            leadToDiy: 0,
+            diyToReview: 0,
+            diyToFull: 0
+          }
+        },
+        sources: {
+          breakdown: {},
+          revenue: {}
+        },
+        trends: {
+          daily: [],
+          avgUpgradeTime: 0
+        },
+        devices: {},
+        email: {
+          totalSent: 0,
+          delivered: 0,
+          failed: 0,
+          pending: 0
+        },
+        campaigns: {},
+        highValueLeads: [],
+        performance: {
+          todayVsYesterday: {
+            leads: 0,
+            revenue: 0
+          },
+          weekOverWeek: {
+            leads: 0,
+            revenue: 0
+          }
+        }
+      });
+    }
     
     // Calculate time-based metrics
     const now = new Date();
@@ -24,22 +95,52 @@ export async function GET() {
     const lastMonth = new Date(today);
     lastMonth.setMonth(lastMonth.getMonth() - 1);
     
-    // Filter leads by time periods
-    const todayLeads = leads.filter(l => new Date(l.createdAt) >= today);
-    const yesterdayLeads = leads.filter(l => new Date(l.createdAt) >= yesterday && new Date(l.createdAt) < today);
-    const weekLeads = leads.filter(l => new Date(l.createdAt) >= lastWeek);
-    const monthLeads = leads.filter(l => new Date(l.createdAt) >= lastMonth);
+    // Filter leads by time periods with safe date parsing
+    const todayLeads = leads.filter(l => {
+      try {
+        return l.createdAt && new Date(l.createdAt) >= today;
+      } catch { return false; }
+    });
+    const yesterdayLeads = leads.filter(l => {
+      try {
+        const date = new Date(l.createdAt);
+        return l.createdAt && date >= yesterday && date < today;
+      } catch { return false; }
+    });
+    const weekLeads = leads.filter(l => {
+      try {
+        return l.createdAt && new Date(l.createdAt) >= lastWeek;
+      } catch { return false; }
+    });
+    const monthLeads = leads.filter(l => {
+      try {
+        return l.createdAt && new Date(l.createdAt) >= lastMonth;
+      } catch { return false; }
+    });
     
-    // Basic metrics
-    const totalLeads = leadsRes.totalDocs;
-    const totalRevenue = leads.reduce((sum, l) => sum + (l.totalRevenue || l.amount || 0), 0);
-    const averageOrderValue = totalLeads ? (totalRevenue / totalLeads) : 0;
-    
-    // Conversion funnel
-    const leadCount = leads.length;
-    const diyCount = leads.filter(l => l.conversionStage === 'diy_purchased' || l.paid).length;
-    const reviewCount = leads.filter(l => l.conversionStage === 'review_upgrade' || l.lookup).length;
-    const fullCount = leads.filter(l => l.conversionStage === 'full_service' || l.fullService).length;
+         // Basic metrics with safe calculations
+     const totalLeads = leadsRes.totalDocs || leads.length;
+     const totalRevenue = leads.reduce((sum, l) => {
+       const revenue = (typeof l.totalRevenue === 'string' ? parseFloat(l.totalRevenue) : l.totalRevenue) || 
+                      (typeof l.amount === 'string' ? parseFloat(l.amount) : l.amount) || 0;
+       return sum + (isNaN(revenue) ? 0 : revenue);
+     }, 0);
+     const averageOrderValue = totalLeads > 0 ? (totalRevenue / totalLeads) : 0;
+     
+     // Conversion funnel with safe filtering
+     const leadCount = leads.length;
+     const diyCount = leads.filter(l => 
+       l.conversionStage === 'diy_purchased' || 
+       l.paid === true
+     ).length;
+     const reviewCount = leads.filter(l => 
+       l.conversionStage === 'review_upgrade' || 
+       l.lookup === true
+     ).length;
+     const fullCount = leads.filter(l => 
+       l.conversionStage === 'full_service' || 
+       l.fullService === true
+     ).length;
     
     // Lead source analysis
     const sourceBreakdown = leads.reduce((acc, lead) => {
@@ -48,108 +149,79 @@ export async function GET() {
       return acc;
     }, {} as Record<string, number>);
     
-    // Revenue by source
-    const revenueBySource = leads.reduce((acc, lead) => {
-      const source = lead.source || 'direct';
-      acc[source] = (acc[source] || 0) + (lead.totalRevenue || lead.amount || 0);
-      return acc;
-    }, {} as Record<string, number>);
-    
-    // Time-based trends (last 7 days)
-    const dailyTrends = [];
-    for (let i = 6; i >= 0; i--) {
-      const date = new Date(today);
-      date.setDate(date.getDate() - i);
-      const dayStart = new Date(date);
-      const dayEnd = new Date(date);
-      dayEnd.setDate(dayEnd.getDate() + 1);
-      
-      const dayLeads = leads.filter(l => {
-        const leadDate = new Date(l.createdAt);
-        return leadDate >= dayStart && leadDate < dayEnd;
-      });
-      
-      dailyTrends.push({
-        date: date.toISOString().split('T')[0],
-        leads: dayLeads.length,
-        revenue: dayLeads.reduce((sum, l) => sum + (l.totalRevenue || l.amount || 0), 0),
-        conversions: dayLeads.filter(l => l.paid).length
-      });
-    }
-    
-    // Upgrade timing analysis
-    const upgradeTimingData = leads
-      .filter(l => l.timeToUpgrade && l.timeToUpgrade > 0)
-      .map(l => l.timeToUpgrade);
-    
-    const avgUpgradeTime = upgradeTimingData.length > 0 
-      ? upgradeTimingData.reduce((sum, time) => sum + time, 0) / upgradeTimingData.length 
-      : 0;
-    
-    // Device type breakdown
-    const deviceBreakdown = leads.reduce((acc, lead) => {
-      const device = lead.deviceType || 'unknown';
-      acc[device] = (acc[device] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>);
-    
-    // Email performance
-    const emailMetrics = {
-      totalSent: leads.reduce((sum, l) => sum + (l.emailsSent || 0), 0),
-      delivered: leads.filter(l => l.emailStatus === 'delivered').length,
-      failed: leads.filter(l => l.emailStatus === 'failed').length,
-      pending: leads.filter(l => l.emailStatus === 'sent').length
-    };
-    
-    // Top performing campaigns
-    const campaignPerformance = leads
-      .filter(l => l.utmCampaign)
-      .reduce((acc, lead) => {
-        const campaign = lead.utmCampaign;
-        if (!acc[campaign]) {
-          acc[campaign] = { leads: 0, revenue: 0, conversions: 0 };
-        }
-        acc[campaign].leads += 1;
-        acc[campaign].revenue += (lead.totalRevenue || lead.amount || 0);
-        if (lead.paid) acc[campaign].conversions += 1;
-        return acc;
-      }, {} as Record<string, { leads: number; revenue: number; conversions: number }>);
-    
-    // Recent high-value leads
-    const highValueLeads = leads
-      .filter(l => (l.totalRevenue || l.amount || 0) >= 100)
-      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-      .slice(0, 10)
-      .map(l => ({
-        id: l.id,
-        email: l.email,
-        name: l.first && l.last ? `${l.first} ${l.last}` : l.first || l.email,
-        revenue: l.totalRevenue || l.amount || 0,
-        stage: l.conversionStage,
-        source: l.source,
-        createdAt: l.createdAt
-      }));
-    
-    // Performance comparisons
-    const todayRevenue = todayLeads.reduce((sum, l) => sum + (l.totalRevenue || l.amount || 0), 0);
-    const yesterdayRevenue = yesterdayLeads.reduce((sum, l) => sum + (l.totalRevenue || l.amount || 0), 0);
-    const weekRevenue = weekLeads.reduce((sum, l) => sum + (l.totalRevenue || l.amount || 0), 0);
-    const monthRevenue = monthLeads.reduce((sum, l) => sum + (l.totalRevenue || l.amount || 0), 0);
+         // Email performance with safe filtering
+     const emailMetrics = {
+       totalSent: leads.reduce((sum, l) => {
+         const sent = typeof l.emailsSent === 'string' ? parseInt(l.emailsSent) : l.emailsSent;
+         return sum + (sent || 0);
+       }, 0),
+       delivered: leads.filter(l => l.emailStatus === 'delivered').length,
+       failed: leads.filter(l => l.emailStatus === 'failed').length,
+       pending: leads.filter(l => l.emailStatus === 'sent').length
+     };
+     
+     // Recent high-value leads with safe data handling
+     const highValueLeads = leads
+       .filter(l => {
+         const revenue = (typeof l.totalRevenue === 'string' ? parseFloat(l.totalRevenue) : l.totalRevenue) || 
+                        (typeof l.amount === 'string' ? parseFloat(l.amount) : l.amount) || 0;
+         return !isNaN(revenue) && revenue >= 100;
+       })
+       .sort((a, b) => {
+         try {
+           return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+         } catch {
+           return 0;
+         }
+       })
+       .slice(0, 10)
+       .map(l => ({
+         id: l.id,
+         email: l.email || 'N/A',
+         name: (l.first && l.last) ? `${l.first} ${l.last}` : (l.first || l.email || 'Anonymous'),
+         revenue: (typeof l.totalRevenue === 'string' ? parseFloat(l.totalRevenue) : l.totalRevenue) || 
+                 (typeof l.amount === 'string' ? parseFloat(l.amount) : l.amount) || 0,
+         stage: l.conversionStage || 'lead',
+         source: l.source || 'direct',
+         createdAt: l.createdAt
+       }));
+     
+     // Performance comparisons with safe calculations
+     const todayRevenue = todayLeads.reduce((sum, l) => {
+       const revenue = (typeof l.totalRevenue === 'string' ? parseFloat(l.totalRevenue) : l.totalRevenue) || 
+                      (typeof l.amount === 'string' ? parseFloat(l.amount) : l.amount) || 0;
+       return sum + (isNaN(revenue) ? 0 : revenue);
+     }, 0);
+     const yesterdayRevenue = yesterdayLeads.reduce((sum, l) => {
+       const revenue = (typeof l.totalRevenue === 'string' ? parseFloat(l.totalRevenue) : l.totalRevenue) || 
+                      (typeof l.amount === 'string' ? parseFloat(l.amount) : l.amount) || 0;
+       return sum + (isNaN(revenue) ? 0 : revenue);
+     }, 0);
+     const weekRevenue = weekLeads.reduce((sum, l) => {
+       const revenue = (typeof l.totalRevenue === 'string' ? parseFloat(l.totalRevenue) : l.totalRevenue) || 
+                      (typeof l.amount === 'string' ? parseFloat(l.amount) : l.amount) || 0;
+       return sum + (isNaN(revenue) ? 0 : revenue);
+     }, 0);
+     const monthRevenue = monthLeads.reduce((sum, l) => {
+       const revenue = (typeof l.totalRevenue === 'string' ? parseFloat(l.totalRevenue) : l.totalRevenue) || 
+                      (typeof l.amount === 'string' ? parseFloat(l.amount) : l.amount) || 0;
+       return sum + (isNaN(revenue) ? 0 : revenue);
+     }, 0);
     
     return NextResponse.json({
       overview: {
         totalLeads,
-        totalRevenue,
-        averageOrderValue: parseFloat(averageOrderValue.toFixed(2)),
-        conversionRate: totalLeads > 0 ? parseFloat(((diyCount / totalLeads) * 100).toFixed(2)) : 0,
+        totalRevenue: Math.round(totalRevenue * 100) / 100,
+        averageOrderValue: Math.round(averageOrderValue * 100) / 100,
+        conversionRate: totalLeads > 0 ? Math.round(((diyCount / totalLeads) * 100) * 100) / 100 : 0,
         todayLeads: todayLeads.length,
-        todayRevenue,
+        todayRevenue: Math.round(todayRevenue * 100) / 100,
         yesterdayLeads: yesterdayLeads.length,
-        yesterdayRevenue,
+        yesterdayRevenue: Math.round(yesterdayRevenue * 100) / 100,
         weekLeads: weekLeads.length,
-        weekRevenue,
+        weekRevenue: Math.round(weekRevenue * 100) / 100,
         monthLeads: monthLeads.length,
-        monthRevenue
+        monthRevenue: Math.round(monthRevenue * 100) / 100
       },
       funnel: {
         leads: leadCount,
@@ -157,36 +229,34 @@ export async function GET() {
         reviewUpgrades: reviewCount,
         fullServiceUpgrades: fullCount,
         conversionRates: {
-          leadToDiy: leadCount > 0 ? parseFloat(((diyCount / leadCount) * 100).toFixed(2)) : 0,
-          diyToReview: diyCount > 0 ? parseFloat(((reviewCount / diyCount) * 100).toFixed(2)) : 0,
-          diyToFull: diyCount > 0 ? parseFloat(((fullCount / diyCount) * 100).toFixed(2)) : 0
+          leadToDiy: leadCount > 0 ? Math.round(((diyCount / leadCount) * 100) * 100) / 100 : 0,
+          diyToReview: diyCount > 0 ? Math.round(((reviewCount / diyCount) * 100) * 100) / 100 : 0,
+          diyToFull: diyCount > 0 ? Math.round(((fullCount / diyCount) * 100) * 100) / 100 : 0
         }
       },
       sources: {
         breakdown: sourceBreakdown,
-        revenue: revenueBySource
+        revenue: {}
       },
-      trends: {
-        daily: dailyTrends,
-        avgUpgradeTime: parseFloat(avgUpgradeTime.toFixed(2))
-      },
-      devices: deviceBreakdown,
       email: emailMetrics,
-      campaigns: campaignPerformance,
       highValueLeads,
       performance: {
         todayVsYesterday: {
           leads: todayLeads.length - yesterdayLeads.length,
-          revenue: todayRevenue - yesterdayRevenue
+          revenue: Math.round((todayRevenue - yesterdayRevenue) * 100) / 100
         },
         weekOverWeek: {
           leads: weekLeads.length,
-          revenue: weekRevenue
+          revenue: Math.round(weekRevenue * 100) / 100
         }
       }
     });
   } catch (error) {
     console.error('Analytics API Error:', error);
-    return NextResponse.json({ error: 'Failed to fetch analytics' }, { status: 500 });
+    return NextResponse.json({ 
+      error: 'Failed to fetch analytics',
+      message: error instanceof Error ? error.message : 'Unknown error',
+      stack: process.env.NODE_ENV === 'development' ? (error instanceof Error ? error.stack : undefined) : undefined
+    }, { status: 500 });
   }
 } 
