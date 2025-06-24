@@ -1,1 +1,1 @@
-export { importMap } from './[[...segments]]/importMap.js'; 
+export { importMap } from './[[...segments]]/importMap.js';
