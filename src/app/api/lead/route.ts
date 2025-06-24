@@ -53,7 +53,11 @@ export async function POST(req: NextRequest) {
       timeOnSite,
       pagesViewed,
       referrer,
-      leadMagnet
+      leadMagnet,
+      paid = false,
+      amount = 0,
+      lookup = false,
+      fullService = false
     } = leadData;
     
     // Validate required fields
@@ -116,7 +120,10 @@ export async function POST(req: NextRequest) {
       emailSequence,
       leadMagnet: leadMagnet || undefined,
       referrer: referrer || undefined,
-      paid: false,
+      paid: paid || false,
+      amount: amount || 0,
+      lookup: lookup || false,
+      fullService: fullService || false,
       source: source as 'organic' | 'paid' | 'referral' | 'direct' | 'social' | 'email',
       utmCampaign: utmCampaign || undefined,
       utmSource: utmSource || undefined,
@@ -176,13 +183,51 @@ export async function POST(req: NextRequest) {
         
         console.log('✅ Lead created successfully via Mongoose:', doc._id);
         
+        // 🔥 SEND EMAIL DIRECTLY (since Payload hooks won't trigger)
+        if (paid) {
+          try {
+            console.log('📧 Triggering email directly from MongoDB fallback...');
+            const { sendDiyConfirmationEmail } = await import('../../../lib/email');
+            const fullName = first && last ? `${first} ${last}` : first || '';
+            await sendDiyConfirmationEmail(email, fullName);
+            console.log('✅ DIY confirmation email sent successfully!');
+          } catch (emailError) {
+            console.error('❌ Email sending failed:', emailError);
+            // Don't fail the lead creation if email fails
+          }
+        } else {
+          // 🚀 TRIGGER AGGRESSIVE EMAIL FUNNEL for non-paid leads
+          try {
+            console.log('🚀 Triggering aggressive email funnel...');
+            const { triggerEmailSequence } = await import('../../../lib/email-sequences');
+            const fullName = first && last ? `${first} ${last}` : first || '';
+            
+            // Trigger appropriate sequence based on lead data
+            await triggerEmailSequence(email, fullName, emailSequence, {
+              convictionType,
+              convictionYear,
+              urgency,
+              budget,
+              leadScore,
+              leadSegment,
+              source
+            }, doc._id.toString());
+            
+            console.log(`✅ Triggered ${emailSequence} sequence for ${email}`);
+          } catch (emailError) {
+            console.error('❌ Email sequence failed:', emailError);
+            // Don't fail the lead creation if email fails
+          }
+        }
+        
         return NextResponse.json({
           success: true,
           leadId: doc._id,
           leadScore,
           leadSegment,
           emailSequence,
-          method: 'mongoose_fallback'
+          method: 'mongoose_fallback',
+          emailSent: paid ? true : false
         }, { status: 201 });
         
       } catch (mongooseError) {

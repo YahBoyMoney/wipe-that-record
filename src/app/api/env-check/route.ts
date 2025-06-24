@@ -11,6 +11,7 @@ export async function GET() {
         `${process.env.PAYLOAD_SECRET.substring(0, 8)}...` : 'NOT SET',
       NEXT_PUBLIC_SERVER_URL: process.env.NEXT_PUBLIC_SERVER_URL || 'NOT SET',
       NODE_ENV: process.env.NODE_ENV || 'NOT SET',
+      SEND_EMAILS: process.env.SEND_EMAILS || 'NOT SET',
       STRIPE_SECRET_KEY: process.env.STRIPE_SECRET_KEY ? 
         `${process.env.STRIPE_SECRET_KEY.substring(0, 12)}...` : 'NOT SET',
       // Add timestamp for debugging
@@ -19,7 +20,8 @@ export async function GET() {
       REQUIRED_VARS_STATUS: {
         DATABASE_URI: !!process.env.DATABASE_URI,
         PAYLOAD_SECRET: !!process.env.PAYLOAD_SECRET,
-        NEXT_PUBLIC_SERVER_URL: !!process.env.NEXT_PUBLIC_SERVER_URL
+        NEXT_PUBLIC_SERVER_URL: !!process.env.NEXT_PUBLIC_SERVER_URL,
+        SEND_EMAILS: !!process.env.SEND_EMAILS
       }
     }
     
