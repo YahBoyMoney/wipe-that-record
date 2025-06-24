@@ -316,6 +316,7 @@ const AnalyticsDashboard: React.FC = () => {
             </table>
           </div>
         </div>
+              </div>
       </div>
     </div>
     </div>
