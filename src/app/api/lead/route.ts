@@ -14,6 +14,11 @@ export async function POST(req: NextRequest) {
       phone,
       convictionType,
       convictionYear,
+      urgency,
+      budget,
+      previousAttempts,
+      interests = [],
+      employmentGoals,
       source = 'direct',
       utmCampaign,
       utmSource,
@@ -22,8 +27,7 @@ export async function POST(req: NextRequest) {
       timeOnSite,
       pagesViewed,
       referrer,
-      leadMagnet,
-      interests = []
+      leadMagnet
     } = leadData;
     
     // Validate required fields
@@ -52,9 +56,23 @@ export async function POST(req: NextRequest) {
     if (convictionType) leadScore += 20;
     if (convictionYear) leadScore += 10;
     
+    // Urgency scoring
+    if (urgency === 'immediate') leadScore += 20;
+    else if (urgency === 'within-month') leadScore += 15;
+    else if (urgency === 'within-3months') leadScore += 10;
+    
+    // Budget scoring
+    if (budget === 'over-2000' || budget === 'flexible') leadScore += 15;
+    else if (budget === '1000-2000') leadScore += 10;
+    else if (budget === '500-1000') leadScore += 5;
+    
+    // Previous attempts scoring (shows commitment)
+    if (previousAttempts === 'hired-lawyer') leadScore += 15;
+    else if (previousAttempts === 'tried-myself') leadScore += 10;
+    
     // Engagement scoring
     if (timeOnSite) {
-      const timeMinutes = parseInt(timeOnSite) / 60;
+      const timeMinutes = parseInt(timeOnSite) / 60000; // Convert ms to minutes
       if (timeMinutes > 5) leadScore += 15;
       else if (timeMinutes > 2) leadScore += 10;
       else if (timeMinutes > 1) leadScore += 5;
@@ -88,19 +106,31 @@ export async function POST(req: NextRequest) {
     else if (leadMagnet === 'free-consultation') emailSequence = 'consultation-follow-up';
     else if (leadScore >= 50) emailSequence = 'high-intent-acceleration';
 
-    // Prepare lead data for database
+    // Prepare lead data for database - only include fields that exist in schema
     const leadPayload = {
       email,
       first,
       last,
       phone: phone || undefined,
+      convictionType: convictionType || undefined,
+      convictionYear: convictionYear || undefined,
+      urgency: urgency || undefined,
+      budget: budget || undefined,
+      previousAttempts: previousAttempts || undefined,
+      interests: Array.isArray(interests) ? interests.join(', ') : interests || undefined,
+      employmentGoals: employmentGoals || undefined,
+      leadScore,
+      leadSegment,
+      emailSequence,
+      leadMagnet: leadMagnet || undefined,
+      referrer: referrer || undefined,
       paid: false,
       source: source as 'organic' | 'paid' | 'referral' | 'direct' | 'social' | 'email',
       utmCampaign: utmCampaign || undefined,
       utmSource: utmSource || undefined,
       utmMedium: utmMedium || undefined,
       deviceType: deviceType as 'desktop' | 'mobile' | 'tablet' || 'desktop',
-      timeOnSite: timeOnSite || undefined,
+      timeOnSite: timeOnSite ? timeOnSite.toString() : undefined,
       pagesViewed: pagesViewed || undefined,
       conversionStage: 'lead' as const,
       emailStatus: 'not_sent' as const,

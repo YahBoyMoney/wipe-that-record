@@ -12,6 +12,8 @@ const Leads: CollectionConfig = {
     defaultColumns: [
       'email',
       'conversionStage',
+      'leadScore',
+      'leadSegment',
       'totalRevenue',
       'source',
       'emailStatus',
@@ -25,6 +27,98 @@ const Leads: CollectionConfig = {
     { name: 'email', type: 'email', required: true },
     { name: 'first', type: 'text' },
     { name: 'last', type: 'text' },
+    { name: 'phone', type: 'text', label: 'Phone Number' },
+    
+    // Case Information
+    { 
+      name: 'convictionType', 
+      type: 'select',
+      label: 'Type of Conviction',
+      options: [
+        { label: 'DUI/DWI', value: 'DUI' },
+        { label: 'Misdemeanor', value: 'misdemeanor' },
+        { label: 'Drug Possession', value: 'drug-possession' },
+        { label: 'Theft/Shoplifting', value: 'theft' },
+        { label: 'Domestic Violence', value: 'domestic-violence' },
+        { label: 'Assault', value: 'assault' },
+        { label: 'Other', value: 'other' },
+        { label: 'Not Sure', value: 'not-sure' },
+      ]
+    },
+    { name: 'convictionYear', type: 'text', label: 'Year of Conviction' },
+    
+    // Lead Qualification Data
+    { 
+      name: 'urgency', 
+      type: 'select',
+      label: 'Urgency Level',
+      options: [
+        { label: 'Immediate (job application pending)', value: 'immediate' },
+        { label: 'Within a month', value: 'within-month' },
+        { label: 'Within 3 months', value: 'within-3months' },
+        { label: 'Within a year', value: 'within-year' },
+        { label: 'Just exploring options', value: 'just-exploring' },
+      ]
+    },
+    { 
+      name: 'budget', 
+      type: 'select',
+      label: 'Budget Range',
+      options: [
+        { label: 'Under $100', value: 'under-100' },
+        { label: '$100 - $500', value: '100-500' },
+        { label: '$500 - $1,000', value: '500-1000' },
+        { label: '$1,000 - $2,000', value: '1000-2000' },
+        { label: 'Over $2,000', value: 'over-2000' },
+        { label: 'Flexible', value: 'flexible' },
+      ]
+    },
+    { 
+      name: 'previousAttempts', 
+      type: 'select',
+      label: 'Previous Attempts',
+      options: [
+        { label: 'Never tried', value: 'never' },
+        { label: 'Tried myself but failed', value: 'tried-myself' },
+        { label: 'Hired a lawyer before', value: 'hired-lawyer' },
+        { label: 'Had partial success', value: 'partial-success' },
+      ]
+    },
+    { name: 'interests', type: 'text', label: 'Goals/Interests' },
+    { name: 'employmentGoals', type: 'text', label: 'Employment Goals' },
+    
+    // Lead Scoring & Segmentation
+    { 
+      name: 'leadScore', 
+      type: 'number', 
+      label: 'Lead Score (0-100)',
+      admin: { description: 'Automatically calculated lead score' }
+    },
+    { 
+      name: 'leadSegment', 
+      type: 'select',
+      label: 'Lead Segment',
+      options: [
+        { label: 'Hot (60+ points)', value: 'hot' },
+        { label: 'Warm (40-59 points)', value: 'warm' },
+        { label: 'Lukewarm (25-39 points)', value: 'lukewarm' },
+        { label: 'Cold (<25 points)', value: 'cold' },
+      ]
+    },
+    { 
+      name: 'emailSequence', 
+      type: 'select',
+      label: 'Email Sequence',
+      options: [
+        { label: 'General Nurture', value: 'general-nurture' },
+        { label: 'DUI Specific', value: 'dui-specific' },
+        { label: 'Misdemeanor Specific', value: 'misdemeanor-specific' },
+        { label: 'Consultation Follow-up', value: 'consultation-follow-up' },
+        { label: 'High Intent Acceleration', value: 'high-intent-acceleration' },
+      ]
+    },
+    { name: 'leadMagnet', type: 'text', label: 'Lead Magnet Used' },
+    { name: 'referrer', type: 'text', label: 'Referrer URL' },
     
     // Payment Information
     { name: 'amount', type: 'number' },
