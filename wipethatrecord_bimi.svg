@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- BIMI-compliant SVG -->
+<svg xmlns="http://www.w3.org/2000/svg"
+     xmlns:xlink="http://www.w3.org/1999/xlink"
+     width="256" height="256" viewBox="0 0 256 256"
+     version="1.2" baseProfile="tiny-ps">
+  <title>WipeThatRecord</title>
+  <desc>White stylised W inside a blue rounded‑square, brand mark for WipeThatRecord.com</desc>
+
+  <!-- Solid background -->
+  <rect x="0" y="0" width="256" height="256" rx="40" ry="40" fill="#136AE6"/>
+
+  <!-- Stylised W -->
+  <path d="M60 80 L96 176 L128 112 L160 176 L196 80"
+        fill="none" stroke="#ffffff" stroke-width="24" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
