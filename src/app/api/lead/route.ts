@@ -200,6 +200,7 @@ export async function POST(req: NextRequest) {
           try {
             console.log('🚀 Triggering aggressive email funnel...');
             const { triggerEmailSequence } = await import('../../../lib/email-sequences');
+            const { triggerPromoSequence } = await import('../../../lib/promo-email-sequences');
             const fullName = first && last ? `${first} ${last}` : first || '';
             
             // Trigger appropriate sequence based on lead data
@@ -214,6 +215,50 @@ export async function POST(req: NextRequest) {
             }, doc._id.toString());
             
             console.log(`✅ Triggered ${emailSequence} sequence for ${email}`);
+            
+            // 💰 TRIGGER AGGRESSIVE PROMO SEQUENCES
+            if (leadScore >= 70) {
+              // High-intent leads get flash sale
+              await triggerPromoSequence(email, fullName, 'flash-sale', {
+                convictionType,
+                urgency,
+                budget,
+                leadScore,
+                leadSegment
+              });
+              console.log(`🔥 Triggered flash-sale promo sequence for high-intent lead`);
+            } else if (budget === 'under-100') {
+              // Budget-conscious leads get budget-friendly promos
+              await triggerPromoSequence(email, fullName, 'budget-friendly', {
+                convictionType,
+                urgency,
+                budget,
+                leadScore,
+                leadSegment
+              });
+              console.log(`💰 Triggered budget-friendly promo sequence`);
+            } else if (urgency === 'immediate') {
+              // Urgent leads get urgency sequence
+              await triggerPromoSequence(email, fullName, 'urgency', {
+                convictionType,
+                urgency,
+                budget,
+                leadScore,
+                leadSegment
+              });
+              console.log(`🚨 Triggered urgency promo sequence`);
+            } else {
+              // Everyone else gets success story sequence
+              await triggerPromoSequence(email, fullName, 'success-story', {
+                convictionType,
+                urgency,
+                budget,
+                leadScore,
+                leadSegment
+              });
+              console.log(`🏆 Triggered success-story promo sequence`);
+            }
+            
           } catch (emailError) {
             console.error('❌ Email sequence failed:', emailError);
             // Don't fail the lead creation if email fails
