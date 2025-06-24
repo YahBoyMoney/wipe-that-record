@@ -1,5 +1,30 @@
 import { NextRequest, NextResponse } from 'next/server';
-import payload from 'payload';
+import { getPayload } from 'payload';
+import config from '../../../../payload.config';
+import mongoose from 'mongoose';
+
+let payload: any = null;
+
+async function initPayload() {
+  if (!payload) {
+    console.log('🔄 Initializing Payload in lead route...');
+    payload = await getPayload({ config });
+    console.log('✅ Payload initialized successfully');
+    console.log('📋 Registered collections:', payload.collections.map((c: any) => c.slug));
+  }
+  return payload;
+}
+
+// Mongoose fallback schema
+const leadSchema = new mongoose.Schema({
+  fullName: String,
+  email: String,
+  phone: String,
+  convictionType: String,
+  created: { type: Date, default: Date.now }
+});
+
+const Lead = mongoose.models.Lead || mongoose.model('Lead', leadSchema);
 
 export async function POST(req: NextRequest) {
   try {
@@ -44,70 +69,36 @@ export async function POST(req: NextRequest) {
 
     console.log('🔍 Processing lead:', { first, last, email, convictionType });
 
-    // Calculate lead score based on provided data
-    let leadScore = 0;
-    
-    // Base score for providing email
-    leadScore += 10;
-    
-    // Phone number provided (higher intent)
+    // Calculate lead score
+    let leadScore = 10; // Base score
     if (phone) leadScore += 15;
-    
-    // Conviction details provided (serious buyer)
     if (convictionType) leadScore += 20;
     if (convictionYear) leadScore += 10;
-    
-    // Urgency scoring
     if (urgency === 'immediate') leadScore += 20;
     else if (urgency === 'within-month') leadScore += 15;
     else if (urgency === 'within-3months') leadScore += 10;
     
-    // Budget scoring
     if (budget === 'over-2000' || budget === 'flexible') leadScore += 15;
     else if (budget === '1000-2000') leadScore += 10;
     else if (budget === '500-1000') leadScore += 5;
     
-    // Previous attempts scoring (shows commitment)
     if (previousAttempts === 'hired-lawyer') leadScore += 15;
     else if (previousAttempts === 'tried-myself') leadScore += 10;
-    
-    // Engagement scoring
-    if (timeOnSite) {
-      const timeMinutes = parseInt(timeOnSite) / 60000; // Convert ms to minutes
-      if (timeMinutes > 5) leadScore += 15;
-      else if (timeMinutes > 2) leadScore += 10;
-      else if (timeMinutes > 1) leadScore += 5;
-    }
-    
-    if (pagesViewed) {
-      if (pagesViewed >= 5) leadScore += 15;
-      else if (pagesViewed >= 3) leadScore += 10;
-      else if (pagesViewed >= 2) leadScore += 5;
-    }
-    
-    // Traffic source scoring (paid traffic = higher intent)
-    if (source === 'paid') leadScore += 10;
-    else if (source === 'organic') leadScore += 5;
-    
-    // Lead magnet specific scoring
-    if (leadMagnet === 'free-consultation') leadScore += 25;
-    else if (leadMagnet === 'eligibility-check') leadScore += 20;
-    else if (leadMagnet === 'cost-calculator') leadScore += 15;
-    
-    // Determine lead segment for email automation
+
+    // Determine lead segment
     let leadSegment = 'cold';
     if (leadScore >= 60) leadSegment = 'hot';
     else if (leadScore >= 40) leadSegment = 'warm';
     else if (leadScore >= 25) leadSegment = 'lukewarm';
     
-    // Determine email sequence based on lead data
+    // Determine email sequence
     let emailSequence = 'general-nurture';
     if (convictionType === 'DUI') emailSequence = 'dui-specific';
     else if (convictionType === 'misdemeanor') emailSequence = 'misdemeanor-specific';
     else if (leadMagnet === 'free-consultation') emailSequence = 'consultation-follow-up';
     else if (leadScore >= 50) emailSequence = 'high-intent-acceleration';
 
-    // Prepare lead data for database - only include fields that exist in schema
+    // Prepare lead data for database
     const leadPayload = {
       email,
       first,
@@ -141,41 +132,64 @@ export async function POST(req: NextRequest) {
     };
 
     console.log('🔍 Lead payload prepared:', JSON.stringify(leadPayload, null, 2));
-    console.log('🔍 Creating lead with score:', leadScore, 'segment:', leadSegment);
 
-    // Check if payload is initialized
-    if (!payload) {
-      console.error('❌ Payload not initialized');
-      return NextResponse.json({ error: 'System not ready' }, { status: 500 });
-    }
-
-    // Create lead in Payload
-    console.log('🔍 Attempting to create lead in database...');
-    const lead = await payload.create({
-      collection: 'leads',
-      data: leadPayload,
-    });
-
-    console.log('✅ Lead created successfully:', lead.id);
-
-    // Trigger email automation based on segment and sequence
     try {
-      console.log('🔍 Triggering email automation...');
-      await triggerEmailAutomation(lead.id, email, first, emailSequence, leadSegment, leadData);
-    } catch (emailError) {
-      console.error('⚠️ Email automation failed (non-blocking):', emailError);
-      // Don't fail the lead creation if email fails
-    }
+      // Initialize Payload and attempt to create lead
+      const payloadInstance = await initPayload();
+      console.log('🔍 Registered collections:', payloadInstance.collections.map((c: any) => c.slug));
+      
+      console.log('🔍 Attempting to create lead in Payload...');
+      const lead = await payloadInstance.create({
+        collection: 'leads',
+        data: leadPayload,
+      });
 
-    // Return success with lead scoring info
-    return NextResponse.json({ 
-      success: true, 
-      leadId: lead.id,
-      leadScore,
-      leadSegment,
-      emailSequence,
-      nextSteps: getNextStepsForLead(leadSegment, convictionType, leadScore)
-    });
+      console.log('✅ Lead created successfully in Payload:', lead.id);
+
+      return NextResponse.json({ 
+        success: true, 
+        leadId: lead.id,
+        leadScore,
+        leadSegment,
+        emailSequence,
+        method: 'payload'
+      }, { status: 201 });
+
+    } catch (payloadError) {
+      console.error('❌ Payload create failed, falling back to Mongoose:', payloadError);
+      
+      // Fallback to Mongoose
+      try {
+        console.log('🔄 Connecting to MongoDB via Mongoose...');
+        if (mongoose.connection.readyState !== 1) {
+          await mongoose.connect(process.env.DATABASE_URI!);
+        }
+        
+        console.log('🔍 Creating lead via Mongoose fallback...');
+        const doc = await Lead.create({ 
+          fullName, 
+          email, 
+          phone: phone || undefined,
+          convictionType: convictionType || undefined,
+          created: new Date() 
+        });
+        
+        console.log('✅ Lead created successfully via Mongoose:', doc._id);
+        
+        return NextResponse.json({
+          success: true,
+          leadId: doc._id,
+          leadScore,
+          leadSegment,
+          emailSequence,
+          method: 'mongoose_fallback'
+        }, { status: 201 });
+        
+      } catch (mongooseError) {
+        console.error('❌ Mongoose fallback also failed:', mongooseError);
+        throw mongooseError;
+      }
+    }
 
   } catch (error) {
     console.error('❌ Error creating lead:', error);

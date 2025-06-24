@@ -165,6 +165,32 @@ export interface Lead {
   email: string;
   first?: string | null;
   last?: string | null;
+  phone?: string | null;
+  convictionType?:
+    | ('DUI' | 'misdemeanor' | 'drug-possession' | 'theft' | 'domestic-violence' | 'assault' | 'other' | 'not-sure')
+    | null;
+  convictionYear?: string | null;
+  urgency?: ('immediate' | 'within-month' | 'within-3months' | 'within-year' | 'just-exploring') | null;
+  budget?: ('under-100' | '100-500' | '500-1000' | '1000-2000' | 'over-2000' | 'flexible') | null;
+  previousAttempts?: ('never' | 'tried-myself' | 'hired-lawyer' | 'partial-success') | null;
+  interests?: string | null;
+  employmentGoals?: string | null;
+  /**
+   * Automatically calculated lead score
+   */
+  leadScore?: number | null;
+  leadSegment?: ('hot' | 'warm' | 'lukewarm' | 'cold') | null;
+  emailSequence?:
+    | (
+        | 'general-nurture'
+        | 'dui-specific'
+        | 'misdemeanor-specific'
+        | 'consultation-follow-up'
+        | 'high-intent-acceleration'
+      )
+    | null;
+  leadMagnet?: string | null;
+  referrer?: string | null;
   amount?: number | null;
   paid?: boolean | null;
   stripeSessionId?: string | null;
@@ -334,6 +360,19 @@ export interface LeadsSelect<T extends boolean = true> {
   email?: T;
   first?: T;
   last?: T;
+  phone?: T;
+  convictionType?: T;
+  convictionYear?: T;
+  urgency?: T;
+  budget?: T;
+  previousAttempts?: T;
+  interests?: T;
+  employmentGoals?: T;
+  leadScore?: T;
+  leadSegment?: T;
+  emailSequence?: T;
+  leadMagnet?: T;
+  referrer?: T;
   amount?: T;
   paid?: T;
   stripeSessionId?: T;

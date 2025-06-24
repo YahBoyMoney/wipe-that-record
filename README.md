@@ -104,34 +104,101 @@ git clone https://github.com/YahBoMoney/wipe-that-record.git
 cd wipe-that-record
 
 # Install dependencies
-npm install
+pnpm install
 
 # Configure environment variables
-cp .env.example .env
-# Edit .env with your MongoDB Atlas and Stripe credentials
+cp .env.example .env.local
+# Edit .env.local with your MongoDB Atlas and Stripe credentials
 
 # Run development server
-npm run dev
+pnpm dev
 ```
 
 ### **Environment Variables**
+Create a `.env.local` file in the root directory with the following variables:
+
 ```env
-# Database
+# Database - MongoDB Atlas connection string
 DATABASE_URI=mongodb+srv://username:password@cluster.mongodb.net/wipe-that-record
 
-# PayloadCMS
-PAYLOAD_SECRET=your-32-character-secret-key
+# PayloadCMS - 32+ character secret key for JWT tokens
+PAYLOAD_SECRET=your-secure-32-character-secret-key-here
 
-# Stripe
-STRIPE_SECRET_KEY=sk_test_...
-STRIPE_PUBLISHABLE_KEY=pk_test_...
+# Application URLs
+NEXT_PUBLIC_SERVER_URL=http://localhost:3000
 
-# Email (Optional)
+# Stripe Payment Integration
+STRIPE_SECRET_KEY=sk_test_your_stripe_secret_key_here
+STRIPE_PUBLISHABLE_KEY=pk_test_your_stripe_publishable_key_here
+
+# Email Service (Optional)
 SMTP_HOST=smtp.gmail.com
 SMTP_PORT=587
 SMTP_USER=your-email@gmail.com
 SMTP_PASS=your-app-password
+
+# Email Marketing Integrations (Optional)
+CONVERTKIT_API_KEY=your_convertkit_api_key
+MAILCHIMP_API_KEY=your_mailchimp_api_key
+ACTIVECAMPAIGN_API_KEY=your_activecampaign_api_key
 ```
+
+### **Development Workflow**
+```bash
+# Start development server
+pnpm dev
+
+# Run automated tests
+node scripts/test/lead-test.js
+
+# Check environment configuration
+curl http://localhost:3000/api/env-check
+
+# Access admin panel
+# Navigate to: http://localhost:3000/admin
+```
+
+### **Testing & Debugging**
+```bash
+# Test lead creation API
+node scripts/test/lead-test.js
+
+# Test specific endpoints
+curl -X POST http://localhost:3000/api/lead \
+  -H "Content-Type: application/json" \
+  -d '{"fullName":"Test User","email":"test@example.com"}'
+
+# Debug Payload initialization
+curl http://localhost:3000/api/payload/test
+
+# Verify environment variables
+curl http://localhost:3000/api/env-check
+```
+
+### **Admin Panel Access**
+- **URL**: `http://localhost:3000/admin`
+- **Features**: Lead management, analytics dashboard, content management
+- **Collections**: Users, Leads, Media
+- **Dashboard**: Real-time business metrics and conversion tracking
+
+## 🔧 **Development Features**
+
+### **Payload CMS Integration**
+- **Collections**: Fully typed TypeScript collections for Leads, Users, Media
+- **Admin UI**: Beautiful admin interface at `/admin`
+- **API Routes**: RESTful endpoints with automatic fallback to MongoDB
+- **Real-time Sync**: Automatic database synchronization
+
+### **Robust Error Handling**
+- **Payload Fallback**: Automatic MongoDB fallback if Payload fails
+- **Debug Logging**: Comprehensive logging for troubleshooting
+- **Environment Validation**: Built-in environment variable checking
+- **Graceful Degradation**: System continues operating even with partial failures
+
+### **Automated Testing**
+- **API Testing**: Comprehensive endpoint testing with `node scripts/test/lead-test.js`
+- **Environment Validation**: Automatic environment variable verification
+- **Integration Tests**: Full workflow testing from lead capture to database storage
 
 ## 🎨 **Screenshots**
 
