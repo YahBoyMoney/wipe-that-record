@@ -1,5 +1,5 @@
 import React from 'react';
-import AnalyticsDashboard from '@/components/AnalyticsDashboard';
+import AdminDashboard from './AdminDashboard';
 
 interface DashboardProps {
   user?: any;
@@ -30,7 +30,7 @@ const Dashboard: React.FC<DashboardProps> = ({ user, canAccessAdmin }) => {
     );
   }
 
-  return <AnalyticsDashboard />;
+  return <AdminDashboard />;
 };
 
 export default Dashboard; 
