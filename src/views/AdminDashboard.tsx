@@ -4,17 +4,13 @@ import React from 'react';
 import dynamic from 'next/dynamic';
 import useSWR from 'swr';
 import { 
-  TrendingUp, 
-  TrendingDown, 
   Users, 
   DollarSign, 
   Mail, 
-  Smartphone, 
   Target, 
   Clock,
   ArrowUp,
   ArrowDown,
-  Calendar,
   BarChart3
 } from 'lucide-react';
 

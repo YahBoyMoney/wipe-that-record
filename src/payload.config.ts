@@ -16,7 +16,6 @@ export default buildConfig({
   admin: {
     user: Users.slug,
     importMap: { baseDir: __dirname },
-    indexView: 'dashboard',
     components: {
       views: {
         dashboard: {
