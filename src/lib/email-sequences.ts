@@ -41,7 +41,7 @@ export const highIntentSequence: EmailSequenceStep[] = [
             </div>
             
             <div style="text-align: center; margin: 30px 0;">
-              <a href="https://wipethatrecord.com/diy-start" 
+                              <a href="https://www.wipethatrecord.com/" 
                  style="background: #dc2626; color: white; padding: 18px 40px; text-decoration: none; 
                         border-radius: 8px; font-size: 18px; font-weight: bold; display: inline-block;">
                 🚀 START MY EXPUNGEMENT NOW ($50)
@@ -58,7 +58,7 @@ export const highIntentSequence: EmailSequenceStep[] = [
           </div>
         </div>
       `,
-      text: `URGENT: Your ${leadData.convictionType} case is perfect for expungement. 94% approval rate, 30-60 day processing. Start now for $50: https://wipethatrecord.com/diy-start`
+      text: `URGENT: Your ${leadData.convictionType} case is perfect for expungement. 94% approval rate, 30-60 day processing. Start now for $50: https://www.wipethatrecord.com/`
     })
   },
   {
@@ -94,7 +94,7 @@ export const highIntentSequence: EmailSequenceStep[] = [
             </div>
             
             <div style="text-align: center; margin: 30px 0;">
-              <a href="https://wipethatrecord.com/diy-start" 
+              <a href="https://www.wipethatrecord.com/" 
                  style="background: #dc2626; color: white; padding: 18px 40px; text-decoration: none; 
                         border-radius: 8px; font-size: 18px; font-weight: bold; display: inline-block;">
                 🔒 SECURE MY SPOT NOW
@@ -107,7 +107,7 @@ export const highIntentSequence: EmailSequenceStep[] = [
           </div>
         </div>
       `,
-      text: `Final notice: Your expungement spot expires in 24 hours. Secure it now for $50: https://wipethatrecord.com/diy-start`
+      text: `Final notice: Your expungement spot expires in 24 hours. Secure it now for $50: https://www.wipethatrecord.com/`
     })
   },
   {
@@ -164,7 +164,7 @@ export const highIntentSequence: EmailSequenceStep[] = [
             </div>
             
             <div style="text-align: center; margin: 30px 0;">
-              <a href="https://wipethatrecord.com/diy-start" 
+              <a href="https://www.wipethatrecord.com/" 
                  style="background: #10b981; color: white; padding: 18px 40px; text-decoration: none; 
                         border-radius: 8px; font-size: 18px; font-weight: bold; display: inline-block;">
                 🚀 START MY SUCCESS STORY
@@ -177,7 +177,7 @@ export const highIntentSequence: EmailSequenceStep[] = [
           </div>
         </div>
       `,
-      text: `Success Story: Maria cleared her record in 45 days and landed a $75K job. Your turn: https://wipethatrecord.com/diy-start`
+      text: `Success Story: Maria cleared her record in 45 days and landed a $75K job. Your turn: https://www.wipethatrecord.com/`
     })
   }
 ];
@@ -222,7 +222,7 @@ export const duiSpecificSequence: EmailSequenceStep[] = [
             </div>
             
             <div style="text-align: center; margin: 30px 0;">
-              <a href="https://wipethatrecord.com/dui-expungement" 
+              <a href="https://www.wipethatrecord.com/" 
                  style="background: #dc2626; color: white; padding: 18px 40px; text-decoration: none; 
                         border-radius: 8px; font-size: 18px; font-weight: bold; display: inline-block;">
                 🚗 START MY DUI EXPUNGEMENT
@@ -236,7 +236,7 @@ export const duiSpecificSequence: EmailSequenceStep[] = [
           </div>
         </div>
       `,
-      text: `Good news: Your DUI qualifies for expungement! 89% approval rate. Start now: https://wipethatrecord.com/dui-expungement`
+      text: `Good news: Your DUI qualifies for expungement! 89% approval rate. Start now: https://www.wipethatrecord.com/`
     })
   }
 ];
@@ -289,7 +289,7 @@ export const upgradeSequences = {
               </div>
               
               <div style="text-align: center; margin: 30px 0;">
-                <a href="https://wipethatrecord.com/upgrade-review" 
+                <a href="https://www.wipethatrecord.com/" 
                    style="background: #f59e0b; color: white; padding: 18px 40px; text-decoration: none; 
                           border-radius: 8px; font-size: 18px; font-weight: bold; display: inline-block;">
                   🛡️ PROTECT MY CASE - UPGRADE NOW
@@ -298,7 +298,7 @@ export const upgradeSequences = {
             </div>
           </div>
         `,
-        text: `Warning: DIY filing mistakes cost $1,400+. Upgrade to expert review for $100: https://wipethatrecord.com/upgrade-review`
+        text: `Warning: DIY filing mistakes cost $1,400+. Upgrade to expert review for $100: https://www.wipethatrecord.com/`
       })
     }
   ],
@@ -340,7 +340,7 @@ export const upgradeSequences = {
               </div>
               
               <div style="text-align: center; margin: 30px 0;">
-                <a href="https://wipethatrecord.com/full-service" 
+                <a href="https://www.wipethatrecord.com/" 
                    style="background: #7c3aed; color: white; padding: 18px 40px; text-decoration: none; 
                           border-radius: 8px; font-size: 18px; font-weight: bold; display: inline-block;">
                   👑 UPGRADE TO VIP SERVICE
@@ -356,13 +356,80 @@ export const upgradeSequences = {
             </div>
           </div>
         `,
-        text: `VIP Full Service: Let us handle everything for $1,500. Dedicated attorney, court appearances included: https://wipethatrecord.com/full-service`
+        text: `VIP Full Service: Let us handle everything for $1,500. Dedicated attorney, court appearances included: https://www.wipethatrecord.com/`
       })
     }
   ]
 };
 
-// 🚀 AUTOMATION FUNCTIONS
+// Default nurture sequence
+const defaultNurtureSequence: EmailSequenceStep[] = [
+  {
+    day: 0,
+    subject: "🎯 Your Criminal Record Doesn't Have to Define You",
+    template: (name: string, leadData: any) => ({
+      html: `
+        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+          <div style="background: #1f2937; color: white; padding: 30px; text-align: center;">
+            <h1>🎯 SECOND CHANCES</h1>
+            <p style="font-size: 18px; margin: 0;">Everyone deserves a fresh start</p>
+          </div>
+          
+          <div style="padding: 30px;">
+            <h2>Hi ${name},</h2>
+            
+            <p>Your past doesn't have to control your future.</p>
+            
+            <p>Right now, your ${leadData.convictionType || 'criminal record'} is probably:</p>
+            <ul>
+              <li>❌ Blocking job opportunities</li>
+              <li>❌ Preventing housing approvals</li>
+              <li>❌ Limiting your potential</li>
+              <li>❌ Causing embarrassment and stress</li>
+            </ul>
+            
+            <div style="background: #f0f9ff; padding: 25px; border-radius: 8px; margin: 25px 0;">
+              <h3 style="color: #0284c7;">✅ What Expungement Does:</h3>
+              <ul>
+                <li>Legally dismisses your case</li>
+                <li>Removes conviction from most background checks</li>
+                <li>Restores many civil rights</li>
+                <li>Gives you a genuine fresh start</li>
+              </ul>
+            </div>
+            
+            <div style="text-align: center; margin: 30px 0;">
+              <a href="https://www.wipethatrecord.com/" 
+                 style="background: #0284c7; color: white; padding: 18px 40px; text-decoration: none; 
+                        border-radius: 8px; font-size: 18px; font-weight: bold; display: inline-block;">
+                🚀 START MY FRESH START
+              </a>
+            </div>
+            
+            <p style="text-align: center; color: #666; font-style: italic;">
+              "The best time to plant a tree was 20 years ago. The second best time is now."
+            </p>
+          </div>
+        </div>
+      `,
+      text: `Your criminal record doesn't have to define you. Start your fresh start today: https://www.wipethatrecord.com/`
+    })
+  }
+];
+
+// Helper function to get appropriate sequence
+function getGeneralNurtureSequence(leadData: any): EmailSequenceStep[] {
+  // Return appropriate sequence based on lead data
+  if (leadData.leadScore >= 60) {
+    return highIntentSequence;
+  } else if (leadData.convictionType === 'DUI') {
+    return duiSpecificSequence;
+  } else {
+    return defaultNurtureSequence;
+  }
+}
+
+// 🚀 MAIN AUTOMATION FUNCTION
 export async function triggerEmailSequence(
   email: string,
   name: string,
@@ -405,69 +472,4 @@ export async function triggerEmailSequence(
       }
     }, step.day * 24 * 60 * 60 * 1000); // Convert days to milliseconds
   }
-}
-
-function getGeneralNurtureSequence(leadData: any): EmailSequenceStep[] {
-  // Return appropriate sequence based on lead data
-  if (leadData.leadScore >= 60) {
-    return highIntentSequence;
-  } else if (leadData.convictionType === 'DUI') {
-    return duiSpecificSequence;
-  } else {
-    return defaultNurtureSequence;
-  }
-}
-
-const defaultNurtureSequence: EmailSequenceStep[] = [
-  {
-    day: 0,
-    subject: "🎯 Your Criminal Record Doesn't Have to Define You",
-    template: (name: string, leadData: any) => ({
-      html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-          <div style="background: #1f2937; color: white; padding: 30px; text-align: center;">
-            <h1>🎯 SECOND CHANCES</h1>
-            <p style="font-size: 18px; margin: 0;">Everyone deserves a fresh start</p>
-          </div>
-          
-          <div style="padding: 30px;">
-            <h2>Hi ${name},</h2>
-            
-            <p>Your past doesn't have to control your future.</p>
-            
-            <p>Right now, your ${leadData.convictionType || 'criminal record'} is probably:</p>
-            <ul>
-              <li>❌ Blocking job opportunities</li>
-              <li>❌ Preventing housing approvals</li>
-              <li>❌ Limiting your potential</li>
-              <li>❌ Causing embarrassment and stress</li>
-            </ul>
-            
-            <div style="background: #f0f9ff; padding: 25px; border-radius: 8px; margin: 25px 0;">
-              <h3 style="color: #0284c7;">✅ What Expungement Does:</h3>
-              <ul>
-                <li>Legally dismisses your case</li>
-                <li>Removes conviction from most background checks</li>
-                <li>Restores many civil rights</li>
-                <li>Gives you a genuine fresh start</li>
-              </ul>
-            </div>
-            
-            <div style="text-align: center; margin: 30px 0;">
-              <a href="https://wipethatrecord.com/get-started" 
-                 style="background: #0284c7; color: white; padding: 18px 40px; text-decoration: none; 
-                        border-radius: 8px; font-size: 18px; font-weight: bold; display: inline-block;">
-                🚀 START MY FRESH START
-              </a>
-            </div>
-            
-            <p style="text-align: center; color: #666; font-style: italic;">
-              "The best time to plant a tree was 20 years ago. The second best time is now."
-            </p>
-          </div>
-        </div>
-      `,
-      text: `Your criminal record doesn't have to define you. Start your fresh start today: https://wipethatrecord.com/get-started`
-    })
-  }
-]; 
+} 

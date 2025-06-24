@@ -70,7 +70,7 @@ export const urgencySequences = {
               </div>
               
               <div style="text-align: center; margin: 30px 0;">
-                <a href="https://wipethatrecord.com/complete-order?id=${leadData.sessionId}" 
+                <a href="https://www.wipethatrecord.com/" 
                    style="background: #dc2626; color: white; padding: 18px 40px; text-decoration: none; 
                           border-radius: 8px; font-size: 18px; font-weight: bold; display: inline-block;">
                   🔒 COMPLETE MY APPLICATION
@@ -83,7 +83,7 @@ export const urgencySequences = {
             </div>
           </div>
         `,
-        text: `Complete your expungement application before losing your spot: https://wipethatrecord.com/complete-order?id=${leadData.sessionId}`
+        text: `Complete your expungement application before losing your spot: https://www.wipethatrecord.com/`
       })
     },
     {
@@ -107,7 +107,7 @@ export const urgencySequences = {
                 <p style="margin: 10px 0 0 0;">After that, you'll go to the back of a 6-month waiting list.</p>
               </div>
               
-              <a href="https://wipethatrecord.com/complete-order?id=${leadData.sessionId}" 
+              <a href="https://www.wipethatrecord.com/" 
                  style="background: #dc2626; color: white; padding: 20px 50px; text-decoration: none; 
                         border-radius: 8px; font-size: 20px; font-weight: bold; display: inline-block;">
                 🚨 SAVE MY SPOT NOW
@@ -119,7 +119,7 @@ export const urgencySequences = {
             </div>
           </div>
         `,
-        text: `FINAL WARNING: Your expungement spot expires in 1 hour. Save it now: https://wipethatrecord.com/complete-order?id=${leadData.sessionId}`
+        text: `FINAL WARNING: Your expungement spot expires in 1 hour. Save it now: https://www.wipethatrecord.com/`
       })
     }
   ],
@@ -158,7 +158,7 @@ export const urgencySequences = {
               </div>
               
               <div style="text-align: center; margin: 30px 0;">
-                <a href="https://wipethatrecord.com/vip-fasttrack" 
+                <a href="https://www.wipethatrecord.com/" 
                    style="background: #7c3aed; color: white; padding: 18px 40px; text-decoration: none; 
                           border-radius: 8px; font-size: 18px; font-weight: bold; display: inline-block;">
                   🔥 CLAIM MY VIP SPOT
@@ -171,7 +171,7 @@ export const urgencySequences = {
             </div>
           </div>
         `,
-        text: `VIP Fast-Track Invitation: Skip the line, process in 10-15 days. Claim your spot: https://wipethatrecord.com/vip-fasttrack`
+        text: `VIP Fast-Track Invitation: Skip the line, process in 10-15 days. Claim your spot: https://www.wipethatrecord.com/`
       })
     }
   ],
@@ -225,7 +225,7 @@ export const urgencySequences = {
               </div>
               
               <div style="text-align: center; margin: 30px 0;">
-                <a href="https://wipethatrecord.com/diy-50" 
+                <a href="https://www.wipethatrecord.com/" 
                    style="background: #059669; color: white; padding: 18px 40px; text-decoration: none; 
                           border-radius: 8px; font-size: 18px; font-weight: bold; display: inline-block;">
                   💰 GET STARTED FOR $50
@@ -238,7 +238,7 @@ export const urgencySequences = {
             </div>
           </div>
         `,
-        text: `Can't afford $1500? Get the same result for $50 with our DIY package: https://wipethatrecord.com/diy-50`
+        text: `Can't afford $1500? Get the same result for $50 with our DIY package: https://www.wipethatrecord.com/`
       })
     }
   ]

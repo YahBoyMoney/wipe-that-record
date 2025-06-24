@@ -10,7 +10,9 @@ async function initPayload() {
     console.log('🔄 Initializing Payload in lead route...');
     payload = await getPayload({ config });
     console.log('✅ Payload initialized successfully');
-    console.log('📋 Registered collections:', payload.collections.map((c: any) => c.slug));
+    // Fix: payload.collections is not an array, it's an object
+    const collectionNames = payload.config.collections?.map((c: any) => c.slug) || [];
+    console.log('📋 Registered collections:', collectionNames);
   }
   return payload;
 }
@@ -143,7 +145,9 @@ export async function POST(req: NextRequest) {
     try {
       // Initialize Payload and attempt to create lead
       const payloadInstance = await initPayload();
-      console.log('🔍 Registered collections:', payloadInstance.collections.map((c: any) => c.slug));
+      // Fix: payload.collections is not an array, it's an object
+      const collectionNames = payloadInstance.config.collections?.map((c: any) => c.slug) || [];
+      console.log('🔍 Registered collections:', collectionNames);
       
       console.log('🔍 Attempting to create lead in Payload...');
       const lead = await payloadInstance.create({
