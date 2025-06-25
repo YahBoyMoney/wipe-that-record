@@ -1,8 +1,9 @@
 import OpenAI from 'openai'
 
-const openai = new OpenAI({
+// Handle missing API key gracefully during build
+const openai = process.env.OPENAI_API_KEY ? new OpenAI({
   apiKey: process.env.OPENAI_API_KEY
-})
+}) : null
 
 interface BusinessMetrics {
   todayRevenue: number
@@ -52,6 +53,11 @@ TONE: Expert, direct, focused on revenue. Use emojis strategically. Be helpful a
 
   async generateInsight(metrics: BusinessMetrics, query?: string): Promise<string> {
     try {
+      // Check if OpenAI is available
+      if (!openai) {
+        return "🔧 AI advisor not configured. Please set your OPENAI_API_KEY environment variable."
+      }
+
       const context = this.buildContext(metrics)
       const prompt = query || "Analyze today's performance and give me 3 tactical recommendations to increase revenue."
 
