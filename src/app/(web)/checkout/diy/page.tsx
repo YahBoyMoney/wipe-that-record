@@ -48,18 +48,19 @@ export default function DIYCheckoutPage() {
     return `${mins}:${secs.toString().padStart(2, '0')}`;
   };
 
-  const handleCheckout = async (usePromo = false) => {
+  const handleCheckout = async (promoCode?: string) => {
     try {
-      const response = await fetch('/api/checkout', {
+      const response = await fetch('/api/checkout/diy', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          product: 'diy',
-          amount: usePromo ? 40 : 50, // $10 discount with SAVE20
           email: leadData?.email || 'customer@example.com',
           fullName: leadData?.fullName || 'Customer',
-          promoCode: usePromo ? 'SAVE20' : undefined,
-          leadId: leadData?.id || ''
+          promoCode: promoCode || undefined,
+          leadId: leadData?.id || '',
+          utmSource: new URLSearchParams(window.location.search).get('utm_source') || '',
+          utmCampaign: new URLSearchParams(window.location.search).get('utm_campaign') || '',
+          utmMedium: new URLSearchParams(window.location.search).get('utm_medium') || ''
         })
       });
       
@@ -245,8 +246,8 @@ export default function DIYCheckoutPage() {
                     });
                   }
                   
-                  // Redirect to Stripe checkout
-                  window.location.href = '/api/checkout/diy';
+                  // Use the proper checkout handler
+                  handleCheckout();
                 }}
                 className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4 px-6 rounded-lg text-lg transition-colors duration-200 shadow-lg"
               >

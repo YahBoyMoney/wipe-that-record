@@ -13,9 +13,7 @@ function getStripe(): Stripe {
       );
     }
     
-    stripeInstance = new Stripe(stripeSecretKey, {
-      apiVersion: '2025-05-28.basil'
-    });
+    stripeInstance = new Stripe(stripeSecretKey);
   }
   
   return stripeInstance;

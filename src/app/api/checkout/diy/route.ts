@@ -6,9 +6,7 @@ const getStripe = () => {
   if (!secretKey) {
     throw new Error('STRIPE_SECRET_KEY is required');
   }
-  return new Stripe(secretKey, {
-    apiVersion: '2025-05-28.basil'
-  });
+  return new Stripe(secretKey);
 };
 
 export async function POST(req: NextRequest) {

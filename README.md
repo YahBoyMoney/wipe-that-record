@@ -119,7 +119,7 @@ Create a `.env.local` file in the root directory with the following variables:
 
 ```env
 # Database - MongoDB Atlas connection string
-DATABASE_URI=mongodb+srv://username:password@cluster.mongodb.net/wipe-that-record
+DATABASE_URI=mongodb+srv://username:password@cluster.mongodb.net/your-database-name
 
 # PayloadCMS - 32+ character secret key for JWT tokens
 PAYLOAD_SECRET=your-secure-32-character-secret-key-here

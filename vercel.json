@@ -1,0 +1,29 @@
+{
+  "functions": {
+    "src/app/api/telegram-bot/route.ts": {
+      "memory": 1024
+    },
+    "src/app/api/ai-advisor/route.ts": {
+      "memory": 1024
+    }
+  },
+  "headers": [
+    {
+      "source": "/api/telegram-bot",
+      "headers": [
+        {
+          "key": "Access-Control-Allow-Origin",
+          "value": "*"
+        },
+        {
+          "key": "Access-Control-Allow-Methods",
+          "value": "GET, POST, PUT, DELETE, OPTIONS"
+        },
+        {
+          "key": "Access-Control-Allow-Headers",
+          "value": "Content-Type, Authorization"
+        }
+      ]
+    }
+  ]
+} 

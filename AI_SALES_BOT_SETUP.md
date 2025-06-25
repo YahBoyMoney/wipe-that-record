@@ -19,7 +19,7 @@ NEXT_PUBLIC_SERVER_URL=https://your-vercel-url.vercel.app
 NODE_ENV=production
 
 # Payments
-STRIPE_SECRET_KEY=sk_live_your_stripe_key
+STRIPE_SECRET_KEY=sk_live_YOUR_STRIPE_SECRET_KEY
 STRIPE_WEBHOOK_SECRET=whsec_your_webhook_secret
 
 # Email Service
@@ -35,7 +35,7 @@ ADMIN_NOTIFICATION_EMAILS=admin@wipethatrecord.com
 OPENAI_API_KEY=sk-proj-YOUR_OPENAI_API_KEY_HERE
 
 # Telegram Bot
-TELEGRAM_BOT_TOKEN=7971902459:AAEXaewD3p1obQWU2GvCSBCjQ3XkGgpw9Lo
+TELEGRAM_BOT_TOKEN=YOUR_BOT_TOKEN_FROM_BOTFATHER
 TELEGRAM_CHAT_ID=your_chat_id_here
 
 # n8n Automation
@@ -48,7 +48,7 @@ N8N_WEBHOOK_URL=https://your-n8n-instance.railway.app/webhook/wipe-that-record
 
 Open Telegram and message your bot `@WipeMyRecordBot`, then visit:
 ```
-https://api.telegram.org/bot7971902459:AAEXaewD3p1obQWU2GvCSBCjQ3XkGgpw9Lo/getUpdates
+https://api.telegram.org/bot<YOUR_BOT_TOKEN>/getUpdates
 ```
 
 Look for `"chat":{"id":XXXXXXX}` and use that number as your `TELEGRAM_CHAT_ID`.
