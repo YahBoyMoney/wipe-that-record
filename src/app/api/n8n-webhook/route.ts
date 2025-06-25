@@ -71,8 +71,7 @@ async function handleLeadNurture(data: any) {
       id: lead.id,
       data: {
         lastEmailSent: new Date().toISOString(),
-        emailSequenceDay: sequenceDay,
-        emailStatus: 'nurture_active'
+        emailStatus: 'sent'
       }
     });
 
@@ -242,7 +241,7 @@ function getUpsellEmail(purchaseType: string, amount: number) {
 
   return {
     subject: "🎉 Thank You - Here's How We Can Help You Further",
-    html: generateGenericUpsellEmail(amount)
+    html: generateDiyUpsellEmail(amount)
   };
 }
 
