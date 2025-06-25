@@ -1,0 +1,47 @@
+================================================================
+🔧 TELEGRAM BOT - REQUIRED ENVIRONMENT VARIABLES FOR VERCEL
+================================================================
+
+Copy these exact values to your Vercel Dashboard → Settings → Environment Variables:
+
+TELEGRAM_BOT_TOKEN=7971902459:AAEXaewD3p1obQWU2GvCSBCjQ3XkGgpw9Lo
+TELEGRAM_CHAT_ID=1884717726
+TELEGRAM_WEBHOOK_SECRET=ab892875674f21776ee41925af3c75126dc29391ccc462ece8c8a9d3fc9821d5
+
+# YOU NEED TO GET YOUR OWN OPENAI API KEY:
+# Go to: https://platform.openai.com/api-keys
+# Create a new key and replace the value below:
+OPENAI_API_KEY=YOUR_ACTUAL_OPENAI_KEY_HERE
+
+# Optional store integration (if you want business features):
+STORE_PROVIDER=woo
+WC_SITE_URL=https://your-store.com
+WC_CONSUMER_KEY=your_woo_key
+WC_CONSUMER_SECRET=your_woo_secret
+
+# Optional cron job security:
+CRON_SECRET=your_secure_random_string
+
+================================================================
+📝 SETUP INSTRUCTIONS:
+================================================================
+
+1. Go to: https://vercel.com/dashboard
+2. Find your "wipe-that-record" project
+3. Click on it → Settings → Environment Variables
+4. Add each variable above (one by one)
+5. Make sure to set Environment: Production
+6. Click "Save" for each one
+7. After adding all variables, click "Deploy" → "Redeploy"
+
+================================================================
+✅ WHAT THIS FIXES:
+================================================================
+
+- ✅ Webhook URL updated to current deployment
+- ✅ Webhook secret configured for security
+- ✅ Bot token and chat ID verified working
+- ⏳ Environment variables need to be set in Vercel
+- ⏳ OpenAI API key needed for AI features
+
+================================================================ 
