@@ -23,9 +23,16 @@ export function LeadCaptureForm({
   const [qualification, setQualification] = useState<'qualified' | 'maybe' | 'disqualified' | null>(null)
   const [formData, setFormData] = useState({
     // Basic Info
-    fullName: '',
+    firstName: '',
+    lastName: '',
     email: '',
     phone: '',
+    
+    // Address Info (for paperwork)
+    street: '',
+    city: '',
+    state: '',
+    zipCode: '',
     
     // Qualification Questions
     hasConviction: '',
@@ -153,10 +160,10 @@ export function LeadCaptureForm({
   const validateStep = (stepNumber: number) => {
     switch (stepNumber) {
       case 1:
-        return formData.hasConviction && formData.fullName && formData.email && 
+        return formData.hasConviction && formData.firstName && formData.lastName && formData.email && 
                (formData.hasConviction === 'no' || formData.inCalifornia)
       case 2:
-        return formData.convictionType && formData.urgency
+        return formData.convictionType && formData.urgency && formData.street && formData.city && formData.state && formData.zipCode
       case 3:
         return formData.interests.length > 0 // At least one goal selected
       default:
@@ -180,9 +187,16 @@ export function LeadCaptureForm({
     try {
       const leadPayload = {
         // Core lead information
-        fullName: formData.fullName,
+        first: formData.firstName,
+        last: formData.lastName,
         email: formData.email,
         phone: formData.phone,
+        
+        // Address information
+        street: formData.street,
+        city: formData.city,
+        state: formData.state,
+        zipCode: formData.zipCode,
         
         // Qualification data
         hasConviction: formData.hasConviction,
@@ -239,7 +253,8 @@ export function LeadCaptureForm({
         sessionStorage.setItem('leadData', JSON.stringify({
           leadId: result.leadId,
           email: formData.email,
-          fullName: formData.fullName,
+          firstName: formData.firstName,
+          lastName: formData.lastName,
           leadScore: result.leadScore || leadScore,
           leadSegment: result.leadSegment,
           qualification,
@@ -353,7 +368,7 @@ export function LeadCaptureForm({
   }
 
   return (
-    <div className={`bg-white rounded-2xl shadow-2xl p-8 max-w-md w-full ${className}`}>
+    <div className={`bg-white rounded-2xl shadow-2xl p-4 sm:p-8 max-w-md w-full max-h-[90vh] overflow-y-auto ${className}`}>
       {/* Progress bar */}
       <div className="mb-6">
         <div className="flex justify-between items-center mb-2">
@@ -415,7 +430,7 @@ export function LeadCaptureForm({
             className="space-y-6"
           >
             <div>
-              <label className="block text-lg font-semibold text-slate-700 mb-3">
+              <label className="block text-base font-semibold text-slate-700 mb-3">
                 Do you have a criminal conviction on your record? *
               </label>
               <div className="space-y-3">
@@ -449,7 +464,7 @@ export function LeadCaptureForm({
                 className="space-y-4"
               >
                 <div>
-                  <label className="block text-lg font-semibold text-slate-700 mb-3">
+                  <label className="block text-base font-semibold text-slate-700 mb-3">
                     Was this conviction in California? *
                   </label>
                   <div className="space-y-2">
@@ -478,18 +493,33 @@ export function LeadCaptureForm({
             )}
 
             <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
-                  Full Name *
-                </label>
-                <input
-                  type="text"
-                  required
-                  className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
-                  value={formData.fullName}
-                  onChange={(e) => handleInputChange('fullName', e.target.value)}
-                  placeholder="Enter your full name"
-                />
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                    First Name *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                    value={formData.firstName}
+                    onChange={(e) => handleInputChange('firstName', e.target.value)}
+                    placeholder="First name"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                    Last Name *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                    value={formData.lastName}
+                    onChange={(e) => handleInputChange('lastName', e.target.value)}
+                    placeholder="Last name"
+                  />
+                </div>
               </div>
 
               <div>
@@ -524,7 +554,7 @@ export function LeadCaptureForm({
             <button
               type="button"
               onClick={handleNext}
-              disabled={!formData.hasConviction || !formData.fullName || !formData.email}
+              disabled={!formData.hasConviction || !formData.firstName || !formData.lastName || !formData.email}
               className="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-300 disabled:cursor-not-allowed text-white py-4 rounded-lg text-lg font-semibold transition-colors"
             >
               Continue Assessment →
@@ -540,7 +570,7 @@ export function LeadCaptureForm({
             className="space-y-6"
           >
             <div>
-              <label className="block text-lg font-semibold text-slate-700 mb-3">
+              <label className="block text-base font-semibold text-slate-700 mb-3">
                 What type of conviction do you have? *
               </label>
               <select
@@ -551,6 +581,7 @@ export function LeadCaptureForm({
               >
                 <option value="">Select your conviction type</option>
                 <option value="DUI">DUI/DWI (89% success rate)</option>
+                <option value="felony">Felony (Requires special handling)</option>
                 <option value="misdemeanor">Misdemeanor (Theft, Vandalism, etc.)</option>
                 <option value="drug-possession">Drug Possession</option>
                 <option value="theft">Theft/Shoplifting</option>
@@ -603,7 +634,7 @@ export function LeadCaptureForm({
             </div>
 
             <div>
-              <label className="block text-lg font-semibold text-slate-700 mb-3">
+              <label className="block text-base font-semibold text-slate-700 mb-3">
                 How urgent is clearing your record? *
               </label>
               <div className="space-y-2">
@@ -646,6 +677,79 @@ export function LeadCaptureForm({
               <p className="text-xs text-slate-500 mt-1">This helps us locate your records faster</p>
             </div>
 
+            {/* Address Information - Required for Legal Paperwork */}
+            <div className="bg-blue-50 p-4 rounded-lg">
+              <h4 className="font-semibold text-blue-900 mb-3 flex items-center gap-2">
+                <span>📋</span>
+                Address Information (Required for Legal Paperwork)
+              </h4>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                    Street Address *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                    value={formData.street}
+                    onChange={(e) => handleInputChange('street', e.target.value)}
+                    placeholder="123 Main Street"
+                  />
+                </div>
+                
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                      City *
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                      value={formData.city}
+                      onChange={(e) => handleInputChange('city', e.target.value)}
+                      placeholder="Los Angeles"
+                    />
+                  </div>
+                  
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                      State *
+                    </label>
+                    <select
+                      required
+                      className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                      value={formData.state}
+                      onChange={(e) => handleInputChange('state', e.target.value)}
+                    >
+                      <option value="">Select state</option>
+                      <option value="CA">California</option>
+                      <option value="Other">Other State</option>
+                    </select>
+                  </div>
+                </div>
+                
+                <div className="w-1/2">
+                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                    ZIP Code *
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                    value={formData.zipCode}
+                    onChange={(e) => handleInputChange('zipCode', e.target.value)}
+                    placeholder="90210"
+                  />
+                </div>
+                
+                <p className="text-xs text-blue-700">
+                  This address will be used for legal paperwork and court filings.
+                </p>
+              </div>
+            </div>
+
             <div className="flex gap-3">
               <button
                 type="button"
@@ -674,7 +778,7 @@ export function LeadCaptureForm({
             className="space-y-6"
           >
             <div>
-              <label className="block text-lg font-semibold text-slate-700 mb-3">
+              <label className="block text-base font-semibold text-slate-700 mb-3">
                 How has your record affected your life? (Select all that apply) *
               </label>
               <div className="space-y-3">

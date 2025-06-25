@@ -1,0 +1,357 @@
+{
+  "name": "Wipe That Record - Upsell Automation",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "upsell-trigger",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "name": "Purchase Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [240, 300],
+      "webhookId": "upsell-trigger"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.product }}",
+              "operation": "equal",
+              "value2": "diy"
+            }
+          ]
+        }
+      },
+      "name": "Is DIY Purchase",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [460, 200]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.product }}",
+              "operation": "equal",
+              "value2": "review"
+            }
+          ]
+        }
+      },
+      "name": "Is Review Purchase",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [460, 400]
+    },
+    {
+      "parameters": {
+        "amount": 30,
+        "unit": "minutes"
+      },
+      "name": "Wait 30 Min",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1,
+      "position": [680, 100]
+    },
+    {
+      "parameters": {
+        "amount": 2,
+        "unit": "hours"
+      },
+      "name": "Wait 2 Hours",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1,
+      "position": [680, 300]
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/n8n-webhook",
+        "options": {
+          "headers": {
+            "content-type": "application/json"
+          }
+        },
+        "requestMethod": "POST",
+        "jsonParameters": true,
+        "parametersJson": "={{ JSON.stringify({ action: 'post_purchase_upsell', email: $json.email, purchaseType: 'diy', amount: $json.amount, name: $json.name }) }}"
+      },
+      "name": "Send Review Upsell",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 2,
+      "position": [900, 100]
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/n8n-webhook", 
+        "options": {
+          "headers": {
+            "content-type": "application/json"
+          }
+        },
+        "requestMethod": "POST",
+        "jsonParameters": true,
+        "parametersJson": "={{ JSON.stringify({ action: 'post_purchase_upsell', email: $json.email, purchaseType: 'review', amount: $json.amount, name: $json.name }) }}"
+      },
+      "name": "Send Full Service Upsell",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 2,
+      "position": [900, 300]
+    },
+    {
+      "parameters": {
+        "amount": 24,
+        "unit": "hours"
+      },
+      "name": "Wait 24 Hours",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1,
+      "position": [1120, 100]
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/checkout/check-upgrade",
+        "options": {
+          "headers": {
+            "content-type": "application/json"
+          }
+        },
+        "requestMethod": "POST",
+        "jsonParameters": true,
+        "parametersJson": "={{ JSON.stringify({ email: $json.email }) }}"
+      },
+      "name": "Check If Upgraded",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 2,
+      "position": [1340, 100]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "boolean": [
+            {
+              "value1": "={{ $json.hasUpgraded }}",
+              "operation": "equal",
+              "value2": false
+            }
+          ]
+        }
+      },
+      "name": "No Upgrade Yet",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [1560, 100]
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/n8n-webhook",
+        "options": {
+          "headers": {
+            "content-type": "application/json"
+          }
+        },
+        "requestMethod": "POST",
+        "jsonParameters": true,
+        "parametersJson": "={{ JSON.stringify({ action: 'second_upsell_attempt', email: $json.email, originalPurchase: 'diy', discountPercent: 20 }) }}"
+      },
+      "name": "Send Discount Upsell",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 2,
+      "position": [1780, 100]
+    },
+    {
+      "parameters": {
+        "amount": 48,
+        "unit": "hours"
+      },
+      "name": "Wait 48 Hours",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1,
+      "position": [2000, 100]
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/n8n-webhook",
+        "options": {
+          "headers": {
+            "content-type": "application/json"
+          }
+        },
+        "requestMethod": "POST",
+        "jsonParameters": true,
+        "parametersJson": "={{ JSON.stringify({ action: 'final_upsell_attempt', email: $json.email, originalPurchase: 'diy', finalOffer: true }) }}"
+      },
+      "name": "Send Final Upsell",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 2,
+      "position": [2220, 100]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ success: true, message: 'Upsell sequence completed', email: $json.email }) }}"
+      },
+      "name": "Complete Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [2440, 200]
+    }
+  ],
+  "connections": {
+    "Purchase Webhook": {
+      "main": [
+        [
+          {
+            "node": "Is DIY Purchase",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Is Review Purchase",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is DIY Purchase": {
+      "main": [
+        [
+          {
+            "node": "Wait 30 Min",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is Review Purchase": {
+      "main": [
+        [
+          {
+            "node": "Wait 2 Hours",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait 30 Min": {
+      "main": [
+        [
+          {
+            "node": "Send Review Upsell",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait 2 Hours": {
+      "main": [
+        [
+          {
+            "node": "Send Full Service Upsell",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Review Upsell": {
+      "main": [
+        [
+          {
+            "node": "Wait 24 Hours",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait 24 Hours": {
+      "main": [
+        [
+          {
+            "node": "Check If Upgraded",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Check If Upgraded": {
+      "main": [
+        [
+          {
+            "node": "No Upgrade Yet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "No Upgrade Yet": {
+      "main": [
+        [
+          {
+            "node": "Send Discount Upsell",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Discount Upsell": {
+      "main": [
+        [
+          {
+            "node": "Wait 48 Hours",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait 48 Hours": {
+      "main": [
+        [
+          {
+            "node": "Send Final Upsell",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Final Upsell": {
+      "main": [
+        [
+          {
+            "node": "Complete Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Full Service Upsell": {
+      "main": [
+        [
+          {
+            "node": "Complete Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {},
+  "id": "2"
+} 

@@ -9,8 +9,8 @@ export const mailer = nodemailer.createTransport({
   maxConnections: 5,
   maxMessages: 100,
   auth: {
-    user: 'admin@wipethatrecord.com',
-    pass: 'Agj21990.',
+    user: process.env.ZOHO_EMAIL || 'admin@wipethatrecord.com',
+    pass: process.env.ZOHO_PASSWORD,
   },
 });
 

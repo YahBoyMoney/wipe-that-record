@@ -19,9 +19,14 @@ async function initPayload() {
 
 // Mongoose fallback schema
 const leadSchema = new mongoose.Schema({
-  fullName: String,
+  first: String,
+  last: String,
   email: String,
   phone: String,
+  street: String,
+  city: String,
+  state: String,
+  zipCode: String,
   convictionType: String,
   created: { type: Date, default: Date.now }
 });
@@ -37,9 +42,17 @@ export async function POST(req: NextRequest) {
     
     // Extract and validate required fields
     const { 
-      fullName, 
+      first,
+      last,
       email, 
       phone,
+      
+      // Address information
+      street,
+      city,
+      state,
+      zipCode,
+      
       convictionType,
       convictionYear,
       urgency,
@@ -59,44 +72,103 @@ export async function POST(req: NextRequest) {
       paid = false,
       amount = 0,
       lookup = false,
-      fullService = false
+      fullService = false,
+      age,
+      employmentStatus,
+      howDidYouHear,
+      additionalInfo
     } = leadData;
     
     // Validate required fields
-    if (!fullName || !email) {
-      console.log('❌ Missing required fields:', { fullName: !!fullName, email: !!email });
-      return NextResponse.json({ error: 'Name and email are required' }, { status: 400 });
+    if (!first || !email) {
+      console.log('❌ Missing required fields:', { first: !!first, email: !!email });
+      return NextResponse.json({ error: 'First name and email are required' }, { status: 400 });
     }
-    
-    // Split full name into first and last
-    const nameParts = fullName.trim().split(' ');
-    const first = nameParts[0] || '';
-    const last = nameParts.slice(1).join(' ') || '';
 
     console.log('🔍 Processing lead:', { first, last, email, convictionType });
 
-    // Calculate lead score
-    let leadScore = 10; // Base score
-    if (phone) leadScore += 15;
-    if (convictionType) leadScore += 20;
-    if (convictionYear) leadScore += 10;
-    if (urgency === 'immediate') leadScore += 20;
-    else if (urgency === 'within-month') leadScore += 15;
-    else if (urgency === 'within-3months') leadScore += 10;
+    // 🎯 ENHANCED LEAD SCORING ALGORITHM
+    let leadScore = 0;
+    let conversionProbability = 'low';
+    let leadQuality = 'cold';
     
-    if (budget === 'over-2000' || budget === 'flexible') leadScore += 15;
-    else if (budget === '1000-2000') leadScore += 10;
-    else if (budget === '500-1000') leadScore += 5;
+    // Urgency scoring (40 points max)
+    switch (urgency) {
+      case 'immediate': leadScore += 40; break;
+      case 'within-month': leadScore += 30; break;
+      case 'within-3-months': leadScore += 20; break;
+      case 'within-6-months': leadScore += 10; break;
+      case 'just-researching': leadScore += 5; break;
+    }
     
-    if (previousAttempts === 'hired-lawyer') leadScore += 15;
-    else if (previousAttempts === 'tried-myself') leadScore += 10;
+    // Conviction type scoring (25 points max)
+    switch (convictionType) {
+      case 'dui': leadScore += 25; break; // High demand
+      case 'drug-possession': leadScore += 20; break;
+      case 'theft': leadScore += 18; break;
+      case 'misdemeanor': leadScore += 15; break;
+      case 'felony': leadScore += 22; break;
+      case 'domestic-violence': leadScore += 12; break;
+      case 'other': leadScore += 10; break;
+    }
+    
+    // Age scoring (15 points max) - recent convictions easier to expunge
+    if (age && age !== 'prefer-not-to-say') {
+      const ageNum = parseInt(age);
+      if (ageNum >= 18 && ageNum <= 30) leadScore += 15;
+      else if (ageNum <= 40) leadScore += 12;
+      else if (ageNum <= 50) leadScore += 8;
+      else leadScore += 5;
+    }
+    
+    // Employment status scoring (10 points max)
+    switch (employmentStatus) {
+      case 'employed': leadScore += 10; break;
+      case 'seeking-employment': leadScore += 8; break;
+      case 'self-employed': leadScore += 7; break;
+      case 'student': leadScore += 5; break;
+      case 'unemployed': leadScore += 3; break;
+    }
+    
+    // Contact preferences scoring (10 points max)
+    if (phone) leadScore += 5; // Phone = higher intent
+    if (howDidYouHear === 'referral') leadScore += 5; // Referrals convert better
+    
+    // Calculate conversion probability and quality
+    if (leadScore >= 80) {
+      conversionProbability = 'very-high';
+      leadQuality = 'hot';
+    } else if (leadScore >= 65) {
+      conversionProbability = 'high';
+      leadQuality = 'warm';
+    } else if (leadScore >= 50) {
+      conversionProbability = 'medium';
+      leadQuality = 'warm';
+    } else if (leadScore >= 35) {
+      conversionProbability = 'low-medium';
+      leadQuality = 'cold';
+    } else {
+      conversionProbability = 'low';
+      leadQuality = 'cold';
+    }
 
-    // Determine lead segment
-    let leadSegment = 'cold';
-    if (leadScore >= 60) leadSegment = 'hot';
-    else if (leadScore >= 40) leadSegment = 'warm';
-    else if (leadScore >= 25) leadSegment = 'lukewarm';
+    // 🎯 LEAD SEGMENTATION FOR TARGETED CAMPAIGNS
+    let leadSegment = 'general-nurture';
     
+    if (convictionType === 'dui' && urgency === 'immediate') {
+      leadSegment = 'dui-urgent';
+    } else if (convictionType === 'dui') {
+      leadSegment = 'dui-specific';
+    } else if (urgency === 'immediate') {
+      leadSegment = 'urgent-general';
+    } else if (leadScore >= 75) {
+      leadSegment = 'high-intent-acceleration';
+    } else if (employmentStatus === 'seeking-employment') {
+      leadSegment = 'job-seeker-focused';
+    } else if (convictionType === 'misdemeanor') {
+      leadSegment = 'misdemeanor-specific';
+    }
+
     // Determine email sequence
     let emailSequence = 'general-nurture';
     if (convictionType === 'DUI') emailSequence = 'dui-specific';
@@ -110,6 +182,12 @@ export async function POST(req: NextRequest) {
       first,
       last,
       phone: phone || undefined,
+      
+      // Address information
+      street: street || undefined,
+      city: city || undefined,
+      state: state || undefined,
+      zipCode: zipCode || undefined,
       convictionType: convictionType || undefined,
       convictionYear: convictionYear || undefined,
       urgency: urgency || undefined,
@@ -137,7 +215,23 @@ export async function POST(req: NextRequest) {
       emailStatus: 'not_sent' as const,
       emailsSent: 0,
       totalRevenue: 0,
-      lifetimeValue: 0
+      lifetimeValue: 0,
+      conversionProbability,
+      leadQuality,
+      conversionStage: 'lead_captured',
+      emailStatus: 'pending',
+      emailsSent: 0,
+      lastEmailSent: null,
+      emailSequenceDay: 0,
+      estimatedLifetimeValue: calculateEstimatedLTV(leadScore, convictionType, urgency),
+      priority: leadScore >= 75 ? 'high' : leadScore >= 50 ? 'medium' : 'low',
+      followUpDate: new Date(Date.now() + 24*60*60*1000).toISOString(), // Next day
+      automationActive: true,
+      nurtureSequenceActive: false,
+      hasBeenUpsold: false,
+      stripeSessionId: null,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
     };
 
     console.log('🔍 Lead payload prepared:', JSON.stringify(leadPayload, null, 2));
@@ -156,6 +250,50 @@ export async function POST(req: NextRequest) {
       });
 
       console.log('✅ Lead created successfully in Payload:', lead.id);
+
+      // 🚀 TRIGGER N8N AUTOMATION WORKFLOWS
+      try {
+        // 1. Immediate lead nurture sequence
+        await triggerN8nWebhook('lead_nurture_sequence', {
+          email,
+          leadScore,
+          convictionType,
+          urgency,
+          leadSegment,
+          sequenceDay: 1,
+          name: first,
+          priority: leadPayload.priority
+        });
+        
+        // 2. High-priority lead notifications
+        if (leadScore >= 85) {
+          await triggerN8nWebhook('high_priority_lead_alert', {
+            email,
+            name: `${first} ${last}`,
+            leadScore,
+            convictionType,
+            urgency,
+            phone: phone || '',
+            estimatedLTV: leadPayload.estimatedLifetimeValue
+          });
+        }
+        
+        // 3. Segment-specific workflows
+        if (leadSegment === 'dui-urgent') {
+          await triggerN8nWebhook('dui_urgent_sequence', {
+            email,
+            name: first,
+            phone: phone || '',
+            leadScore
+          });
+        }
+        
+        console.log(`🔗 n8n automations triggered for ${email} (Score: ${leadScore})`);
+        
+      } catch (webhookError) {
+        console.error('❌ n8n webhook failed:', webhookError);
+        // Don't fail the lead creation if webhook fails
+      }
 
       return NextResponse.json({ 
         success: true, 
@@ -178,9 +316,14 @@ export async function POST(req: NextRequest) {
         
         console.log('🔍 Creating lead via Mongoose fallback...');
         const doc = await Lead.create({ 
-          fullName, 
+          first,
+          last,
           email, 
           phone: phone || undefined,
+          street: street || undefined,
+          city: city || undefined,
+          state: state || undefined,
+          zipCode: zipCode || undefined,
           convictionType: convictionType || undefined,
           created: new Date() 
         });
@@ -543,5 +686,60 @@ function getNextStepsForLead(segment: string, convictionType: string, leadScore:
       email_sequence: 'general-nurture',
       offer: 'Educational content about expungement'
     };
+  }
+}
+
+// Helper function to calculate estimated lifetime value
+function calculateEstimatedLTV(leadScore: number, convictionType: string, urgency: string): number {
+  let baseLTV = 150; // Base LTV for all leads
+  
+  // Score multiplier
+  baseLTV *= (leadScore / 50);
+  
+  // Conviction type multiplier
+  if (convictionType === 'dui') baseLTV *= 1.8;
+  else if (convictionType === 'felony') baseLTV *= 2.2;
+  else if (convictionType === 'misdemeanor') baseLTV *= 1.4;
+  
+  // Urgency multiplier
+  if (urgency === 'immediate') baseLTV *= 2.5;
+  else if (urgency === 'within-month') baseLTV *= 1.8;
+  else if (urgency === 'within-3-months') baseLTV *= 1.3;
+  
+  return Math.round(baseLTV);
+}
+
+// Helper function to trigger n8n webhooks
+async function triggerN8nWebhook(action: string, data: any) {
+  try {
+    const n8nUrl = process.env.N8N_WEBHOOK_URL;
+    if (!n8nUrl) {
+      console.log('⚠️ N8N_WEBHOOK_URL not configured');
+      return;
+    }
+
+    const response = await fetch(n8nUrl, {
+      method: 'POST',
+      headers: { 
+        'Content-Type': 'application/json',
+        'User-Agent': 'WipeThatRecord-Railway'
+      },
+      body: JSON.stringify({ 
+        action, 
+        timestamp: new Date().toISOString(),
+        source: 'railway-api',
+        ...data 
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error(`n8n webhook failed: ${response.status}`);
+    }
+
+    console.log(`✅ n8n webhook triggered: ${action}`);
+    
+  } catch (error) {
+    console.error(`❌ n8n webhook error for ${action}:`, error);
+    throw error;
   }
 } 

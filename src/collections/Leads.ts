@@ -10,10 +10,14 @@ const Leads: CollectionConfig = {
   admin: { 
     useAsTitle: 'email', 
     defaultColumns: [
+      'first',
+      'last', 
       'email',
+      'convictionType',
+      'city',
+      'state',
       'conversionStage',
       'leadScore',
-      'leadSegment',
       'totalRevenue',
       'source',
       'emailStatus',
@@ -25,9 +29,15 @@ const Leads: CollectionConfig = {
   fields: [
     // Basic Lead Information
     { name: 'email', type: 'email', required: true },
-    { name: 'first', type: 'text' },
-    { name: 'last', type: 'text' },
+    { name: 'first', type: 'text', required: true },
+    { name: 'last', type: 'text', required: true },
     { name: 'phone', type: 'text', label: 'Phone Number' },
+    
+    // Address Information (for legal paperwork)
+    { name: 'street', type: 'text', label: 'Street Address' },
+    { name: 'city', type: 'text', label: 'City' },
+    { name: 'state', type: 'text', label: 'State' },
+    { name: 'zipCode', type: 'text', label: 'ZIP Code' },
     
     // Case Information
     { 
@@ -36,6 +46,7 @@ const Leads: CollectionConfig = {
       label: 'Type of Conviction',
       options: [
         { label: 'DUI/DWI', value: 'DUI' },
+        { label: 'Felony', value: 'felony' },
         { label: 'Misdemeanor', value: 'misdemeanor' },
         { label: 'Drug Possession', value: 'drug-possession' },
         { label: 'Theft/Shoplifting', value: 'theft' },

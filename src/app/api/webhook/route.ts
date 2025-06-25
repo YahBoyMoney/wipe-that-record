@@ -51,6 +51,21 @@ export async function POST(req: NextRequest) {
       });
       
       console.log(`💰 DIY purchase: ${s.customer_details.email} - $${s.amount_total / 100}`);
+      
+      // Send admin notification
+      try {
+        const { notifyPurchase } = await import('@/lib/notifications');
+        await notifyPurchase({
+          email: s.customer_details.email,
+          fullName: `${s.metadata.first || ''} ${s.metadata.last || ''}`.trim(),
+          amount: s.amount_total / 100,
+          product: 'DIY Package',
+          stripeSessionId: s.id
+        });
+      } catch (error) {
+        console.error('❌ Failed to send purchase notification:', error);
+      }
+      
       return NextResponse.json({ ok: true });
       
     } else if (s.metadata.type === 'upgrade') {
@@ -60,6 +75,8 @@ export async function POST(req: NextRequest) {
       await payload.create({
         collection: 'leads',
         data: {
+          first: s.customer_details.name?.split(' ')[0] || 'Customer',
+          last: s.customer_details.name?.split(' ').slice(1).join(' ') || '',
           email: s.customer_details.email,
           amount: s.amount_total / 100,
           paid: true,

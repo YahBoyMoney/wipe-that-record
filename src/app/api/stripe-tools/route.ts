@@ -4,8 +4,14 @@ import { createMcpHandler } from '@vercel/mcp-adapter';
 import payload from 'payload';
 import type { NextRequest } from 'next/server';
 
-// Initialize Stripe (uses account's default API version)
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
+// Initialize Stripe lazily to avoid build-time errors
+const getStripe = () => {
+  const secretKey = process.env.STRIPE_SECRET_KEY;
+  if (!secretKey) {
+    throw new Error('STRIPE_SECRET_KEY is required');
+  }
+  return new Stripe(secretKey);
+};
 
 // Temporary no-op auth check (replace with real Payload auth if desired)
 const assertAdmin = async (): Promise<void> => {
@@ -23,7 +29,7 @@ const handler = createMcpHandler(
         await assertAdmin();
 
         if (id.startsWith('pi_')) {
-          const pi = await stripe.paymentIntents.retrieve(id);
+          const pi = await getStripe().paymentIntents.retrieve(id);
           const amt = (pi.amount_received ?? pi.amount ?? 0) / 100;
           return {
             content: [
@@ -36,7 +42,7 @@ const handler = createMcpHandler(
         }
 
         if (id.startsWith('ch_')) {
-          const ch = await stripe.charges.retrieve(id);
+          const ch = await getStripe().charges.retrieve(id);
           const amt = (ch.amount ?? 0) / 100;
           return {
             content: [
@@ -61,8 +67,8 @@ const handler = createMcpHandler(
       { limit: z.number().int().min(1).max(100).default(10) },
       async ({ limit }: { limit: number }) => {
         await assertAdmin();
-        const list = await stripe.charges.list({ limit });
-        const lines = list.data.map((c) => `• ${new Date(c.created * 1000).toLocaleString()} — ${(c.amount / 100).toFixed(2)} ${c.currency.toUpperCase()} — ${c.status}`);
+        const list = await getStripe().charges.list({ limit });
+        const lines = list.data.map((c: Stripe.Charge) => `• ${new Date(c.created * 1000).toLocaleString()} — ${(c.amount / 100).toFixed(2)} ${c.currency.toUpperCase()} — ${c.status}`);
         return { content: [{ type: 'text', text: lines.join('\n') }] };
       },
     );
@@ -74,7 +80,7 @@ const handler = createMcpHandler(
       { chargeId: z.string() },
       async ({ chargeId }: { chargeId: string }) => {
         await assertAdmin();
-        const refund = await stripe.refunds.create({ charge: chargeId });
+        const refund = await getStripe().refunds.create({ charge: chargeId });
         return {
           content: [
             {
@@ -93,7 +99,7 @@ const handler = createMcpHandler(
       {},
       async () => {
         await assertAdmin();
-        const bal = await stripe.balance.retrieve();
+        const bal = await getStripe().balance.retrieve();
         const available = bal.available[0]?.amount ?? 0;
         const pending = bal.pending[0]?.amount ?? 0;
         return {

@@ -9,6 +9,8 @@ export async function POST(req: NextRequest) {
     const testLead = await payload.create({
       collection: 'leads',
       data: {
+        first: 'Test',
+        last: 'User',
         email: 'test@example.com'
       }
     });

@@ -116,6 +116,8 @@ export interface UserAuthOperations {
   };
 }
 /**
+ * User management and access control
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users".
  */
@@ -123,7 +125,24 @@ export interface User {
   id: string;
   firstName: string;
   lastName: string;
-  role: 'admin' | 'user';
+  role: 'superadmin' | 'admin' | 'manager' | 'user';
+  department?: ('executive' | 'sales' | 'marketing' | 'operations' | 'legal' | 'customer_service') | null;
+  permissions?:
+    | {
+        resource?: ('all' | 'leads' | 'analytics' | 'email' | 'financial' | 'users' | 'settings') | null;
+        actions?:
+          | {
+              action?: ('create' | 'read' | 'update' | 'delete' | 'export') | null;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+      }[]
+    | null;
+  lastLogin?: string | null;
+  loginCount?: number | null;
+  isActive?: boolean | null;
+  notes?: string | null;
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -163,11 +182,25 @@ export interface Media {
 export interface Lead {
   id: string;
   email: string;
-  first?: string | null;
-  last?: string | null;
+  first: string;
+  last: string;
   phone?: string | null;
+  street?: string | null;
+  city?: string | null;
+  state?: string | null;
+  zipCode?: string | null;
   convictionType?:
-    | ('DUI' | 'misdemeanor' | 'drug-possession' | 'theft' | 'domestic-violence' | 'assault' | 'other' | 'not-sure')
+    | (
+        | 'DUI'
+        | 'felony'
+        | 'misdemeanor'
+        | 'drug-possession'
+        | 'theft'
+        | 'domestic-violence'
+        | 'assault'
+        | 'other'
+        | 'not-sure'
+      )
     | null;
   convictionYear?: string | null;
   urgency?: ('immediate' | 'within-month' | 'within-3months' | 'within-year' | 'just-exploring') | null;
@@ -324,6 +357,23 @@ export interface UsersSelect<T extends boolean = true> {
   firstName?: T;
   lastName?: T;
   role?: T;
+  department?: T;
+  permissions?:
+    | T
+    | {
+        resource?: T;
+        actions?:
+          | T
+          | {
+              action?: T;
+              id?: T;
+            };
+        id?: T;
+      };
+  lastLogin?: T;
+  loginCount?: T;
+  isActive?: T;
+  notes?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -361,6 +411,10 @@ export interface LeadsSelect<T extends boolean = true> {
   first?: T;
   last?: T;
   phone?: T;
+  street?: T;
+  city?: T;
+  state?: T;
+  zipCode?: T;
   convictionType?: T;
   convictionYear?: T;
   urgency?: T;

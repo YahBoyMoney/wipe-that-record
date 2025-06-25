@@ -77,13 +77,26 @@ export async function POST(req: NextRequest) {
       description += ` (${appliedPromoCode.code}: -$${discountAmount})`;
     }
 
-    // 💳 CREATE STRIPE PAYMENT INTENT
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount: stripeAmount,
-      currency: 'usd',
-      automatic_payment_methods: {
-        enabled: true,
-      },
+    // 💳 CREATE STRIPE CHECKOUT SESSION
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ['card'],
+      line_items: [
+        {
+          price_data: {
+            currency: 'usd',
+            product_data: {
+              name: productName,
+              description: description,
+            },
+            unit_amount: stripeAmount,
+          },
+          quantity: 1,
+        },
+      ],
+      mode: 'payment',
+      success_url: `${req.nextUrl.origin}/thank-you?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${req.nextUrl.origin}/`,
+      customer_email: email,
       metadata: {
         email,
         product,
@@ -91,13 +104,13 @@ export async function POST(req: NextRequest) {
         originalAmount: amount.toString(),
         finalAmount: finalAmount.toString(),
         promoCode: promoCode || '',
-        discountAmount: discountAmount.toString()
+        discountAmount: discountAmount.toString(),
+        fullName: fullName || ''
       },
-      description,
-      receipt_email: email,
+      allow_promotion_codes: true,
     });
 
-    console.log(`✅ Payment Intent created: ${paymentIntent.id} for $${finalAmount}`);
+    console.log(`✅ Checkout Session created: ${session.id} for $${finalAmount}`);
 
     // 📊 TRACKING ANALYTICS
     const analytics = {
@@ -108,15 +121,15 @@ export async function POST(req: NextRequest) {
       finalAmount,
       promoCode: promoCode || null,
       discountAmount,
-      paymentIntentId: paymentIntent.id,
+      sessionId: session.id,
       timestamp: new Date().toISOString()
     };
 
     console.log(`📊 Checkout analytics:`, analytics);
 
     return NextResponse.json({
-      clientSecret: paymentIntent.client_secret,
-      paymentIntentId: paymentIntent.id,
+      url: session.url,
+      sessionId: session.id,
       amount: finalAmount,
       originalAmount: amount,
       discountAmount,

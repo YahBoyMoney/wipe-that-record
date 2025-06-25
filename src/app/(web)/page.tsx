@@ -3,12 +3,14 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Hero } from '@/components/Hero';
 import { PlanCard } from '@/components/PlanCard';
+import { LeadCaptureForm } from '@/components/LeadCaptureForm';
 import Image from 'next/image';
 
 export default function LandingPage() {
   const [showExitModal, setShowExitModal] = useState(false);
   const [hasSeenExitModal, setHasSeenExitModal] = useState(false);
   const [showCookieBanner, setShowCookieBanner] = useState(false);
+  const [showQualificationModal, setShowQualificationModal] = useState(false);
 
   // Exit intent detection
   useEffect(() => {
@@ -32,6 +34,10 @@ export default function LandingPage() {
   const acceptCookies = () => {
     localStorage.setItem('cookiesAccepted', 'true');
     setShowCookieBanner(false);
+  };
+
+  const openQualificationModal = () => {
+    setShowQualificationModal(true);
   };
 
   return (
@@ -65,6 +71,27 @@ export default function LandingPage() {
         </motion.div>
       )}
 
+      {/* Qualification Modal */}
+      {showQualificationModal && (
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 overflow-y-auto"
+        >
+          <motion.div 
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            className="relative w-full max-w-md"
+          >
+            <LeadCaptureForm 
+              variant="modal" 
+              leadMagnet="landing-page-qualification"
+              onClose={() => setShowQualificationModal(false)}
+            />
+          </motion.div>
+        </motion.div>
+      )}
+
       {/* Exit Intent Modal */}
       {showExitModal && (
         <motion.div 
@@ -90,7 +117,7 @@ export default function LandingPage() {
                 }}
                 className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold transition-colors"
               >
-                Get 10% Off - $45
+                Get 10% Off - $87
               </button>
               <button 
                 onClick={() => setShowExitModal(false)}
@@ -110,13 +137,70 @@ export default function LandingPage() {
         className="sticky top-0 z-40 bg-gradient-to-r from-amber-400 to-amber-500 text-slate-900 text-center py-2 px-4"
       >
         <p className="text-sm font-semibold">
-          🔥 Limited Time: DIY Expungement Kit - Only $50 (Save $200)
+          🔥 Limited Time: DIY Expungement Kit - Only $97 (Save $50) | 
+          <button 
+            onClick={openQualificationModal}
+            className="ml-2 underline hover:no-underline font-bold"
+          >
+            Check If You Qualify →
+          </button>
         </p>
       </motion.div>
 
       <main className="min-h-screen bg-white dark:bg-slate-900 overflow-x-hidden">
         {/* Hero section */}
         <Hero variant="a" />
+
+        {/* Qualification CTA Section */}
+        <motion.section 
+          className="py-16 px-4 bg-gradient-to-r from-green-600 to-emerald-600 text-white"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+        >
+          <div className="max-w-4xl mx-auto text-center">
+            <motion.h2 
+              className="text-3xl sm:text-4xl font-bold mb-4"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+            >
+              Find Out If You Qualify in 2 Minutes
+            </motion.h2>
+            <motion.p 
+              className="text-xl text-green-100 mb-8 max-w-2xl mx-auto"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+              viewport={{ once: true }}
+            >
+              Most California convictions can be expunged. Take our quick assessment to see if your record qualifies and get your personalized roadmap.
+            </motion.p>
+            
+            <motion.div 
+              className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              viewport={{ once: true }}
+            >
+              <button 
+                onClick={openQualificationModal}
+                className="group bg-white text-green-600 hover:bg-green-50 px-8 py-4 rounded-xl font-bold text-lg transition-all duration-300 hover:scale-105 hover:shadow-xl"
+              >
+                <span className="flex items-center justify-center gap-2">
+                  ✅ Check My Eligibility - FREE
+                  <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                  </svg>
+                </span>
+              </button>
+              <div className="text-green-100 text-sm">
+                ⚡ Get results instantly • 📧 Custom roadmap sent to your email
+              </div>
+            </motion.div>
+          </div>
+        </motion.section>
 
         {/* Live counter */}
         <motion.section 
@@ -170,51 +254,86 @@ export default function LandingPage() {
                 Choose Your Path to Freedom
               </motion.h2>
               <motion.p 
-                className="text-xl text-slate-600 dark:text-slate-300 max-w-2xl mx-auto"
+                className="text-xl text-slate-600 dark:text-slate-300 max-w-2xl mx-auto mb-8"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
                 viewport={{ once: true }}
               >
-                Two proven options to clear your California record and unlock new opportunities
+                Three service levels to clear your California record and unlock new opportunities
               </motion.p>
+              
+              {/* Qualification CTA in plans section */}
+              <motion.div 
+                className="inline-block"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+                viewport={{ once: true }}
+              >
+                <button 
+                  onClick={openQualificationModal}
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors inline-flex items-center gap-2"
+                >
+                  🎯 Find Out Which Option Fits Your Case
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                  </svg>
+                </button>
+              </motion.div>
             </div>
             
-            <div className="grid lg:grid-cols-2 gap-8 max-w-5xl mx-auto">
+            <div className="grid lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
               <PlanCard
-                title="DIY Expungement Kit"
-                price="$50"
-                originalPrice="$250"
+                title="DIY Service"
+                price="$97"
+                originalPrice="$147"
                 description="Perfect for straightforward misdemeanor cases"
                 features={[
-                  "Step-by-step video tutorials",
-                  "All required court forms",
+                  "Complete California forms package",
+                  "Step-by-step instructions",
+                  "Sample completed forms",
                   "Email support included",
-                  "30-day money-back guarantee",
-                  "Average completion: 2-3 weeks"
+                  "Prop 47 & SB 731 compliant"
                 ]}
-                cta="Start DIY for $50"
+                cta="Get DIY Kit - $97"
                 ctaVariant="primary"
-                popular={false}
-                savings="Save $200"
-                href="/api/checkout/diy"
+                popular={true}
+                savings="Save $50"
+                href="/checkout/diy"
               />
               <PlanCard
-                title="Full-Service Expungement"
-                price="$1,500"
-                description="Attorney-handled with guaranteed results"
+                title="Expert Review"
+                price="$297"
+                description="Expert form completion and case review"
                 features={[
-                  "Licensed CA attorney representation",
-                  "Complete case management",
-                  "Court appearances included",
-                  "100% success guarantee",
-                  "Completed in 30-60 days"
+                  "Everything in DIY +",
+                  "Expert form completion",
+                  "Case review & analysis",
+                  "Phone consultation",
+                  "Filing guidance"
                 ]}
-                cta="Free Eligibility Check"
+                cta="Get Expert Review"
                 ctaVariant="secondary"
-                popular={true}
-                badge="Most Successful"
-                href="/api/checkout/upgrade?type=full"
+                popular={false}
+                href="/checkout/review"
+              />
+              <PlanCard
+                title="Full Service"
+                price="$1,497"
+                description="Complete attorney representation"
+                features={[
+                  "Complete attorney service",
+                  "Attorney files everything",
+                  "Court appearances handled",
+                  "Direct attorney access",
+                  "Success guarantee"
+                ]}
+                cta="Get Full Service"
+                ctaVariant="secondary"
+                popular={false}
+                badge="Premium"
+                href="/checkout/full-service"
               />
             </div>
           </div>
@@ -254,7 +373,8 @@ export default function LandingPage() {
                     title: "Check Eligibility",
                     description: "Quick 2-minute form to see if your record qualifies for expungement",
                     icon: "📋",
-                    duration: "2 minutes"
+                    duration: "2 minutes",
+                    cta: true
                   },
                   {
                     number: 2,
@@ -298,16 +418,46 @@ export default function LandingPage() {
                     <p className="text-slate-600 dark:text-slate-300 mb-4 leading-relaxed">
                       {step.description}
                     </p>
-                    <div className="inline-flex items-center gap-2 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 px-3 py-1 rounded-full text-sm font-medium">
+                    <div className="inline-flex items-center gap-2 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 px-3 py-1 rounded-full text-sm font-medium mb-4">
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
                       {step.duration}
                     </div>
+                    
+                    {step.cta && (
+                      <button 
+                        onClick={openQualificationModal}
+                        className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-semibold transition-colors"
+                      >
+                        Start Here - Check Eligibility
+                      </button>
+                    )}
                   </motion.div>
                 ))}
               </div>
             </div>
+            
+            {/* Additional CTA after process */}
+            <motion.div 
+              className="text-center mt-16"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+            >
+              <button 
+                onClick={openQualificationModal}
+                className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all duration-300 hover:scale-105 hover:shadow-xl inline-flex items-center gap-2"
+              >
+                ⚡ Get My Instant Eligibility Report
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                </svg>
+              </button>
+              <p className="text-slate-600 dark:text-slate-300 mt-2 text-sm">
+                Free • Takes 2 minutes • Results sent to your email
+              </p>
+            </motion.div>
           </div>
         </section>
 
@@ -383,6 +533,27 @@ export default function LandingPage() {
                 </motion.div>
               ))}
             </div>
+            
+            {/* CTA after testimonials */}
+            <motion.div 
+              className="text-center mt-12"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+            >
+              <p className="text-slate-600 dark:text-slate-300 mb-4">
+                Ready to join thousands of Californians who've cleared their records?
+              </p>
+              <button 
+                onClick={openQualificationModal}
+                className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors inline-flex items-center gap-2"
+              >
+                🎯 See If Your Case Qualifies
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                </svg>
+              </button>
+            </motion.div>
           </div>
         </section>
 
@@ -445,6 +616,30 @@ export default function LandingPage() {
                 </motion.details>
               ))}
             </div>
+            
+            {/* FAQ CTA */}
+            <motion.div 
+              className="text-center mt-12 p-6 bg-blue-50 dark:bg-blue-900/20 rounded-xl"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+            >
+              <h3 className="text-xl font-bold text-slate-900 dark:text-white mb-3">
+                Still Have Questions About Your Specific Case?
+              </h3>
+              <p className="text-slate-600 dark:text-slate-300 mb-4">
+                Get personalized answers based on your conviction type and circumstances
+              </p>
+              <button 
+                onClick={openQualificationModal}
+                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors inline-flex items-center gap-2"
+              >
+                📋 Get My Custom Case Assessment
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                </svg>
+              </button>
+            </motion.div>
           </div>
         </section>
 
@@ -478,83 +673,56 @@ export default function LandingPage() {
               viewport={{ once: true }}
             >
               <button 
-                onClick={() => window.location.href = '/api/checkout/diy'}
+                onClick={openQualificationModal}
                 className="group bg-white text-blue-600 hover:bg-blue-50 px-8 py-4 rounded-xl font-bold text-lg transition-all duration-300 hover:scale-105 hover:shadow-xl"
               >
                 <span className="flex items-center justify-center gap-2">
-                  Start DIY for $50
+                  🎯 Check If I Qualify - FREE
                   <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                   </svg>
                 </span>
               </button>
               <button 
-                onClick={() => window.location.href = '/api/checkout/upgrade?type=full'}
+                onClick={() => window.location.href = '/api/checkout/diy'}
                 className="group border-2 border-white text-white hover:bg-white hover:text-blue-600 px-8 py-4 rounded-xl font-bold text-lg transition-all duration-300 hover:scale-105"
               >
-                Free Eligibility Check
+                Start DIY for $50
               </button>
             </motion.div>
+            
+            <motion.p 
+              className="text-blue-200 mt-6 text-sm"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ delay: 0.3 }}
+              viewport={{ once: true }}
+            >
+              💪 1,847 Californians helped this month • ⚡ 98.7% success rate • 🛡️ Money-back guarantee
+            </motion.p>
           </div>
         </section>
 
-        {/* Footer */}
-        <footer className="bg-slate-900 text-white py-16 px-4">
-          <div className="max-w-6xl mx-auto">
-            <div className="grid md:grid-cols-4 gap-8 mb-12">
-              <div className="col-span-2">
-                <h3 className="text-2xl font-bold mb-4">Wipe That Record</h3>
-                <p className="text-slate-300 mb-6 max-w-md">
-                  Professional California expungement services helping you clear your record and reclaim your future.
-                </p>
-              </div>
-              
-              <div>
-                <h4 className="font-semibold mb-4">Services</h4>
-                <ul className="space-y-2 text-slate-300">
-                  <li><a href="#" className="hover:text-white transition-colors">DIY Expungement</a></li>
-                  <li><a href="#" className="hover:text-white transition-colors">Full Service</a></li>
-                  <li><a href="#" className="hover:text-white transition-colors">Eligibility Check</a></li>
-                </ul>
-              </div>
-              
-              <div>
-                <h4 className="font-semibold mb-4">Legal</h4>
-                <ul className="space-y-2 text-slate-300">
-                  <li><a href="/privacy" className="hover:text-white transition-colors">Privacy Policy</a></li>
-                  <li><a href="/terms" className="hover:text-white transition-colors">Terms of Service</a></li>
-                  <li><a href="/accessibility" className="hover:text-white transition-colors">Accessibility</a></li>
-                </ul>
+        {/* Floating CTA Button - appears after scrolling */}
+        <motion.div 
+          className="fixed bottom-6 right-6 z-40"
+          initial={{ opacity: 0, scale: 0 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 3 }}
+        >
+          <button 
+            onClick={openQualificationModal}
+            className="bg-green-600 hover:bg-green-700 text-white p-4 rounded-full shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-110 group"
+          >
+            <div className="flex items-center gap-2">
+              <span className="text-2xl">🎯</span>
+              <div className="hidden group-hover:block text-sm font-semibold whitespace-nowrap">
+                Check Eligibility
               </div>
             </div>
-            
-            <div className="border-t border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-              <div className="text-sm text-slate-400">
-                <p>Attorney: Tam Berhe, State Bar #298992</p>
-                <p className="mt-1">This site is attorney advertising. Prior results do not guarantee a similar outcome.</p>
-              </div>
-            </div>
-          </div>
-        </footer>
+          </button>
+        </motion.div>
       </main>
-
-      {/* Sticky bottom CTA for mobile */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-700 p-4 md:hidden z-40">
-        <div className="flex gap-3">
-          <button 
-            onClick={() => window.location.href = '/api/checkout/diy'}
-            className="flex-1 bg-blue-600 text-white px-4 py-3 rounded-lg font-semibold text-sm"
-          >
-            Start DIY $50
-          </button>
-          <button 
-            onClick={() => window.location.href = '/api/checkout/upgrade?type=full'}
-            className="flex-1 border border-blue-600 text-blue-600 px-4 py-3 rounded-lg font-semibold text-sm"
-          >
-            Free Check
-          </button>
-        </div>
-      </div>
     </>
   );
 }

@@ -1,0 +1,287 @@
+{
+  "name": "Wipe That Record - Lead Nurture Sequence",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "wipe-that-record",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [240, 300],
+      "webhookId": "wipe-that-record"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "string": [
+            {
+              "value1": "={{ $json.action }}",
+              "operation": "equal",
+              "value2": "lead_nurture_sequence"
+            }
+          ]
+        }
+      },
+      "name": "Is Lead Nurture",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "number": [
+            {
+              "value1": "={{ $json.sequenceDay }}",
+              "operation": "equal",
+              "value2": 1
+            }
+          ]
+        }
+      },
+      "name": "Day 1 Check",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [680, 200]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "number": [
+            {
+              "value1": "={{ $json.sequenceDay }}",
+              "operation": "equal",
+              "value2": 3
+            }
+          ]
+        }
+      },
+      "name": "Day 3 Check",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 1,
+      "position": [680, 400]
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/n8n-webhook",
+        "options": {
+          "headers": {
+            "content-type": "application/json"
+          }
+        },
+        "requestMethod": "POST",
+        "jsonParameters": true,
+        "parametersJson": "={{ JSON.stringify({ action: 'send_day1_email', email: $json.email, name: $json.name, convictionType: $json.convictionType }) }}"
+      },
+      "name": "Send Day 1 Email",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 2,
+      "position": [900, 100]
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/n8n-webhook",
+        "options": {
+          "headers": {
+            "content-type": "application/json"
+          }
+        },
+        "requestMethod": "POST",
+        "jsonParameters": true,
+        "parametersJson": "={{ JSON.stringify({ action: 'send_day3_email', email: $json.email, name: $json.name, convictionType: $json.convictionType }) }}"
+      },
+      "name": "Send Day 3 Email",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 2,
+      "position": [900, 300]
+    },
+    {
+      "parameters": {
+        "amount": 2,
+        "unit": "days"
+      },
+      "name": "Wait 2 Days",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1,
+      "position": [1120, 100]
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/n8n-webhook",
+        "options": {
+          "headers": {
+            "content-type": "application/json"
+          }
+        },
+        "requestMethod": "POST", 
+        "jsonParameters": true,
+        "parametersJson": "={{ JSON.stringify({ action: 'trigger_next_sequence', email: $json.email, nextDay: 3, convictionType: $json.convictionType, leadScore: $json.leadScore }) }}"
+      },
+      "name": "Trigger Day 3",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 2,
+      "position": [1340, 100]
+    },
+    {
+      "parameters": {
+        "amount": 4,
+        "unit": "days"
+      },
+      "name": "Wait 4 Days",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1,
+      "position": [1120, 300]
+    },
+    {
+      "parameters": {
+        "url": "http://localhost:3000/api/n8n-webhook",
+        "options": {
+          "headers": {
+            "content-type": "application/json"
+          }
+        },
+        "requestMethod": "POST",
+        "jsonParameters": true, 
+        "parametersJson": "={{ JSON.stringify({ action: 'trigger_next_sequence', email: $json.email, nextDay: 7, convictionType: $json.convictionType, leadScore: $json.leadScore }) }}"
+      },
+      "name": "Trigger Day 7",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 2,
+      "position": [1340, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify({ success: true, message: 'Lead nurture sequence initiated', email: $json.email, day: $json.sequenceDay }) }}"
+      },
+      "name": "Success Response",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1560, 200]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Is Lead Nurture",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is Lead Nurture": {
+      "main": [
+        [
+          {
+            "node": "Day 1 Check",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Day 3 Check",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Day 1 Check": {
+      "main": [
+        [
+          {
+            "node": "Send Day 1 Email",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Day 3 Check": {
+      "main": [
+        [
+          {
+            "node": "Send Day 3 Email", 
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Day 1 Email": {
+      "main": [
+        [
+          {
+            "node": "Wait 2 Days",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send Day 3 Email": {
+      "main": [
+        [
+          {
+            "node": "Wait 4 Days",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait 2 Days": {
+      "main": [
+        [
+          {
+            "node": "Trigger Day 3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait 4 Days": {
+      "main": [
+        [
+          {
+            "node": "Trigger Day 7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Trigger Day 3": {
+      "main": [
+        [
+          {
+            "node": "Success Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Trigger Day 7": {
+      "main": [
+        [
+          {
+            "node": "Success Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {},
+  "id": "1"
+} 
