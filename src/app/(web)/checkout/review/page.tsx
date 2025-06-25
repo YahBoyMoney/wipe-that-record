@@ -45,7 +45,7 @@ export default function ReviewCheckoutPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           product: 'review',
-          amount: 100,
+          amount: 297,
           email: leadData?.email || 'customer@example.com',
           fullName: leadData?.fullName || 'Customer',
           leadId: leadData?.id || ''
@@ -123,8 +123,8 @@ export default function ReviewCheckoutPage() {
           <div className="text-center mb-12">
             <h1 className="text-4xl font-bold text-gray-900 mb-4">
               {leadData?.fullName ? `${leadData.fullName}, ` : ""}
-              Get Expert Review for Just $100
-              <span className="text-orange-600"> (66% OFF!)</span>
+              Get Expert Review for Just $297
+              <span className="text-orange-600"> (Expert Assistance!)</span>
             </h1>
             <p className="text-xl text-gray-600">
               Don't risk costly mistakes. Have a licensed attorney review your case before filing.
@@ -148,7 +148,7 @@ export default function ReviewCheckoutPage() {
             {/* Value Stack */}
             <div className="bg-white p-6 rounded-xl shadow-lg">
               <h3 className="font-bold text-green-800 text-lg mb-3">
-                ✅ Expert Review Includes ($812 Value)
+                ✅ Expert Review Includes (High Value)
               </h3>
               <ul className="text-green-700 text-sm space-y-2">
                 <li>• Licensed attorney reviews your case</li>
@@ -158,7 +158,7 @@ export default function ReviewCheckoutPage() {
                 <li>• 30-day money-back guarantee</li>
               </ul>
               <div className="mt-4 p-3 bg-yellow-50 rounded text-center">
-                <div className="text-lg font-bold text-green-600">Only $100 (Save $712!)</div>
+                <div className="text-lg font-bold text-green-600">Professional Service - $297</div>
               </div>
             </div>
           </div>
@@ -197,14 +197,14 @@ export default function ReviewCheckoutPage() {
             <div className="bg-blue-50 p-8 rounded-2xl border-2 border-blue-200 max-w-md mx-auto">
               <h3 className="text-2xl font-bold mb-4">🛡️ 96% Success Rate</h3>
               <div className="mb-6">
-                <div className="text-3xl font-bold text-green-600">$100</div>
-                <div className="text-sm text-gray-500 line-through">$300 Regular Price</div>
+                <div className="text-3xl font-bold text-green-600">$297</div>
+                <div className="text-sm text-gray-500">Professional Expert Review</div>
               </div>
               <button
                 onClick={handleCheckout}
                 className="w-full bg-orange-600 hover:bg-orange-700 text-white py-4 px-6 rounded-lg font-bold text-lg transition-colors mb-4"
               >
-                🎯 Get Expert Review Now - $100
+                🎯 Get Expert Review Now - $297
               </button>
               <div className="text-xs text-gray-500">
                 ⚡ 96% success rate • 30-day guarantee • SSL secured
@@ -218,7 +218,7 @@ export default function ReviewCheckoutPage() {
             <div className="grid md:grid-cols-3 gap-6">
               {/* DIY */}
               <div className="border p-4 rounded-lg">
-                <h4 className="font-bold text-lg mb-3">DIY Kit - $50</h4>
+                <h4 className="font-bold text-lg mb-3">DIY Service - $97</h4>
                 <ul className="text-sm space-y-2 mb-4">
                   <li>✅ Forms & instructions</li>
                   <li>❌ No attorney review</li>
@@ -238,7 +238,7 @@ export default function ReviewCheckoutPage() {
                 <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-orange-500 text-white px-3 py-1 rounded text-xs font-bold">
                   BEST VALUE
                 </div>
-                <h4 className="font-bold text-lg mb-3 text-orange-700">Expert Review - $100</h4>
+                <h4 className="font-bold text-lg mb-3 text-orange-700">Expert Review - $297</h4>
                 <ul className="text-sm space-y-2 mb-4">
                   <li>✅ Everything in DIY</li>
                   <li>✅ Attorney case review</li>
@@ -255,7 +255,7 @@ export default function ReviewCheckoutPage() {
 
               {/* Full Service */}
               <div className="border p-4 rounded-lg">
-                <h4 className="font-bold text-lg mb-3">Full Service - $1,500</h4>
+                <h4 className="font-bold text-lg mb-3">Full Service - $1,497</h4>
                 <ul className="text-sm space-y-2 mb-4">
                   <li>✅ Everything done for you</li>
                   <li>✅ Attorney handles filing</li>

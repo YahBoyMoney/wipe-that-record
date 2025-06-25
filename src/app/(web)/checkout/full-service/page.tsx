@@ -21,7 +21,7 @@ export default function FullServiceCheckoutPage() {
 
   const handleCheckout = async () => {
     try {
-      const amount = paymentPlan === 'full' ? 1500 : 300; // $300 down payment
+      const amount = paymentPlan === 'full' ? 1497 : 300; // $300 down payment
       const leadData = JSON.parse(sessionStorage.getItem('leadData') || '{}');
       
       const response = await fetch('/api/checkout', {
@@ -81,7 +81,7 @@ export default function FullServiceCheckoutPage() {
             </p>
             <div className="bg-yellow-100 border-2 border-yellow-300 rounded-xl p-4 max-w-2xl mx-auto">
               <p className="text-yellow-800 font-semibold">
-                🎉 <strong>Limited Time:</strong> Save $500 off regular $2,000 price!
+                🎉 <strong>Professional Service:</strong> Complete attorney representation for $1,497!
               </p>
             </div>
           </motion.div>
@@ -122,9 +122,9 @@ export default function FullServiceCheckoutPage() {
               </div>
               <div className="mt-6 p-6 bg-gradient-to-r from-yellow-50 to-orange-50 rounded-xl border-2 border-yellow-300">
                 <div className="text-center text-yellow-800">
-                  <div className="text-xl font-bold">Total Attorney Value: $2,000</div>
-                  <div className="text-3xl font-bold text-green-600 mt-2">Your Price: Only $1,500</div>
-                  <div className="text-lg">You Save: $500 (25% OFF)</div>
+                  <div className="text-xl font-bold">Complete Attorney Service</div>
+                  <div className="text-3xl font-bold text-green-600 mt-2">Your Price: $1,497</div>
+                  <div className="text-lg">Professional White-Glove Service</div>
                 </div>
               </div>
             </motion.div>
@@ -142,9 +142,9 @@ export default function FullServiceCheckoutPage() {
                   <thead>
                     <tr className="border-b">
                       <th className="py-3 px-4 text-left">Feature</th>
-                      <th className="py-3 px-4 text-center text-red-600">DIY ($50)</th>
-                      <th className="py-3 px-4 text-center text-orange-600">Review ($100)</th>
-                      <th className="py-3 px-4 text-center text-purple-600 bg-purple-50">Full Service ($1,500)</th>
+                      <th className="py-3 px-4 text-center text-red-600">DIY ($97)</th>
+                      <th className="py-3 px-4 text-center text-orange-600">Review ($297)</th>
+                      <th className="py-3 px-4 text-center text-purple-600 bg-purple-50">Full Service ($1,497)</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -254,11 +254,11 @@ export default function FullServiceCheckoutPage() {
                     <div className="flex items-center justify-between">
                       <div>
                         <div className="font-bold text-lg">Pay in Full</div>
-                        <div className="text-sm text-gray-600">Save $200 with full payment</div>
+                        <div className="text-sm text-gray-600">Complete attorney service</div>
                       </div>
                       <div className="text-right">
-                        <div className="text-2xl font-bold text-green-600">$1,500</div>
-                        <div className="text-sm text-gray-500 line-through">$2,000</div>
+                        <div className="text-2xl font-bold text-green-600">$1,497</div>
+                        <div className="text-sm text-gray-500">One-time payment</div>
                       </div>
                     </div>
                   </div>
@@ -274,7 +274,7 @@ export default function FullServiceCheckoutPage() {
                     <div className="flex items-center justify-between">
                       <div>
                         <div className="font-bold text-lg">Payment Plan</div>
-                        <div className="text-sm text-gray-600">$300 down, then $300/month × 4</div>
+                        <div className="text-sm text-gray-600">$300 down, then $299/month × 4</div>
                       </div>
                       <div className="text-right">
                         <div className="text-2xl font-bold text-blue-600">$300</div>
@@ -291,7 +291,7 @@ export default function FullServiceCheckoutPage() {
                 className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white py-4 px-6 rounded-lg font-bold text-lg transition-all transform hover:scale-105 mb-6"
               >
                 {paymentPlan === 'full' 
-                  ? '👑 Get White-Glove Service - $1,500'
+                  ? '👑 Get White-Glove Service - $1,497'
                   : '👑 Start with $300 - Payment Plan'
                 }
               </button>
@@ -353,10 +353,10 @@ export default function FullServiceCheckoutPage() {
               transition={{ delay: 0.6 }}
               className="mt-6 bg-red-50 p-6 rounded-xl border-2 border-red-200 text-center"
             >
-              <h4 className="font-bold text-red-800 mb-2">⏰ Limited Time Offer!</h4>
+              <h4 className="font-bold text-red-800 mb-2">⏰ Professional Service!</h4>
               <p className="text-red-700 text-sm">
-                This $500 discount is ending soon. After the timer hits zero, 
-                the price returns to the regular $2,000.
+                Complete white-glove attorney service for just $1,497. 
+                Zero work required - we handle everything for you.
               </p>
               <div className="mt-3 text-xs text-red-600">
                 ⚡ Only 5 premium slots available this month

@@ -1,13 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Metadata } from 'next';
 import Link from 'next/link';
-
-export const metadata: Metadata = {
-  title: 'DIY Expungement Kit - Complete Your Order | Wipe That Record',
-  description: 'Get your complete DIY expungement kit with step-by-step instructions, pre-filled forms, and success guarantee. Start clearing your record today!'
-};
 
 export default function DIYCheckoutPage() {
   const [timeLeft, setTimeLeft] = useState(1800); // 30 minutes
