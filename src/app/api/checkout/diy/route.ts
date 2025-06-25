@@ -27,8 +27,8 @@ export async function POST(req: NextRequest) {
     console.log('🛒 DIY Checkout initiated:', { email, promoCode, leadId });
 
     // Base price and discount calculation
-    let basePrice = 147;  // Regular price
-    let salePrice = 97;   // Sale price
+    const basePrice = 147;  // Regular price
+    const salePrice = 97;   // Sale price
     let finalAmount = salePrice;
     let discountAmount = basePrice - salePrice;
     let appliedPromoCode = null;
