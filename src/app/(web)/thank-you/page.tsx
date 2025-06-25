@@ -45,7 +45,7 @@ export default function ThankYouPage() {
               </div>
               <div className="mb-6">
                 <h3 className="text-2xl md:text-3xl font-bold mb-3 text-amber-800">
-                  $100 Filing Review & Document Completion
+                  $297 Expert Review & Document Completion
                 </h3>
                 <p className="text-gray-900 text-lg leading-relaxed">
                   Let us look up your case, finish the paperwork, and push it through for you.
@@ -85,7 +85,7 @@ export default function ThankYouPage() {
                 href="/api/checkout/upgrade?type=review"
                 className="block w-full bg-amber-500 hover:bg-amber-600 text-white font-bold py-4 px-6 rounded-lg text-xl text-center transition-colors shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200"
               >
-                Upgrade for $100
+                Upgrade for $297
               </Link>
             </div>
 
@@ -96,7 +96,7 @@ export default function ThankYouPage() {
               </div>
               <div className="mb-6">
                 <h3 className="text-2xl md:text-3xl font-bold mb-3 text-green-800">
-                  $1,500 Full Expungement Service
+                  $1,497 Full Expungement Service
                 </h3>
                 <p className="text-gray-900 text-lg leading-relaxed">
                   You won't lift a finger. We'll take care of your case start to finish.
@@ -142,7 +142,7 @@ export default function ThankYouPage() {
                 href="/api/checkout/upgrade?type=full"
                 className="block w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4 px-6 rounded-lg text-xl text-center transition-colors shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-200"
               >
-                Hire Us for $1,500
+                Hire Us for $1,497
               </Link>
             </div>
           </div>
