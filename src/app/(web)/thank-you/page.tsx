@@ -17,10 +17,10 @@ export default function ThankYouPage() {
           <h1 className="text-4xl md:text-5xl font-bold mb-6">
             You're Almost There
           </h1>
-          <p className="text-xl md:text-2xl mb-6 text-green-100">
+          <p className="text-xl md:text-2xl mb-6 text-white">
             Your DIY expungement kit has been delivered to your email.
           </p>
-          <p className="text-lg text-green-100 max-w-2xl mx-auto">
+          <p className="text-lg text-white max-w-2xl mx-auto">
             Most clients realize they'd rather not deal with the legal process. We can help.
           </p>
         </div>
@@ -32,7 +32,7 @@ export default function ThankYouPage() {
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-4 text-gray-800">
             Want us to handle it for you?
           </h2>
-          <p className="text-lg text-gray-600 text-center mb-16 max-w-3xl mx-auto">
+          <p className="text-lg text-gray-800 text-center mb-16 max-w-3xl mx-auto">
             Why stress over legal paperwork when our experts can fast-track your case? 
             Choose the level of help that's right for you.
           </p>
@@ -47,7 +47,7 @@ export default function ThankYouPage() {
                 <h3 className="text-2xl md:text-3xl font-bold mb-3 text-amber-800">
                   $100 Filing Review & Document Completion
                 </h3>
-                <p className="text-gray-700 text-lg leading-relaxed">
+                <p className="text-gray-900 text-lg leading-relaxed">
                   Let us look up your case, finish the paperwork, and push it through for you.
                 </p>
               </div>
@@ -58,25 +58,25 @@ export default function ThankYouPage() {
                     <svg className="w-5 h-5 text-amber-500 mr-3 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                     </svg>
-                    <span className="text-gray-700">Complete case record lookup</span>
+                    <span className="text-gray-900">Complete case record lookup</span>
                   </li>
                   <li className="flex items-start">
                     <svg className="w-5 h-5 text-amber-500 mr-3 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                     </svg>
-                    <span className="text-gray-700">Professional document preparation</span>
+                    <span className="text-gray-900">Professional document preparation</span>
                   </li>
                   <li className="flex items-start">
                     <svg className="w-5 h-5 text-amber-500 mr-3 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                     </svg>
-                    <span className="text-gray-700">Eligibility verification & case review</span>
+                    <span className="text-gray-900">Eligibility verification & case review</span>
                   </li>
                   <li className="flex items-start">
                     <svg className="w-5 h-5 text-amber-500 mr-3 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                     </svg>
-                    <span className="text-gray-700">Priority email support</span>
+                    <span className="text-gray-900">Priority email support</span>
                   </li>
                 </ul>
               </div>
@@ -98,7 +98,7 @@ export default function ThankYouPage() {
                 <h3 className="text-2xl md:text-3xl font-bold mb-3 text-green-800">
                   $1,500 Full Expungement Service
                 </h3>
-                <p className="text-gray-700 text-lg leading-relaxed">
+                <p className="text-gray-900 text-lg leading-relaxed">
                   You won't lift a finger. We'll take care of your case start to finish.
                 </p>
               </div>
@@ -109,31 +109,31 @@ export default function ThankYouPage() {
                     <svg className="w-5 h-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                     </svg>
-                    <span className="text-gray-700">Complete case management from start to finish</span>
+                    <span className="text-gray-900">Complete case management from start to finish</span>
                   </li>
                   <li className="flex items-start">
                     <svg className="w-5 h-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                     </svg>
-                    <span className="text-gray-700">Dedicated attorney representation</span>
+                    <span className="text-gray-900">Dedicated attorney representation</span>
                   </li>
                   <li className="flex items-start">
                     <svg className="w-5 h-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                     </svg>
-                    <span className="text-gray-700">All court filing fees included</span>
+                    <span className="text-gray-900">All court filing fees included</span>
                   </li>
                   <li className="flex items-start">
                     <svg className="w-5 h-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                     </svg>
-                    <span className="text-gray-700">Court appearance handling (if required)</span>
+                    <span className="text-gray-900">Court appearance handling (if required)</span>
                   </li>
                   <li className="flex items-start">
                     <svg className="w-5 h-5 text-green-500 mr-3 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
                     </svg>
-                    <span className="text-gray-700">Money-back guarantee if not approved</span>
+                    <span className="text-gray-900">Money-back guarantee if not approved</span>
                   </li>
                 </ul>
               </div>
@@ -164,7 +164,7 @@ export default function ThankYouPage() {
                   </svg>
                 </div>
                 <h4 className="font-semibold text-lg mb-2">95% Success Rate</h4>
-                <p className="text-gray-600">Our expert team knows exactly what courts want to see</p>
+                <p className="text-gray-800">Our expert team knows exactly what courts want to see</p>
               </div>
               <div className="text-center">
                 <div className="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -173,7 +173,7 @@ export default function ThankYouPage() {
                   </svg>
                 </div>
                 <h4 className="font-semibold text-lg mb-2">Faster Processing</h4>
-                <p className="text-gray-600">We know the shortcuts to get your case done quickly</p>
+                <p className="text-gray-800">We know the shortcuts to get your case done quickly</p>
               </div>
               <div className="text-center">
                 <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -182,7 +182,7 @@ export default function ThankYouPage() {
                   </svg>
                 </div>
                 <h4 className="font-semibold text-lg mb-2">Peace of Mind</h4>
-                <p className="text-gray-600">No stress, no mistakes, just results</p>
+                <p className="text-gray-800">No stress, no mistakes, just results</p>
               </div>
             </div>
           </div>
@@ -195,7 +195,7 @@ export default function ThankYouPage() {
           <h3 className="text-xl font-semibold mb-4 text-gray-800">
             Questions about upgrading your service?
           </h3>
-          <p className="text-gray-600 mb-6">
+          <p className="text-gray-800 mb-6">
             Our team is here to help you choose the right option for your situation.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -209,7 +209,7 @@ export default function ThankYouPage() {
               admin@wipethatrecord.com
             </a>
             <span className="text-gray-400 hidden sm:block">|</span>
-            <span className="text-gray-600">Response within 2 hours</span>
+            <span className="text-gray-800">Response within 2 hours</span>
           </div>
         </div>
       </section>

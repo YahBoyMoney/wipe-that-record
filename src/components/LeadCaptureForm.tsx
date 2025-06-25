@@ -372,8 +372,8 @@ export function LeadCaptureForm({
       {/* Progress bar */}
       <div className="mb-6">
         <div className="flex justify-between items-center mb-2">
-          <span className="text-sm font-medium text-slate-600">Step {step} of 3</span>
-          <span className="text-sm text-slate-500">{Math.round((step / 3) * 100)}% Complete</span>
+          <span className="text-sm font-medium text-slate-800">Step {step} of 3</span>
+          <span className="text-sm text-slate-700">{Math.round((step / 3) * 100)}% Complete</span>
         </div>
         <div className="w-full bg-slate-200 rounded-full h-2">
           <div 
@@ -385,7 +385,7 @@ export function LeadCaptureForm({
 
       <div className="text-center mb-6">
         <h3 className="text-2xl font-bold text-slate-900 mb-2">{getStepTitle()}</h3>
-        <p className="text-slate-600">{getStepDescription()}</p>
+        <p className="text-slate-800">{getStepDescription()}</p>
       </div>
 
       {/* Social proof - only show on first step */}
@@ -430,7 +430,7 @@ export function LeadCaptureForm({
             className="space-y-6"
           >
             <div>
-              <label className="block text-base font-semibold text-slate-700 mb-3">
+              <label className="block text-base font-semibold text-slate-900 mb-3">
                 Do you have a criminal conviction on your record? *
               </label>
               <div className="space-y-3">
@@ -451,7 +451,7 @@ export function LeadCaptureForm({
                       className="sr-only"
                     />
                     <span className="text-2xl mr-3">{option.icon}</span>
-                    <span className="font-medium text-slate-700">{option.label}</span>
+                    <span className="font-medium text-slate-900">{option.label}</span>
                   </label>
                 ))}
               </div>
@@ -464,7 +464,7 @@ export function LeadCaptureForm({
                 className="space-y-4"
               >
                 <div>
-                  <label className="block text-base font-semibold text-slate-700 mb-3">
+                  <label className="block text-base font-semibold text-slate-900 mb-3">
                     Was this conviction in California? *
                   </label>
                   <div className="space-y-2">
@@ -484,7 +484,7 @@ export function LeadCaptureForm({
                           className="sr-only"
                         />
                         <span className="text-xl mr-3">{option.icon}</span>
-                        <span className="font-medium text-slate-700">{option.label}</span>
+                        <span className="font-medium text-slate-900">{option.label}</span>
                       </label>
                     ))}
                   </div>
@@ -495,7 +495,7 @@ export function LeadCaptureForm({
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                  <label className="block text-sm font-medium text-slate-900 mb-2">
                     First Name *
                   </label>
                   <input
