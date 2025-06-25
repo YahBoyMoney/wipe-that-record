@@ -106,7 +106,7 @@ export default function LandingPage() {
           >
             <div className="text-6xl mb-4">🎉</div>
             <h3 className="text-2xl font-bold mb-4 text-slate-900">Wait! Special Offer</h3>
-            <p className="text-slate-600 mb-6">
+            <p className="text-slate-800 mb-6">
               Get 10% off your DIY Expungement Kit - Limited time offer for first-time visitors!
             </p>
             <div className="flex gap-3">
@@ -121,7 +121,7 @@ export default function LandingPage() {
               </button>
               <button 
                 onClick={() => setShowExitModal(false)}
-                className="flex-1 border border-slate-300 hover:bg-slate-50 py-3 rounded-lg font-semibold text-slate-700 transition-colors"
+                className="flex-1 border border-slate-300 hover:bg-slate-50 py-3 rounded-lg font-semibold text-slate-900 transition-colors"
               >
                 No Thanks
               </button>
@@ -254,7 +254,7 @@ export default function LandingPage() {
                 Choose Your Path to Freedom
               </motion.h2>
               <motion.p 
-                className="text-xl text-slate-600 dark:text-slate-300 max-w-2xl mx-auto mb-8"
+                className="text-xl text-slate-800 dark:text-slate-300 max-w-2xl mx-auto mb-8"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
@@ -352,7 +352,7 @@ export default function LandingPage() {
                 Simple 3-Step Process
               </motion.h2>
               <motion.p 
-                className="text-xl text-slate-600 dark:text-slate-300 max-w-2xl mx-auto"
+                className="text-xl text-slate-800 dark:text-slate-300 max-w-2xl mx-auto"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
@@ -415,7 +415,7 @@ export default function LandingPage() {
                     <h3 className="text-xl font-bold mb-3 text-slate-900 dark:text-white">
                       {step.title}
                     </h3>
-                    <p className="text-slate-600 dark:text-slate-300 mb-4 leading-relaxed">
+                    <p className="text-slate-800 dark:text-slate-300 mb-4 leading-relaxed">
                       {step.description}
                     </p>
                     <div className="inline-flex items-center gap-2 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 px-3 py-1 rounded-full text-sm font-medium mb-4">
@@ -454,7 +454,7 @@ export default function LandingPage() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                 </svg>
               </button>
-              <p className="text-slate-600 dark:text-slate-300 mt-2 text-sm">
+              <p className="text-slate-800 dark:text-slate-300 mt-2 text-sm">
                 Free • Takes 2 minutes • Results sent to your email
               </p>
             </motion.div>
@@ -509,7 +509,7 @@ export default function LandingPage() {
                     ))}
                   </div>
                   
-                  <blockquote className="text-slate-700 dark:text-slate-300 mb-6 italic text-center">
+                  <blockquote className="text-slate-800 dark:text-slate-300 mb-6 italic text-center">
                     "{testimonial.quote}"
                   </blockquote>
                   
