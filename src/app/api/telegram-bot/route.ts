@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { BusinessTelegramBot } from '@/lib/business-telegram-bot'
+import { BusinessTelegramBot } from '../../../lib/business-telegram-bot'
 
 // Enhanced security and environment validation
 const BOT_TOKEN = process.env.TELEGRAM_BOT_TOKEN
@@ -71,8 +71,8 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ ok: true })
     }
 
-    // Initialize business bot
-    const bot = new BusinessTelegramBot(BOT_TOKEN, chatId)
+    // Initialize business bot (BOT_TOKEN is guaranteed to exist due to validation above)
+    const bot = new BusinessTelegramBot(BOT_TOKEN!, chatId)
 
     // Route commands
     await bot.handleCommand(text, message)
@@ -91,7 +91,7 @@ export async function POST(request: NextRequest) {
 // Handle unauthorized access attempts
 async function sendUnauthorizedMessage(chatId: string) {
   try {
-    const response = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+    const response = await fetch(`https://api.telegram.org/bot${BOT_TOKEN!}/sendMessage`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
