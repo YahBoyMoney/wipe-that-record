@@ -32,7 +32,7 @@ ADMIN_NOTIFICATION_EMAILS=admin@wipethatrecord.com
 ### **🤖 AI Sales Bot (NEW)**
 ```bash
 # OpenAI Integration
-OPENAI_API_KEY=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
+OPENAI_API_KEY=sk-proj-YOUR_OPENAI_API_KEY_HERE
 
 # Telegram Bot
 TELEGRAM_BOT_TOKEN=7971902459:AAEXaewD3p1obQWU2GvCSBCjQ3XkGgpw9Lo
