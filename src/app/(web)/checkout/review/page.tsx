@@ -198,7 +198,7 @@ export default function ReviewCheckoutPage() {
               <h3 className="text-2xl font-bold mb-4">🛡️ 96% Success Rate</h3>
               <div className="mb-6">
                 <div className="text-3xl font-bold text-green-600">$297</div>
-                <div className="text-sm text-gray-500">Professional Expert Review</div>
+                <div className="text-sm text-gray-800 font-medium">Professional Expert Review</div>
               </div>
               <button
                 onClick={handleCheckout}
@@ -206,7 +206,7 @@ export default function ReviewCheckoutPage() {
               >
                 🎯 Get Expert Review Now - $297
               </button>
-              <div className="text-xs text-gray-500">
+              <div className="text-xs text-gray-800 font-medium">
                 ⚡ 96% success rate • 30-day guarantee • SSL secured
               </div>
             </div>

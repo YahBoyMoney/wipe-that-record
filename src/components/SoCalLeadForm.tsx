@@ -128,7 +128,7 @@ export default function SoCalLeadForm({
       <div className="mb-8">
         <div className="flex justify-between items-center mb-2">
           <span className="text-sm font-medium text-gray-600">Step {currentStep} of 4</span>
-          <span className="text-sm text-gray-500">{Math.round(getStepProgress())}% Complete</span>
+          <span className="text-sm text-gray-800 font-medium">{Math.round(getStepProgress())}% Complete</span>
         </div>
         <div className="w-full bg-gray-200 rounded-full h-2">
           <div 

@@ -525,7 +525,7 @@ export default function LandingPage() {
                       <div className="font-semibold text-slate-900 dark:text-white">
                         {testimonial.author}
                       </div>
-                      <div className="text-sm text-slate-500 dark:text-slate-400">
+                      <div className="text-sm text-gray-800 dark:text-gray-200 font-medium">
                         {testimonial.location}
                       </div>
                     </div>
@@ -604,7 +604,7 @@ export default function LandingPage() {
                     <h3 className="font-semibold text-slate-900 dark:text-white pr-4">
                       {faq.question}
                     </h3>
-                    <span className="text-slate-500 group-open:rotate-180 transition-transform">
+                    <span className="text-gray-700 group-open:rotate-180 transition-transform">
                       ▼
                     </span>
                   </summary>

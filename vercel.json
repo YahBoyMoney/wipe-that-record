@@ -5,8 +5,24 @@
     },
     "src/app/api/ai-advisor/route.ts": {
       "memory": 1024
+    },
+    "src/app/api/cron/daily-summary/route.ts": {
+      "memory": 512
+    },
+    "src/app/api/cron/low-stock-alert/route.ts": {
+      "memory": 512
     }
   },
+  "crons": [
+    {
+      "path": "/api/cron/daily-summary",
+      "schedule": "0 18 * * *"
+    },
+    {
+      "path": "/api/cron/low-stock-alert", 
+      "schedule": "0 */4 * * *"
+    }
+  ],
   "headers": [
     {
       "source": "/api/telegram-bot",

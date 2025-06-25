@@ -674,7 +674,7 @@ export function LeadCaptureForm({
                 onChange={(e) => handleInputChange('caseNumber', e.target.value)}
                 placeholder="e.g., 21CR12345"
               />
-              <p className="text-xs text-slate-500 mt-1">This helps us locate your records faster</p>
+              <p className="text-xs text-gray-800 mt-1 font-medium">This helps us locate your records faster</p>
             </div>
 
             {/* Address Information - Required for Legal Paperwork */}
@@ -917,7 +917,7 @@ export function LeadCaptureForm({
 
       {/* Trust indicators */}
       <div className="mt-6 pt-6 border-t border-slate-200">
-        <div className="flex items-center justify-center gap-4 text-xs text-slate-500">
+        <div className="flex items-center justify-center gap-4 text-xs text-gray-800 font-medium">
           <div className="flex items-center gap-1">
             <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
@@ -937,7 +937,7 @@ export function LeadCaptureForm({
       {variant === 'modal' && onClose && (
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 text-slate-400 hover:text-slate-600"
+          className="absolute top-4 right-4 text-gray-700 hover:text-gray-900"
         >
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />

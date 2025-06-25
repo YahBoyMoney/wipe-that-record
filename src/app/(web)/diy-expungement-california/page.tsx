@@ -96,7 +96,7 @@ export default function DIYExpungementCaliforniaPage() {
               </div>
               <h3 className="text-2xl font-bold mb-4">DIY Service</h3>
               <div className="text-center mb-6">
-                <div className="text-lg text-gray-500 line-through">$147</div>
+                <div className="text-lg text-gray-700 line-through font-medium">$147</div>
                 <div className="text-4xl font-bold text-blue-600">$97</div>
                 <div className="text-sm text-green-600 font-semibold">SAVE $50 - Limited Time</div>
               </div>

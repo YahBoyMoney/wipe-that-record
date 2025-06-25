@@ -76,7 +76,7 @@ export default function FullServiceCheckoutPage() {
               </span>
               <br />We Handle Everything For You
             </h1>
-            <p className="text-2xl text-gray-600 mb-6">
+            <p className="text-2xl text-gray-800 mb-6 font-medium">
               Sit back and relax while licensed attorneys clear your record
             </p>
             <div className="bg-yellow-100 border-2 border-yellow-300 rounded-xl p-4 max-w-2xl mx-auto">
@@ -115,7 +115,7 @@ export default function FullServiceCheckoutPage() {
                     transition={{ delay: 0.1 + index * 0.1 }}
                     className="flex justify-between items-center p-4 bg-purple-50 rounded-lg border-l-4 border-purple-500"
                   >
-                    <span className="font-medium">✅ {item.item}</span>
+                    <span className="font-semibold text-gray-900">✅ {item.item}</span>
                     <span className="font-bold text-purple-600">{item.value}</span>
                   </motion.div>
                 ))}
@@ -124,7 +124,7 @@ export default function FullServiceCheckoutPage() {
                 <div className="text-center text-yellow-800">
                   <div className="text-xl font-bold">Complete Attorney Service</div>
                   <div className="text-3xl font-bold text-green-600 mt-2">Your Price: $1,497</div>
-                  <div className="text-lg">Professional White-Glove Service</div>
+                  <div className="text-lg font-semibold">Professional White-Glove Service</div>
                 </div>
               </div>
             </motion.div>
@@ -141,35 +141,35 @@ export default function FullServiceCheckoutPage() {
                 <table className="w-full text-sm">
                   <thead>
                     <tr className="border-b">
-                      <th className="py-3 px-4 text-left">Feature</th>
-                      <th className="py-3 px-4 text-center text-red-600">DIY ($97)</th>
-                      <th className="py-3 px-4 text-center text-orange-600">Review ($297)</th>
-                      <th className="py-3 px-4 text-center text-purple-600 bg-purple-50">Full Service ($1,497)</th>
+                      <th className="py-3 px-4 text-left font-bold text-gray-900">Feature</th>
+                      <th className="py-3 px-4 text-center text-red-600 font-bold">DIY ($97)</th>
+                      <th className="py-3 px-4 text-center text-orange-600 font-bold">Review ($297)</th>
+                      <th className="py-3 px-4 text-center text-purple-600 bg-purple-50 font-bold">Full Service ($1,497)</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr className="border-b">
-                      <td className="py-3 px-4 font-medium">Your Work Required</td>
-                      <td className="py-3 px-4 text-center text-red-600">All of it</td>
-                      <td className="py-3 px-4 text-center text-orange-600">Most of it</td>
+                      <td className="py-3 px-4 font-semibold text-gray-900">Your Work Required</td>
+                      <td className="py-3 px-4 text-center text-red-600 font-semibold">All of it</td>
+                      <td className="py-3 px-4 text-center text-orange-600 font-semibold">Most of it</td>
                       <td className="py-3 px-4 text-center bg-purple-50 text-purple-600 font-bold">ZERO ✨</td>
                     </tr>
                     <tr className="border-b">
-                      <td className="py-3 px-4 font-medium">Success Rate</td>
-                      <td className="py-3 px-4 text-center text-red-600">65%</td>
-                      <td className="py-3 px-4 text-center text-orange-600">96%</td>
+                      <td className="py-3 px-4 font-semibold text-gray-900">Success Rate</td>
+                      <td className="py-3 px-4 text-center text-red-600 font-semibold">65%</td>
+                      <td className="py-3 px-4 text-center text-orange-600 font-semibold">96%</td>
                       <td className="py-3 px-4 text-center bg-purple-50 text-purple-600 font-bold">99% 🏆</td>
                     </tr>
                     <tr className="border-b">
-                      <td className="py-3 px-4 font-medium">Time to Complete</td>
-                      <td className="py-3 px-4 text-center text-red-600">6+ months</td>
-                      <td className="py-3 px-4 text-center text-orange-600">4-6 months</td>
+                      <td className="py-3 px-4 font-semibold text-gray-900">Time to Complete</td>
+                      <td className="py-3 px-4 text-center text-red-600 font-semibold">6+ months</td>
+                      <td className="py-3 px-4 text-center text-orange-600 font-semibold">4-6 months</td>
                       <td className="py-3 px-4 text-center bg-purple-50 text-purple-600 font-bold">2-3 months ⚡</td>
                     </tr>
                     <tr>
-                      <td className="py-3 px-4 font-medium">Stress Level</td>
-                      <td className="py-3 px-4 text-center text-red-600">High 😰</td>
-                      <td className="py-3 px-4 text-center text-orange-600">Medium 😐</td>
+                      <td className="py-3 px-4 font-semibold text-gray-900">Stress Level</td>
+                      <td className="py-3 px-4 text-center text-red-600 font-semibold">High 😰</td>
+                      <td className="py-3 px-4 text-center text-orange-600 font-semibold">Medium 😐</td>
                       <td className="py-3 px-4 text-center bg-purple-50 text-purple-600 font-bold">Zero 😌</td>
                     </tr>
                   </tbody>
@@ -192,13 +192,13 @@ export default function FullServiceCheckoutPage() {
                       <span key={i} className="text-yellow-400 text-lg">★</span>
                     ))}
                   </div>
-                  <p className="text-gray-700 italic mb-3">
+                  <p className="text-gray-800 italic mb-3 font-medium">
                     "I literally did NOTHING except pay. Attorney handled everything - forms, filing, court appearances. 
                     My record was cleared in 2 months. Worth every penny!"
                   </p>
                   <div className="text-sm">
-                    <div className="font-semibold text-gray-800">Jennifer R., Marketing Executive</div>
-                    <div className="text-gray-600">Los Angeles, CA • Completed in 8 weeks</div>
+                    <div className="font-bold text-gray-900">Jennifer R., Marketing Executive</div>
+                    <div className="text-gray-800 font-medium">Los Angeles, CA • Completed in 8 weeks</div>
                   </div>
                 </div>
                 <div className="border-l-4 border-purple-500 pl-4 bg-purple-50 p-4 rounded-r-lg">
@@ -207,13 +207,13 @@ export default function FullServiceCheckoutPage() {
                       <span key={i} className="text-yellow-400 text-lg">★</span>
                     ))}
                   </div>
-                  <p className="text-gray-700 italic mb-3">
+                  <p className="text-gray-800 italic mb-3 font-medium">
                     "Best investment I've ever made. Got promoted 3 months after my record was cleared. 
                     The attorney was amazing - kept me updated every step."
                   </p>
                   <div className="text-sm">
-                    <div className="font-semibold text-gray-800">Michael T., Software Engineer</div>
-                    <div className="text-gray-600">San Francisco, CA • $40k salary increase</div>
+                    <div className="font-bold text-gray-900">Michael T., Software Engineer</div>
+                    <div className="text-gray-800 font-medium">San Francisco, CA • $40k salary increase</div>
                   </div>
                 </div>
               </div>
@@ -234,14 +234,14 @@ export default function FullServiceCheckoutPage() {
                 <h2 className="text-3xl font-bold text-gray-900 mb-2">
                   Zero Work For You
                 </h2>
-                <p className="text-gray-600">
+                <p className="text-gray-800 font-medium">
                   99% success rate • Completed in 2-3 months
                 </p>
               </div>
 
               {/* Payment Options */}
               <div className="mb-8">
-                <h3 className="font-bold text-lg mb-4">Choose Your Payment Option:</h3>
+                <h3 className="font-bold text-lg mb-4 text-gray-900">Choose Your Payment Option:</h3>
                 <div className="space-y-3">
                   <div 
                     className={`p-4 border-2 rounded-lg cursor-pointer transition-all ${
@@ -253,12 +253,12 @@ export default function FullServiceCheckoutPage() {
                   >
                     <div className="flex items-center justify-between">
                       <div>
-                        <div className="font-bold text-lg">Pay in Full</div>
-                        <div className="text-sm text-gray-600">Complete attorney service</div>
+                        <div className="font-bold text-lg text-gray-900">Pay in Full</div>
+                        <div className="text-sm text-gray-800 font-medium">Complete attorney service</div>
                       </div>
                       <div className="text-right">
                         <div className="text-2xl font-bold text-green-600">$1,497</div>
-                        <div className="text-sm text-gray-500">One-time payment</div>
+                        <div className="text-sm text-gray-700 font-medium">One-time payment</div>
                       </div>
                     </div>
                   </div>
@@ -273,12 +273,12 @@ export default function FullServiceCheckoutPage() {
                   >
                     <div className="flex items-center justify-between">
                       <div>
-                        <div className="font-bold text-lg">Payment Plan</div>
-                        <div className="text-sm text-gray-600">$300 down, then $299/month × 4</div>
+                        <div className="font-bold text-lg text-gray-900">Payment Plan</div>
+                        <div className="text-sm text-gray-800 font-medium">$300 down, then $299/month × 4</div>
                       </div>
                       <div className="text-right">
                         <div className="text-2xl font-bold text-blue-600">$300</div>
-                        <div className="text-sm text-gray-600">down payment</div>
+                        <div className="text-sm text-gray-800 font-medium">down payment</div>
                       </div>
                     </div>
                   </div>
@@ -302,28 +302,28 @@ export default function FullServiceCheckoutPage() {
                   <div className="text-2xl">💰</div>
                   <div>
                     <div className="font-semibold text-green-800">100% Money-Back Guarantee</div>
-                    <div className="text-sm text-green-700">If we don't clear your record, full refund</div>
+                    <div className="text-sm text-green-800 font-medium">If we don't clear your record, full refund</div>
                   </div>
                 </div>
                 <div className="flex items-center gap-3 p-3 bg-blue-50 rounded-lg">
                   <div className="text-2xl">⚡</div>
                   <div>
                     <div className="font-semibold text-blue-800">Fast-Track Processing</div>
-                    <div className="text-sm text-blue-700">Priority handling, completed in 2-3 months</div>
+                    <div className="text-sm text-blue-800 font-medium">Priority handling, completed in 2-3 months</div>
                   </div>
                 </div>
                 <div className="flex items-center gap-3 p-3 bg-purple-50 rounded-lg">
                   <div className="text-2xl">🎯</div>
                   <div>
                     <div className="font-semibold text-purple-800">99% Success Rate</div>
-                    <div className="text-sm text-purple-700">Industry-leading success rate with full service</div>
+                    <div className="text-sm text-purple-800 font-medium">Industry-leading success rate with full service</div>
                   </div>
                 </div>
               </div>
 
               {/* Trust Badges */}
               <div className="mt-8 pt-6 border-t border-gray-200">
-                <div className="grid grid-cols-3 gap-4 text-center text-xs text-gray-500">
+                <div className="grid grid-cols-3 gap-4 text-center text-xs text-gray-800 font-medium">
                   <div className="flex flex-col items-center">
                     <svg className="w-6 h-6 text-green-500 mb-1" fill="currentColor" viewBox="0 0 20 20">
                       <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
@@ -354,11 +354,11 @@ export default function FullServiceCheckoutPage() {
               className="mt-6 bg-red-50 p-6 rounded-xl border-2 border-red-200 text-center"
             >
               <h4 className="font-bold text-red-800 mb-2">⏰ Professional Service!</h4>
-              <p className="text-red-700 text-sm">
+              <p className="text-red-800 text-sm font-medium">
                 Complete white-glove attorney service for just $1,497. 
                 Zero work required - we handle everything for you.
               </p>
-              <div className="mt-3 text-xs text-red-600">
+              <div className="mt-3 text-xs text-red-700 font-semibold">
                 ⚡ Only 5 premium slots available this month
               </div>
             </motion.div>

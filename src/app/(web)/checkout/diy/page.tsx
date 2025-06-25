@@ -209,7 +209,7 @@ export default function DIYCheckoutPage() {
             {/* Price Box */}
             <div className="bg-white rounded-xl shadow-lg p-6 border-2 border-green-500">
               <div className="text-center mb-6">
-                <div className="text-gray-500 text-lg line-through">Regular: $147</div>
+                <div className="text-gray-700 text-lg line-through font-medium">Regular: $147</div>
                 <div className="text-4xl font-bold text-green-600">$97</div>
                 <div className="text-gray-600">One-time payment • Instant access</div>
               </div>
@@ -254,7 +254,7 @@ export default function DIYCheckoutPage() {
                 🚀 Get Instant Access - $97
               </button>
 
-              <div className="text-center text-sm text-gray-500 mt-4">
+              <div className="text-center text-sm text-gray-800 mt-4 font-medium">
                 <div className="flex items-center justify-center space-x-2 mb-2">
                   <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
