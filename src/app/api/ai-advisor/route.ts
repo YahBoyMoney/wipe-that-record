@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getPayloadHMR } from '@payloadcms/next/utilities'
-import configPromise from '@/payload.config'
+import config from '../../../../payload.config'
 import { SalesAdvisorBot, sendTelegramMessage } from '@/lib/ai-sales-bot'
 
-const payload = await getPayloadHMR({ config: configPromise })
+const payload = await getPayloadHMR({ config })
 
 export async function GET(request: NextRequest) {
   try {

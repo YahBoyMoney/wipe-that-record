@@ -70,6 +70,9 @@ export interface Config {
     users: User;
     media: Media;
     leads: Lead;
+    products: Product;
+    orders: Order;
+    analytics: Analytics;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -79,6 +82,9 @@ export interface Config {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     leads: LeadsSelect<false> | LeadsSelect<true>;
+    products: ProductsSelect<false> | ProductsSelect<true>;
+    orders: OrdersSelect<false> | OrdersSelect<true>;
+    analytics: AnalyticsSelect<false> | AnalyticsSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -86,8 +92,12 @@ export interface Config {
   db: {
     defaultIDType: string;
   };
-  globals: {};
-  globalsSelect: {};
+  globals: {
+    settings: Setting;
+  };
+  globalsSelect: {
+    settings: SettingsSelect<false> | SettingsSelect<true>;
+  };
   locale: null;
   user: User & {
     collection: 'users';
@@ -290,6 +300,602 @@ export interface Lead {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "products".
+ */
+export interface Product {
+  id: string;
+  /**
+   * Product name/title
+   */
+  name: string;
+  /**
+   * URL-friendly product identifier
+   */
+  slug: string;
+  /**
+   * Detailed product description
+   */
+  description: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  /**
+   * Brief product summary (max 300 chars)
+   */
+  shortDescription?: string | null;
+  category: 'diy' | 'legal' | 'consultation' | 'express' | 'review';
+  serviceType: 'digital' | 'service' | 'consultation' | 'full_service';
+  /**
+   * Price in USD
+   */
+  price: number;
+  /**
+   * Original price (for showing discounts)
+   */
+  originalPrice?: number | null;
+  /**
+   * Stripe Price ID for payments
+   */
+  stripePriceId?: string | null;
+  /**
+   * Stripe Product ID
+   */
+  stripeProductId?: string | null;
+  status: 'active' | 'inactive' | 'draft' | 'archived';
+  inventory?: {
+    trackInventory?: boolean | null;
+    quantity?: number | null;
+    lowStockThreshold?: number | null;
+    allowBackorders?: boolean | null;
+  };
+  processingTime?: {
+    /**
+     * Minimum processing days
+     */
+    minDays?: number | null;
+    /**
+     * Maximum processing days
+     */
+    maxDays?: number | null;
+    businessDaysOnly?: boolean | null;
+  };
+  /**
+   * Types of convictions this service covers
+   */
+  convictionTypes?:
+    | ('felony' | 'misdemeanor' | 'infraction' | 'juvenile' | 'dui' | 'drug' | 'violent' | 'white_collar')[]
+    | null;
+  /**
+   * Key features and benefits
+   */
+  features?:
+    | {
+        feature: string;
+        description?: string | null;
+        highlight?: boolean | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Requirements for this service
+   */
+  requirements?:
+    | {
+        requirement: string;
+        required?: boolean | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Frequently asked questions
+   */
+  faqs?:
+    | {
+        question: string;
+        answer: {
+          root: {
+            type: string;
+            children: {
+              type: string;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        };
+        id?: string | null;
+      }[]
+    | null;
+  seo?: {
+    title?: string | null;
+    description?: string | null;
+    keywords?: string | null;
+  };
+  images?:
+    | {
+        image: string | Media;
+        alt: string;
+        isPrimary?: boolean | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Downloadable documents (for digital products)
+   */
+  documents?:
+    | {
+        document: string | Media;
+        title: string;
+        description?: string | null;
+        downloadable?: boolean | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Product performance metrics
+   */
+  analytics?: {
+    views?: number | null;
+    totalSales?: number | null;
+    revenue?: number | null;
+    /**
+     * Conversion rate percentage
+     */
+    conversionRate?: number | null;
+    averageRating?: number | null;
+    totalReviews?: number | null;
+  };
+  /**
+   * Show on homepage and featured sections
+   */
+  featured?: boolean | null;
+  /**
+   * Mark as popular choice
+   */
+  popular?: boolean | null;
+  /**
+   * Mark as best value option
+   */
+  bestValue?: boolean | null;
+  tags?:
+    | (
+        | 'california'
+        | 'los_angeles'
+        | 'orange_county'
+        | 'san_francisco'
+        | 'san_diego'
+        | 'expungement'
+        | 'record_sealing'
+        | 'prop_47'
+        | 'prop_64'
+        | 'fast_track'
+        | 'attorney_review'
+      )[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "orders".
+ */
+export interface Order {
+  id: string;
+  /**
+   * Unique order identifier
+   */
+  orderNumber: string;
+  status:
+    | 'pending'
+    | 'processing'
+    | 'review'
+    | 'filing'
+    | 'court_processing'
+    | 'completed'
+    | 'cancelled'
+    | 'refunded'
+    | 'on_hold';
+  customer: {
+    firstName: string;
+    lastName: string;
+    email: string;
+    phone?: string | null;
+    address?: {
+      street?: string | null;
+      city?: string | null;
+      state?: string | null;
+      zipCode?: string | null;
+    };
+  };
+  items: {
+    product: string | Product;
+    quantity: number;
+    /**
+     * Price at time of purchase
+     */
+    price: number;
+    /**
+     * Line item total (quantity × price)
+     */
+    total: number;
+    id?: string | null;
+  }[];
+  totals: {
+    subtotal: number;
+    tax?: number | null;
+    discount?: number | null;
+    total: number;
+  };
+  payment?: {
+    method?: ('credit_card' | 'paypal' | 'bank_transfer' | 'check') | null;
+    status?: ('pending' | 'processing' | 'completed' | 'failed' | 'refunded' | 'partial_refund') | null;
+    /**
+     * Payment processor transaction ID
+     */
+    transactionId?: string | null;
+    /**
+     * Stripe Payment Intent ID
+     */
+    stripePaymentIntentId?: string | null;
+    paidAt?: string | null;
+    refundAmount?: number | null;
+    refundReason?: string | null;
+  };
+  /**
+   * Legal case information
+   */
+  caseDetails?: {
+    /**
+     * Court case number
+     */
+    caseNumber?: string | null;
+    /**
+     * Court where case was filed
+     */
+    court?: string | null;
+    county?:
+      | (
+          | 'los_angeles'
+          | 'orange'
+          | 'san_diego'
+          | 'riverside'
+          | 'san_bernardino'
+          | 'ventura'
+          | 'santa_barbara'
+          | 'kern'
+          | 'fresno'
+          | 'other'
+        )
+      | null;
+    convictionDate?: string | null;
+    convictionType?: ('felony' | 'misdemeanor' | 'infraction' | 'juvenile' | 'dui' | 'drug')[] | null;
+    charges?:
+      | {
+          charge: string;
+          /**
+           * Penal code section
+           */
+          code?: string | null;
+          /**
+           * Final disposition of charge
+           */
+          disposition?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+    documents?:
+      | {
+          document: string | Media;
+          type?: ('court_records' | 'id_copy' | 'fingerprint' | 'probation' | 'other') | null;
+          description?: string | null;
+          uploadedAt?: string | null;
+          id?: string | null;
+        }[]
+      | null;
+  };
+  /**
+   * Case progress timeline
+   */
+  timeline?:
+    | {
+        date: string;
+        status: string;
+        description: string;
+        /**
+         * Internal note (not visible to customer)
+         */
+        internal?: boolean | null;
+        /**
+         * Staff member who made the update
+         */
+        updatedBy?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Staff assignment
+   */
+  assignedTo?: {
+    /**
+     * Assigned attorney
+     */
+    attorney?: string | null;
+    /**
+     * Assigned paralegal
+     */
+    paralegal?: string | null;
+    /**
+     * Assigned case manager
+     */
+    caseManager?: string | null;
+  };
+  /**
+   * Customer communications log
+   */
+  communications?:
+    | {
+        date: string;
+        type: 'email' | 'phone' | 'sms' | 'mail' | 'in_person';
+        direction: 'inbound' | 'outbound';
+        subject?: string | null;
+        content: string;
+        /**
+         * Staff member who handled communication
+         */
+        staffMember?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Expected completion date
+   */
+  expectedCompletion?: string | null;
+  /**
+   * Actual completion date
+   */
+  actualCompletion?: string | null;
+  priority?: ('low' | 'normal' | 'high' | 'urgent') | null;
+  tags?: ('rush' | 'vip' | 'complex' | 'prop_47' | 'prop_64' | 'repeat' | 'referral')[] | null;
+  /**
+   * Internal notes
+   */
+  notes?:
+    | {
+        date: string;
+        note: string;
+        author: string;
+        type?: ('general' | 'legal' | 'customer_service' | 'billing' | 'technical') | null;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * How customer found us
+   */
+  source?:
+    | ('website' | 'google' | 'facebook' | 'instagram' | 'referral' | 'repeat' | 'attorney_referral' | 'other')
+    | null;
+  /**
+   * Promotional code used
+   */
+  promoCode?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "analytics".
+ */
+export interface Analytics {
+  id: string;
+  /**
+   * Type of analytics event
+   */
+  eventType:
+    | 'sale_completed'
+    | 'payment_received'
+    | 'refund_processed'
+    | 'subscription_started'
+    | 'subscription_cancelled'
+    | 'lead_created'
+    | 'customer_registered'
+    | 'customer_login'
+    | 'profile_updated'
+    | 'product_viewed'
+    | 'cart_add'
+    | 'cart_remove'
+    | 'checkout_started'
+    | 'checkout_completed'
+    | 'checkout_abandoned'
+    | 'email_opened'
+    | 'email_clicked'
+    | 'ad_clicked'
+    | 'social_share'
+    | 'referral_made'
+    | 'page_view'
+    | 'search_performed'
+    | 'form_submitted'
+    | 'download_started'
+    | 'error_occurred';
+  /**
+   * Source of the event
+   */
+  source:
+    | 'website'
+    | 'mobile_app'
+    | 'api'
+    | 'admin'
+    | 'email'
+    | 'social'
+    | 'google_ads'
+    | 'facebook_ads'
+    | 'referral'
+    | 'direct'
+    | 'telegram'
+    | 'system';
+  /**
+   * Event category for grouping
+   */
+  category?: ('revenue' | 'customer' | 'product' | 'marketing' | 'system' | 'legal' | 'support') | null;
+  /**
+   * Numeric value (revenue, quantity, etc.)
+   */
+  value?: number | null;
+  /**
+   * Currency code for monetary values
+   */
+  currency?: string | null;
+  /**
+   * Associated user ID
+   */
+  userId?: string | null;
+  /**
+   * Session identifier
+   */
+  sessionId?: string | null;
+  /**
+   * Related object reference
+   */
+  relatedObject?: {
+    type?: ('product' | 'order' | 'lead' | 'user' | 'page' | 'email_campaign') | null;
+    /**
+     * ID of related object
+     */
+    id?: string | null;
+    /**
+     * Name/title of related object
+     */
+    name?: string | null;
+  };
+  /**
+   * Additional event properties (JSON)
+   */
+  properties?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  /**
+   * Event metadata and context
+   */
+  metadata?: {
+    /**
+     * User agent string
+     */
+    userAgent?: string | null;
+    /**
+     * IP address (anonymized)
+     */
+    ipAddress?: string | null;
+    /**
+     * Referrer URL
+     */
+    referrer?: string | null;
+    /**
+     * Current page URL
+     */
+    url?: string | null;
+    /**
+     * UTM source parameter
+     */
+    utmSource?: string | null;
+    /**
+     * UTM medium parameter
+     */
+    utmMedium?: string | null;
+    /**
+     * UTM campaign parameter
+     */
+    utmCampaign?: string | null;
+    /**
+     * UTM term parameter
+     */
+    utmTerm?: string | null;
+    /**
+     * UTM content parameter
+     */
+    utmContent?: string | null;
+    device?: ('desktop' | 'mobile' | 'tablet' | 'unknown') | null;
+    /**
+     * Browser name and version
+     */
+    browser?: string | null;
+    /**
+     * Operating system
+     */
+    os?: string | null;
+    location?: {
+      country?: string | null;
+      state?: string | null;
+      city?: string | null;
+      zipCode?: string | null;
+    };
+  };
+  /**
+   * Performance metrics
+   */
+  performance?: {
+    /**
+     * Page load time in milliseconds
+     */
+    pageLoadTime?: number | null;
+    /**
+     * Processing time in milliseconds
+     */
+    processingTime?: number | null;
+    /**
+     * Response time in milliseconds
+     */
+    responseTime?: number | null;
+  };
+  /**
+   * Event tags for filtering and analysis
+   */
+  tags?:
+    | (
+        | 'ab_test'
+        | 'high_value'
+        | 'new_customer'
+        | 'returning_customer'
+        | 'mobile'
+        | 'desktop'
+        | 'conversion'
+        | 'abandonment'
+        | 'error'
+        | 'success'
+      )[]
+    | null;
+  /**
+   * Has this event been processed by analytics systems?
+   */
+  isProcessed?: boolean | null;
+  /**
+   * When the event was processed
+   */
+  processedAt?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
@@ -306,6 +912,18 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'leads';
         value: string | Lead;
+      } | null)
+    | ({
+        relationTo: 'products';
+        value: string | Product;
+      } | null)
+    | ({
+        relationTo: 'orders';
+        value: string | Order;
+      } | null)
+    | ({
+        relationTo: 'analytics';
+        value: string | Analytics;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -454,6 +1072,281 @@ export interface LeadsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "products_select".
+ */
+export interface ProductsSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  description?: T;
+  shortDescription?: T;
+  category?: T;
+  serviceType?: T;
+  price?: T;
+  originalPrice?: T;
+  stripePriceId?: T;
+  stripeProductId?: T;
+  status?: T;
+  inventory?:
+    | T
+    | {
+        trackInventory?: T;
+        quantity?: T;
+        lowStockThreshold?: T;
+        allowBackorders?: T;
+      };
+  processingTime?:
+    | T
+    | {
+        minDays?: T;
+        maxDays?: T;
+        businessDaysOnly?: T;
+      };
+  convictionTypes?: T;
+  features?:
+    | T
+    | {
+        feature?: T;
+        description?: T;
+        highlight?: T;
+        id?: T;
+      };
+  requirements?:
+    | T
+    | {
+        requirement?: T;
+        required?: T;
+        id?: T;
+      };
+  faqs?:
+    | T
+    | {
+        question?: T;
+        answer?: T;
+        id?: T;
+      };
+  seo?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        keywords?: T;
+      };
+  images?:
+    | T
+    | {
+        image?: T;
+        alt?: T;
+        isPrimary?: T;
+        id?: T;
+      };
+  documents?:
+    | T
+    | {
+        document?: T;
+        title?: T;
+        description?: T;
+        downloadable?: T;
+        id?: T;
+      };
+  analytics?:
+    | T
+    | {
+        views?: T;
+        totalSales?: T;
+        revenue?: T;
+        conversionRate?: T;
+        averageRating?: T;
+        totalReviews?: T;
+      };
+  featured?: T;
+  popular?: T;
+  bestValue?: T;
+  tags?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "orders_select".
+ */
+export interface OrdersSelect<T extends boolean = true> {
+  orderNumber?: T;
+  status?: T;
+  customer?:
+    | T
+    | {
+        firstName?: T;
+        lastName?: T;
+        email?: T;
+        phone?: T;
+        address?:
+          | T
+          | {
+              street?: T;
+              city?: T;
+              state?: T;
+              zipCode?: T;
+            };
+      };
+  items?:
+    | T
+    | {
+        product?: T;
+        quantity?: T;
+        price?: T;
+        total?: T;
+        id?: T;
+      };
+  totals?:
+    | T
+    | {
+        subtotal?: T;
+        tax?: T;
+        discount?: T;
+        total?: T;
+      };
+  payment?:
+    | T
+    | {
+        method?: T;
+        status?: T;
+        transactionId?: T;
+        stripePaymentIntentId?: T;
+        paidAt?: T;
+        refundAmount?: T;
+        refundReason?: T;
+      };
+  caseDetails?:
+    | T
+    | {
+        caseNumber?: T;
+        court?: T;
+        county?: T;
+        convictionDate?: T;
+        convictionType?: T;
+        charges?:
+          | T
+          | {
+              charge?: T;
+              code?: T;
+              disposition?: T;
+              id?: T;
+            };
+        documents?:
+          | T
+          | {
+              document?: T;
+              type?: T;
+              description?: T;
+              uploadedAt?: T;
+              id?: T;
+            };
+      };
+  timeline?:
+    | T
+    | {
+        date?: T;
+        status?: T;
+        description?: T;
+        internal?: T;
+        updatedBy?: T;
+        id?: T;
+      };
+  assignedTo?:
+    | T
+    | {
+        attorney?: T;
+        paralegal?: T;
+        caseManager?: T;
+      };
+  communications?:
+    | T
+    | {
+        date?: T;
+        type?: T;
+        direction?: T;
+        subject?: T;
+        content?: T;
+        staffMember?: T;
+        id?: T;
+      };
+  expectedCompletion?: T;
+  actualCompletion?: T;
+  priority?: T;
+  tags?: T;
+  notes?:
+    | T
+    | {
+        date?: T;
+        note?: T;
+        author?: T;
+        type?: T;
+        id?: T;
+      };
+  source?: T;
+  promoCode?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "analytics_select".
+ */
+export interface AnalyticsSelect<T extends boolean = true> {
+  eventType?: T;
+  source?: T;
+  category?: T;
+  value?: T;
+  currency?: T;
+  userId?: T;
+  sessionId?: T;
+  relatedObject?:
+    | T
+    | {
+        type?: T;
+        id?: T;
+        name?: T;
+      };
+  properties?: T;
+  metadata?:
+    | T
+    | {
+        userAgent?: T;
+        ipAddress?: T;
+        referrer?: T;
+        url?: T;
+        utmSource?: T;
+        utmMedium?: T;
+        utmCampaign?: T;
+        utmTerm?: T;
+        utmContent?: T;
+        device?: T;
+        browser?: T;
+        os?: T;
+        location?:
+          | T
+          | {
+              country?: T;
+              state?: T;
+              city?: T;
+              zipCode?: T;
+            };
+      };
+  performance?:
+    | T
+    | {
+        pageLoadTime?: T;
+        processingTime?: T;
+        responseTime?: T;
+      };
+  tags?: T;
+  isProcessed?: T;
+  processedAt?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents_select".
  */
 export interface PayloadLockedDocumentsSelect<T extends boolean = true> {
@@ -483,6 +1376,67 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   batch?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "settings".
+ */
+export interface Setting {
+  id: string;
+  siteName: string;
+  siteDescription?: string | null;
+  contactInfo: {
+    email: string;
+    phone?: string | null;
+    address?: string | null;
+  };
+  businessSettings?: {
+    /**
+     * Tax rate (e.g., 0.0875 for 8.75%)
+     */
+    taxRate?: number | null;
+    currency?: ('USD' | 'EUR' | 'GBP') | null;
+    timezone?: ('America/Los_Angeles' | 'America/Denver' | 'America/Chicago' | 'America/New_York') | null;
+  };
+  emailSettings: {
+    fromName?: string | null;
+    fromEmail: string;
+    replyToEmail?: string | null;
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "settings_select".
+ */
+export interface SettingsSelect<T extends boolean = true> {
+  siteName?: T;
+  siteDescription?: T;
+  contactInfo?:
+    | T
+    | {
+        email?: T;
+        phone?: T;
+        address?: T;
+      };
+  businessSettings?:
+    | T
+    | {
+        taxRate?: T;
+        currency?: T;
+        timezone?: T;
+      };
+  emailSettings?:
+    | T
+    | {
+        fromName?: T;
+        fromEmail?: T;
+        replyToEmail?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

@@ -9,7 +9,7 @@ async function initPayload() {
     console.log('🔄 Initializing Payload...')
     payload = await getPayload({ config })
     console.log('✅ Payload initialized successfully')
-    console.log('📋 Registered collections:', payload.collections.map((c: any) => c.slug))
+    console.log('📋 Payload instance created')
   }
   return payload
 }

@@ -13,7 +13,7 @@ Add these to your Vercel deployment dashboard (`Project Settings > Environment V
 ### **Core Application**
 ```bash
 # Database & CMS
-DATABASE_URI=mongodb://your-connection-string
+DATABASE_URI=your-database-uri-here
 PAYLOAD_SECRET=4dbe2ec56c1a8bce83949439605918832d8967b3a28bd6b58b6bc3d021cc59a0
 NEXT_PUBLIC_SERVER_URL=https://your-vercel-url.vercel.app
 NODE_ENV=production
@@ -32,11 +32,12 @@ ADMIN_NOTIFICATION_EMAILS=admin@wipethatrecord.com
 ### **🤖 AI Sales Bot (NEW)**
 ```bash
 # OpenAI Integration
-OPENAI_API_KEY=sk-proj-YOUR_OPENAI_API_KEY_HERE
+OPENAI_API_KEY=your-openai-api-key-here
+OPENAI_MODEL=gpt-4
 
 # Telegram Bot
-TELEGRAM_BOT_TOKEN=YOUR_BOT_TOKEN_FROM_BOTFATHER
-TELEGRAM_CHAT_ID=your_chat_id_here
+TELEGRAM_BOT_TOKEN=your-telegram-bot-token-here
+TELEGRAM_CHAT_ID=your-chat-id-here
 
 # n8n Automation
 N8N_WEBHOOK_URL=https://your-n8n-instance.railway.app/webhook/wipe-that-record
