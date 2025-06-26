@@ -73,6 +73,7 @@ export interface Config {
     products: Product;
     orders: Order;
     analytics: Analytics;
+    email_sequences: EmailSequence;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
     'payload-migrations': PayloadMigration;
@@ -85,6 +86,7 @@ export interface Config {
     products: ProductsSelect<false> | ProductsSelect<true>;
     orders: OrdersSelect<false> | OrdersSelect<true>;
     analytics: AnalyticsSelect<false> | AnalyticsSelect<true>;
+    email_sequences: EmailSequencesSelect<false> | EmailSequencesSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
     'payload-migrations': PayloadMigrationsSelect<false> | PayloadMigrationsSelect<true>;
@@ -896,6 +898,38 @@ export interface Analytics {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "email_sequences".
+ */
+export interface EmailSequence {
+  id: string;
+  name: string;
+  segment: 'all' | 'hot' | 'warm' | 'customers';
+  /**
+   * Delay after previous email in minutes
+   */
+  delayMinutes: number;
+  subject: string;
+  body: {
+    root: {
+      type: string;
+      children: {
+        type: string;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  active?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-locked-documents".
  */
 export interface PayloadLockedDocument {
@@ -924,6 +958,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'analytics';
         value: string | Analytics;
+      } | null)
+    | ({
+        relationTo: 'email_sequences';
+        value: string | EmailSequence;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -1342,6 +1380,20 @@ export interface AnalyticsSelect<T extends boolean = true> {
   tags?: T;
   isProcessed?: T;
   processedAt?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "email_sequences_select".
+ */
+export interface EmailSequencesSelect<T extends boolean = true> {
+  name?: T;
+  segment?: T;
+  delayMinutes?: T;
+  subject?: T;
+  body?: T;
+  active?: T;
   updatedAt?: T;
   createdAt?: T;
 }

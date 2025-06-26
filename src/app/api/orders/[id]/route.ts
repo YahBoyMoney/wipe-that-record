@@ -34,6 +34,16 @@ export async function PATCH(
       }
     }
 
+    // If status present, update order status directly
+    if (updateData.status) {
+      const updated = await payload.update({
+        collection: 'orders',
+        id,
+        data: { status: updateData.status, updatedAt: new Date().toISOString() }
+      });
+      return NextResponse.json({ success: true, order: updated });
+    }
+
     // Update the order
     const updatedOrder = await payload.update({
       collection: 'orders',

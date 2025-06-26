@@ -12,6 +12,7 @@ import Leads from './src/collections/Leads'
 import Products from './src/collections/Products'
 import Orders from './src/collections/Orders'
 import Analytics from './src/collections/Analytics'
+import EmailSequences from './src/collections/EmailSequences'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
@@ -31,6 +32,10 @@ export default buildConfig({
           Component: '@/views/Dashboard',
         },
       },
+      // @ts-ignore - custom graphic override
+      graphics: {
+        Icon: '@/payload-overrides/Hamburger',
+      },
     },
   },
   collections: [
@@ -40,11 +45,15 @@ export default buildConfig({
     Products,
     Orders,
     Analytics,
+    EmailSequences,
   ],
   globals: [
     // Add global settings for site configuration
     {
       slug: 'settings',
+      admin: {
+        hidden: true,
+      },
       access: {
         read: () => true,
         update: ({ req }) => req.user?.role === 'admin',
@@ -153,10 +162,12 @@ export default buildConfig({
   ],
   cors: [
     'http://localhost:3000',
-    'https://your-domain.com', // Add your production domain
+    'http://localhost:3001',
+    'https://your-domain.com', // production
   ],
   csrf: [
     'http://localhost:3000',
-    'https://your-domain.com', // Add your production domain
+    'http://localhost:3001',
+    'https://your-domain.com',
   ],
 }) 

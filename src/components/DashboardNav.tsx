@@ -28,99 +28,43 @@ export default function DashboardNav({ activeSection = 'overview', userRole = 'a
   const navigationItems = [
     {
       name: 'Overview',
-      href: '/admin/dashboard',
+      href: '/admin-dashboard',
       icon: BarChart3,
       section: 'overview',
-      description: 'Key metrics and performance',
+      description: 'Key metrics & performance',
       roles: ['superadmin', 'admin', 'manager'],
     },
     {
-      name: 'Lead Management',
+      name: 'Leads',
       href: '/admin/collections/leads',
       icon: Users,
       section: 'leads',
-      description: 'All leads and customers',
+      description: 'Leads & customers',
       roles: ['superadmin', 'admin', 'manager'],
     },
     {
-      name: 'Revenue Analytics',
-      href: '/admin/dashboard/revenue',
-      icon: DollarSign,
-      section: 'revenue',
-      description: 'Financial performance',
-      roles: ['superadmin', 'admin'],
-    },
-    {
-      name: 'Conversion Funnel',
-      href: '/admin/dashboard/funnel',
-      icon: Target,
-      section: 'funnel',
-      description: 'Sales funnel analysis',
-      roles: ['superadmin', 'admin', 'manager'],
-    },
-    {
-      name: 'Email Marketing',
-      href: '/admin/dashboard/email',
-      icon: Mail,
-      section: 'email',
-      description: 'Email campaigns & automation',
-      roles: ['superadmin', 'admin', 'marketing'],
-    },
-    {
-      name: 'Geographic Data',
-      href: '/admin/dashboard/geographic',
-      icon: MapPin,
-      section: 'geographic',
-      description: 'Location-based insights',
-      roles: ['superadmin', 'admin'],
-    },
-    {
-      name: 'Performance Trends',
-      href: '/admin/dashboard/trends',
-      icon: TrendingUp,
-      section: 'trends',
-      description: 'Historical performance',
-      roles: ['superadmin', 'admin'],
-    },
-    {
-      name: 'Quality Scoring',
-      href: '/admin/dashboard/quality',
-      icon: Award,
-      section: 'quality',
-      description: 'Lead quality metrics',
-      roles: ['superadmin', 'admin', 'manager'],
-    },
-    {
-      name: 'Real-time Monitor',
-      href: '/admin/dashboard/realtime',
-      icon: Clock,
-      section: 'realtime',
-      description: 'Live activity feed',
-      roles: ['superadmin', 'admin'],
-    },
-    {
-      name: 'Reports & Export',
-      href: '/admin/dashboard/reports',
+      name: 'Products',
+      href: '/admin-dashboard?view=products',
       icon: FileText,
-      section: 'reports',
-      description: 'Generate custom reports',
+      section: 'products',
+      description: 'Product catalog',
       roles: ['superadmin', 'admin'],
     },
     {
-      name: 'Alert Center',
-      href: '/admin/dashboard/alerts',
-      icon: AlertTriangle,
-      section: 'alerts',
-      description: 'System notifications',
+      name: 'Orders',
+      href: '/admin-dashboard?view=orders',
+      icon: DollarSign,
+      section: 'orders',
+      description: 'Order management',
       roles: ['superadmin', 'admin'],
     },
     {
-      name: 'User Management',
-      href: '/admin/collections/users',
-      icon: Settings,
-      section: 'users',
-      description: 'Manage system users',
-      roles: ['superadmin'],
+      name: 'Analytics',
+      href: '/admin/collections/analytics',
+      icon: TrendingUp,
+      section: 'analytics',
+      description: 'Business insights',
+      roles: ['superadmin', 'admin'],
     },
   ];
 
@@ -130,26 +74,7 @@ export default function DashboardNav({ activeSection = 'overview', userRole = 'a
   );
 
   // Quick actions for superadmin
-  const quickActions = [
-    {
-      name: 'Export All Data',
-      action: 'export-all',
-      icon: Download,
-      roles: ['superadmin', 'admin'],
-    },
-    {
-      name: 'Refresh Analytics',
-      action: 'refresh',
-      icon: RefreshCw,
-      roles: ['superadmin', 'admin', 'manager'],
-    },
-    {
-      name: 'Initialize Admin',
-      action: 'init-admin',
-      icon: Settings,
-      roles: ['superadmin'],
-    },
-  ];
+  const quickActions: { name: string; action: string; icon: any; roles: string[] }[] = [];
 
   const handleQuickAction = async (action: string) => {
     switch (action) {
@@ -190,7 +115,7 @@ export default function DashboardNav({ activeSection = 'overview', userRole = 'a
       </div>
 
       {/* Quick Actions */}
-      {userRole === 'superadmin' && (
+      {userRole === 'superadmin' && quickActions.length > 0 && (
         <div className="mb-6 p-4 bg-purple-50 rounded-lg">
           <h3 className="text-sm font-semibold text-purple-900 mb-3">Quick Actions</h3>
           <div className="flex flex-wrap gap-2">

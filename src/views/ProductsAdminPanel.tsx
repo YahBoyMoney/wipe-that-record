@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import ProductForm from '../components/ProductForm';
 
 interface Product {
   id: string;
@@ -57,6 +58,9 @@ export default function ProductsAdminPanel({ initialProducts = [] }: ProductsAdm
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [bulkAction, setBulkAction] = useState('');
+  const [page, setPage] = useState(1);
+  const limit = 12;
+  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
     fetchProducts();
@@ -65,9 +69,19 @@ export default function ProductsAdminPanel({ initialProducts = [] }: ProductsAdm
   const fetchProducts = async () => {
     try {
       setLoading(true);
-      const response = await fetch('/api/payload/collections/products');
-      const data = await response.json();
-      setProducts(data.docs || []);
+      const params = new URLSearchParams({
+        page: page.toString(),
+        limit: limit.toString(),
+        search: searchTerm,
+        status: filterStatus,
+        category: filterCategory,
+        sortBy,
+        sortOrder,
+      });
+      const response = await fetch(`/api/products?${params.toString()}`);
+      const { data } = await response.json();
+      setProducts(data.products || []);
+      setTotalPages(data.pagination?.totalPages || 1);
     } catch (error) {
       console.error('Error fetching products:', error);
       // Use sample data if API fails
@@ -170,6 +184,11 @@ export default function ProductsAdminPanel({ initialProducts = [] }: ProductsAdm
     }
   };
 
+  useEffect(() => {
+    fetchProducts();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [page, searchTerm, filterStatus, filterCategory, sortBy, sortOrder]);
+
   const filteredProducts = products.filter(product => {
     const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          product.description.toLowerCase().includes(searchTerm.toLowerCase());
@@ -250,6 +269,38 @@ export default function ProductsAdminPanel({ initialProducts = [] }: ProductsAdm
     if (quantity === 0) return { status: 'Out of Stock', color: 'text-red-600 bg-red-100' };
     if (quantity <= lowStockThreshold) return { status: 'Low Stock', color: 'text-yellow-600 bg-yellow-100' };
     return { status: 'In Stock', color: 'text-green-600 bg-green-100' };
+  };
+
+  const handleDuplicateProduct = async (product: Product) => {
+    try {
+      const { id, createdAt, updatedAt, analytics, ...rest } = product;
+      const response = await fetch('/api/products', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          ...rest,
+          name: rest.name + ' (Copy)',
+          slug: rest.slug + '-copy',
+        }),
+      });
+      if (!response.ok) throw new Error('Failed to duplicate');
+      await fetchProducts();
+    } catch (err) {
+      console.error(err);
+      alert('Error duplicating product');
+    }
+  };
+
+  const handleDeleteProduct = async (id: string) => {
+    if (!confirm('Delete this product?')) return;
+    try {
+      const res = await fetch(`/api/products/${id}`, { method: 'DELETE' });
+      if (!res.ok) throw new Error('Failed');
+      await fetchProducts();
+    } catch (err) {
+      console.error(err);
+      alert('Error deleting');
+    }
   };
 
   if (loading) {
@@ -748,17 +799,13 @@ export default function ProductsAdminPanel({ initialProducts = [] }: ProductsAdm
                             Edit
                           </button>
                           <button
-                            onClick={() => {
-                              // Handle duplicate
-                            }}
+                            onClick={() => handleDuplicateProduct(product)}
                             className="text-gray-600 hover:text-gray-900"
                           >
                             Duplicate
                           </button>
                           <button
-                            onClick={() => {
-                              // Handle delete
-                            }}
+                            onClick={() => handleDeleteProduct(product.id)}
                             className="text-red-600 hover:text-red-900"
                           >
                             Delete
@@ -772,6 +819,29 @@ export default function ProductsAdminPanel({ initialProducts = [] }: ProductsAdm
             </div>
           )}
         </div>
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="flex justify-center mt-6 space-x-2">
+            <button
+              onClick={() => setPage((p) => Math.max(p - 1, 1))}
+              disabled={page === 1}
+              className="px-3 py-1 text-sm rounded border border-gray-300 bg-white disabled:opacity-50"
+            >
+              Prev
+            </button>
+            <span className="px-2 py-1 text-sm text-gray-600">
+              Page {page} of {totalPages}
+            </span>
+            <button
+              onClick={() => setPage((p) => Math.min(p + 1, totalPages))}
+              disabled={page === totalPages}
+              className="px-3 py-1 text-sm rounded border border-gray-300 bg-white disabled:opacity-50"
+            >
+              Next
+            </button>
+          </div>
+        )}
 
         {sortedProducts.length === 0 && (
           <div className="text-center py-12">
@@ -825,22 +895,19 @@ export default function ProductsAdminPanel({ initialProducts = [] }: ProductsAdm
               </div>
               
               <div className="p-6">
-                <div className="text-center py-12">
-                  <div className="text-6xl mb-4">🚧</div>
-                  <h3 className="text-lg font-medium text-gray-900 mb-2">Product Form Coming Soon</h3>
-                  <p className="text-gray-500 mb-6">
-                    The detailed product creation and editing form will be implemented here.
-                    For now, use the Payload admin interface.
-                  </p>
-                  <a
-                    href="/admin/collections/products"
-                    className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors inline-block"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Open Payload Admin
-                  </a>
-                </div>
+                <ProductForm
+                  defaultValues={editingProduct ?? undefined}
+                  productId={editingProduct?.id}
+                  onCancel={() => {
+                    setShowCreateModal(false);
+                    setEditingProduct(null);
+                  }}
+                  onSuccess={async () => {
+                    await fetchProducts();
+                    setShowCreateModal(false);
+                    setEditingProduct(null);
+                  }}
+                />
               </div>
             </motion.div>
           </motion.div>

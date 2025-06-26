@@ -9,6 +9,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@hookform/resolvers": "^3.10.0",
     "@payloadcms/db-mongodb": "^3.43.0",
     "@payloadcms/next": "^3.43.0",
     "@payloadcms/payload-cloud": "^3.43.0",
@@ -33,6 +34,7 @@
     "react": "^19.0.0",
     "react-chartjs-2": "^5.3.0",
     "react-dom": "^19.0.0",
+    "react-hook-form": "^7.58.1",
     "resend": "^4.6.0",
     "stripe": "^18.2.1",
     "swr": "^2.3.3",
