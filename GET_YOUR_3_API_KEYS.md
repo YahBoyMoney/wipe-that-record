@@ -52,7 +52,7 @@ TELEGRAM_CHAT_ID=987654321
 
 **Step 4:** Name it "WipeThatRecord Bot" 
 
-**Step 5:** Copy the key that starts with: `sk-proj-...`
+**Step 5:** Copy the API key that starts with: `sk-`
 
 **Step 6:** In your .env.local file, replace:
 ```
@@ -60,7 +60,7 @@ OPENAI_API_KEY=YOUR_OPENAI_KEY_HERE
 ```
 with:
 ```
-OPENAI_API_KEY=sk-proj-your-actual-key-here
+OPENAI_API_KEY=your-openai-api-key-here
 ```
 
 ## 4. 🧪 TEST YOUR SETUP

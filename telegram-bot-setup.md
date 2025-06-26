@@ -60,7 +60,7 @@ TELEGRAM_BOT_TOKEN=1234567890:ABCdefGHIjklMNOpqrsTUVwxyz
 TELEGRAM_CHAT_ID=987654321
 
 # Required for AI insights
-OPENAI_API_KEY=sk-proj-your-openai-key-here
+OPENAI_API_KEY=your-openai-api-key-here
 
 # Your domain (auto-detected on Vercel)
 NEXT_PUBLIC_SERVER_URL=https://yourdomain.vercel.app

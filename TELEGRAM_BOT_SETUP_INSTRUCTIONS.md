@@ -25,7 +25,7 @@ Your test shows: **Missing environment variables: TELEGRAM_BOT_TOKEN, TELEGRAM_C
 1. **Go to**: https://platform.openai.com/api-keys
 2. **Sign in** to your OpenAI account
 3. **Click**: "Create new secret key"
-4. **Copy the key** that starts with: `sk-proj-...`
+4. **Copy the API key** that starts with: `sk-`
 
 ### STEP 4: Update Your .env.local File
 
@@ -42,7 +42,7 @@ TELEGRAM_BOT_TOKEN=1234567890:ABCdefGHIjklMNOpqrsTUVwxyz
 TELEGRAM_CHAT_ID=987654321
 
 # OpenAI API Key from platform.openai.com
-OPENAI_API_KEY=sk-proj-your-actual-key-here
+OPENAI_API_KEY=your-openai-api-key-here
 
 # Your server URL
 NEXT_PUBLIC_SERVER_URL=https://wipethatrecord.com

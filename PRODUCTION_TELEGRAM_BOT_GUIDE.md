@@ -43,7 +43,7 @@ TELEGRAM_WEBHOOK_SECRET=your_secure_random_string
 TELEGRAM_CHAT_ID=your_chat_id_from_userinfobot
 
 # AI Integration
-OPENAI_API_KEY=sk-proj-your_openai_key
+OPENAI_API_KEY=your-openai-api-key-here
 
 # Store Integration (Choose one)
 STORE_PROVIDER=woo  # or 'shopify'
