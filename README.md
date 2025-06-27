@@ -266,6 +266,7 @@ GET  /api/analytics         // Business analytics
 POST /api/checkout/diy      // $50 DIY package
 POST /api/checkout/upgrade  // $100/$1500 packages
 POST /api/webhook           // Stripe webhook handler
+POST /api/update-lead-behavior // Update lead behavior analytics
 ```
 
 ### **Admin Endpoints**
