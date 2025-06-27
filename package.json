@@ -9,6 +9,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@heroicons/react": "^2.2.0",
     "@hookform/resolvers": "^3.10.0",
     "@payloadcms/db-mongodb": "^3.43.0",
     "@payloadcms/next": "^3.43.0",
