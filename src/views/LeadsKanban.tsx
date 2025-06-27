@@ -92,7 +92,7 @@ export default function LeadsKanban() {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0 }}
                     draggable
-                    onDragStart={(e: any) => {
+                    onDragStart={(e: React.DragEvent) => {
                       e.dataTransfer.setData('leadId', lead.id);
                       e.dataTransfer.setData('fromStage', key);
                     }}

@@ -33,7 +33,7 @@ interface Product {
     totalReviews: number;
   };
   images?: Array<{
-    image: any;
+    image: Record<string, unknown>;
     alt: string;
     isPrimary: boolean;
   }>;
@@ -64,7 +64,7 @@ export default function ProductsAdminPanel({ initialProducts = [] }: ProductsAdm
 
   useEffect(() => {
     fetchProducts();
-  }, []);
+  }, [page, searchTerm, filterStatus, filterCategory, sortBy, sortOrder]);
 
   const fetchProducts = async () => {
     try {
@@ -273,7 +273,7 @@ export default function ProductsAdminPanel({ initialProducts = [] }: ProductsAdm
 
   const handleDuplicateProduct = async (product: Product) => {
     try {
-      const { id, createdAt, updatedAt, analytics, ...rest } = product;
+      const { ...rest } = product;
       const response = await fetch('/api/products', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

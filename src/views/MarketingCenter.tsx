@@ -8,9 +8,9 @@ export default function MarketingCenter() {
   const [segment, setSegment] = useState('all');
   const [sending, setSending] = useState(false);
   const [message, setMessage] = useState('');
-  const [sequences, setSequences] = useState<any[]>([]);
+  const [sequences, setSequences] = useState<Record<string, unknown>[]>([]);
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [editing, setEditing] = useState<any | null>(null);
+  const [editing, setEditing] = useState<Record<string, unknown> | null>(null);
 
   const sendEmail = async () => {
     if (!subject || !body) {
@@ -27,7 +27,8 @@ export default function MarketingCenter() {
       const json = await res.json();
       if (json.success) setMessage('Broadcast queued 👍');
       else setMessage(json.error || 'Failed');
-    } catch (err) {
+    } catch (err: unknown) {
+      console.error('Email send error:', err);
       setMessage('Error sending');
     } finally {
       setSending(false);
