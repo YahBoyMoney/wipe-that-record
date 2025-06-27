@@ -1,18 +1,43 @@
 import nodemailer from 'nodemailer';
 
-// Configure Zoho SMTP transporter with connection pooling
-export const mailer = nodemailer.createTransport({
-  host: 'smtp.zoho.com',
-  port: 465,
-  secure: true,
-  pool: true, // Enable connection pooling for better reliability
-  maxConnections: 5,
-  maxMessages: 100,
-  auth: {
-    user: process.env.ZOHO_EMAIL || 'admin@wipethatrecord.com',
-    pass: process.env.ZOHO_PASSWORD,
-  },
-});
+// Configure email transporter with multiple providers fallback
+const createTransporter = () => {
+  // Try Zoho first
+  if (process.env.ZOHO_EMAIL && process.env.ZOHO_PASSWORD) {
+    console.log('📧 Using Zoho email configuration');
+    return nodemailer.createTransport({
+      host: 'smtp.zoho.com',
+      port: 465,
+      secure: true,
+      pool: true,
+      maxConnections: 5,
+      maxMessages: 100,
+      auth: {
+        user: process.env.ZOHO_EMAIL,
+        pass: process.env.ZOHO_PASSWORD,
+      },
+    });
+  }
+  
+  // Fallback to Gmail/SMTP
+  if (process.env.SMTP_USER && process.env.SMTP_PASS) {
+    console.log('📧 Using SMTP email configuration');
+    return nodemailer.createTransport({
+      host: process.env.SMTP_HOST || 'smtp.gmail.com',
+      port: parseInt(process.env.SMTP_PORT || '587'),
+      secure: process.env.SMTP_PORT === '465',
+      auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS,
+      },
+    });
+  }
+  
+  console.warn('⚠️ No email configuration found - emails will not be sent');
+  return null;
+};
+
+export const mailer = createTransporter();
 
 export async function sendEmail(opts: {
   to: string;
@@ -21,8 +46,15 @@ export async function sendEmail(opts: {
   text?: string;
 }) {
   try {
+    if (!mailer) {
+      console.warn(`⚠️ Email not sent to ${opts.to} - no transporter configured`);
+      console.warn(`📋 Subject: ${opts.subject}`);
+      return { messageId: 'no-transporter', mock: true };
+    }
+
+    const fromEmail = process.env.ZOHO_EMAIL || process.env.SMTP_USER || 'admin@wipethatrecord.com';
     const info = await mailer.sendMail({
-      from: '"Wipe That Record" <admin@wipethatrecord.com>',
+      from: `"Wipe That Record" <${fromEmail}>`,
       ...opts,
     });
     
@@ -34,7 +66,9 @@ export async function sendEmail(opts: {
   } catch (error) {
     console.error(`❌ Failed to send email to ${opts.to}:`, error);
     console.error(`📋 Subject: ${opts.subject}`);
-    throw error;
+    
+    // Don't throw error, just log it and return mock response
+    return { messageId: 'error', error: error instanceof Error ? error.message : 'Unknown error' };
   }
 }
 

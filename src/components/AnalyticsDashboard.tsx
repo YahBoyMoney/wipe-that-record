@@ -2,36 +2,89 @@
 
 import React, { useEffect, useState } from 'react';
 import DashboardNav from './DashboardNav';
+import { Line, Bar, Doughnut } from 'react-chartjs-2';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+  ArcElement,
+} from 'chart.js';
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+  ArcElement
+);
 
 interface AnalyticsData {
   overview: {
     totalLeads: number;
     totalRevenue: number;
-    averageOrderValue: string;
-    conversionRates: {
-      leadToDiy: string;
-      diyToReview: string;
-      diyToFull: string;
-    };
+    conversionRate: number;
+    averageOrderValue: number;
+    todayLeads: number;
+    todayRevenue: number;
+    weekLeads: number;
+    weekRevenue: number;
+    monthLeads: number;
+    monthRevenue: number;
+    avgLeadScore: number;
+    highQualityLeads: number;
   };
   funnel: {
     leads: number;
     diyPurchases: number;
     reviewUpgrades: number;
     fullServiceUpgrades: number;
+    conversionRates: {
+      leadToDiy: string;
+      diyToReview: string;
+      diyToFull: string;
+    };
   };
-  revenue: {
-    total: number;
-    bySource: Array<{ source: string; revenue: number }>;
+  trends: {
+    daily: Array<{
+      date: string;
+      leads: number;
+      revenue: number;
+      conversions: number;
+    }>;
+    monthly: Array<{
+      month: string;
+      revenue: number;
+      leads: number;
+      conversions: number;
+    }>;
   };
+  sources: {
+    breakdown: Record<string, number>;
+    top: Array<{ source: string; count: number }>;
+  };
+  convictions: Record<string, number>;
   email: {
     totalSent: number;
-    byStatus: { [key: string]: number };
+    delivered: number;
+    pending: number;
+    failed: number;
   };
-  recent: Array<{
+  highValueLeads: Array<{
+    id: string;
+    name: string;
     email: string;
-    stage: string;
     revenue: number;
+    stage: string;
     source: string;
     createdAt: string;
   }>;
@@ -77,24 +130,31 @@ const AnalyticsDashboard: React.FC = () => {
   const [data, setData] = useState<AnalyticsData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const fetchAnalytics = async () => {
+    try {
+      setRefreshing(true);
+      const response = await fetch('/api/analytics');
+      if (!response.ok) {
+        throw new Error('Failed to fetch analytics');
+      }
+      const analyticsData = await response.json();
+      setData(analyticsData);
+      setError(null);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An error occurred');
+      console.error('Analytics fetch error:', err);
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchAnalytics = async () => {
-      try {
-        const response = await fetch('/api/analytics');
-        if (!response.ok) {
-          throw new Error('Failed to fetch analytics');
-        }
-        const analyticsData = await response.json();
-        setData(analyticsData);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : 'An error occurred');
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchAnalytics();
+    const interval = setInterval(fetchAnalytics, 300000); // Refresh every 5 minutes
+    return () => clearInterval(interval);
   }, []);
 
   if (loading) {
@@ -142,181 +202,298 @@ const AnalyticsDashboard: React.FC = () => {
   const formatCurrency = (amount: number) => `$${amount.toLocaleString()}`;
   const formatDate = (dateString: string) => new Date(dateString).toLocaleDateString();
 
+  // Chart configurations
+  const revenueChartData = {
+    labels: data.trends?.daily?.map(d => new Date(d.date).toLocaleDateString()) || [],
+    datasets: [
+      {
+        label: 'Daily Revenue',
+        data: data.trends?.daily?.map(d => d.revenue) || [],
+        borderColor: 'rgb(59, 130, 246)',
+        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+        tension: 0.4,
+      },
+    ],
+  };
+
+  const leadsChartData = {
+    labels: data.trends?.daily?.map(d => new Date(d.date).toLocaleDateString()) || [],
+    datasets: [
+      {
+        label: 'Daily Leads',
+        data: data.trends?.daily?.map(d => d.leads) || [],
+        backgroundColor: 'rgba(16, 185, 129, 0.8)',
+        borderColor: 'rgb(16, 185, 129)',
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  const funnelData = {
+    labels: ['Leads', 'DIY Purchases', 'Review Upgrades', 'Full Service'],
+    datasets: [
+      {
+        data: [
+          data.funnel.leads,
+          data.funnel.diyPurchases,
+          data.funnel.reviewUpgrades,
+          data.funnel.fullServiceUpgrades,
+        ],
+        backgroundColor: [
+          'rgba(99, 102, 241, 0.8)',
+          'rgba(16, 185, 129, 0.8)',
+          'rgba(245, 158, 11, 0.8)',
+          'rgba(239, 68, 68, 0.8)',
+        ],
+        borderColor: [
+          'rgb(99, 102, 241)',
+          'rgb(16, 185, 129)',
+          'rgb(245, 158, 11)',
+          'rgb(239, 68, 68)',
+        ],
+        borderWidth: 2,
+      },
+    ],
+  };
+
+  const sourcesData = {
+    labels: data.sources?.top?.map(s => s.source) || [],
+    datasets: [
+      {
+        data: data.sources?.top?.map(s => s.count) || [],
+        backgroundColor: [
+          'rgba(59, 130, 246, 0.8)',
+          'rgba(16, 185, 129, 0.8)',
+          'rgba(245, 158, 11, 0.8)',
+          'rgba(239, 68, 68, 0.8)',
+          'rgba(139, 92, 246, 0.8)',
+        ],
+      },
+    ],
+  };
+
   return (
     <div className="bg-gray-50 min-h-screen">
       <DashboardNav />
       <div className="p-8">
         <div className="max-w-7xl mx-auto">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Wipe That Record - Analytics Dashboard</h1>
-          <p className="text-gray-600 mt-2">Lead conversion and revenue analytics</p>
-        </div>
-
-        {/* Overview Metrics */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          <MetricCard
-            title="Total Leads"
-            value={data.overview.totalLeads.toLocaleString()}
-            subtitle="All time"
-          />
-          <MetricCard
-            title="Total Revenue"
-            value={formatCurrency(data.overview.totalRevenue)}
-            subtitle="All time"
-          />
-          <MetricCard
-            title="Average Order Value"
-            value={formatCurrency(parseFloat(data.overview.averageOrderValue))}
-            subtitle="Per DIY purchase"
-          />
-          <MetricCard
-            title="Lead to DIY Rate"
-            value={`${data.overview.conversionRates.leadToDiy}%`}
-            subtitle="Conversion rate"
-          />
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-          {/* Conversion Funnel */}
-          <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Conversion Funnel</h2>
-            <div className="space-y-4">
-              <ProgressBar
-                value={data.funnel.leads}
-                max={data.funnel.leads}
-                label="Leads"
-                color="bg-blue-500"
-              />
-              <ProgressBar
-                value={data.funnel.diyPurchases}
-                max={data.funnel.leads}
-                label="DIY Purchases ($50)"
-                color="bg-green-500"
-              />
-              <ProgressBar
-                value={data.funnel.reviewUpgrades}
-                max={data.funnel.leads}
-                label="Review Upgrades ($100)"
-                color="bg-yellow-500"
-              />
-              <ProgressBar
-                value={data.funnel.fullServiceUpgrades}
-                max={data.funnel.leads}
-                label="Full Service ($1500)"
-                color="bg-purple-500"
-              />
+          {/* Header */}
+          <div className="flex items-center justify-between mb-8">
+            <div>
+              <h1 className="text-3xl font-bold text-gray-900">Analytics Dashboard</h1>
+              <p className="text-gray-600 mt-2">Real-time business intelligence and performance metrics</p>
             </div>
-            <div className="mt-4 text-xs text-gray-500 space-y-1">
-              <div>DIY Rate: {data.overview.conversionRates.leadToDiy}%</div>
-              <div>DIY → Review: {data.overview.conversionRates.diyToReview}%</div>
-              <div>DIY → Full: {data.overview.conversionRates.diyToFull}%</div>
+            <button
+              onClick={fetchAnalytics}
+              disabled={refreshing}
+              className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
+            >
+              {refreshing ? '🔄 Refreshing...' : '🔄 Refresh'}
+            </button>
+          </div>
+
+          {/* Key Metrics */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <MetricCard
+              title="Total Revenue"
+              value={formatCurrency(data.overview.totalRevenue)}
+              subtitle={`Today: ${formatCurrency(data.overview.todayRevenue)}`}
+            />
+            <MetricCard
+              title="Total Leads"
+              value={data.overview.totalLeads.toLocaleString()}
+              subtitle={`Today: ${data.overview.todayLeads}`}
+            />
+            <MetricCard
+              title="Conversion Rate"
+              value={`${data.overview.conversionRate.toFixed(1)}%`}
+              subtitle={data.overview.conversionRate > 15 ? '🔥 Excellent' : data.overview.conversionRate > 10 ? '✅ Good' : '⚠️ Needs work'}
+            />
+            <MetricCard
+              title="Avg Order Value"
+              value={formatCurrency(Math.round(data.overview.averageOrderValue))}
+              subtitle={`Revenue per lead: ${formatCurrency(Math.round(data.overview.totalRevenue / data.overview.totalLeads))}`}
+            />
+          </div>
+
+          {/* Charts Row */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            {/* Revenue Trend */}
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Revenue Trend (7 Days)</h3>
+              <div className="h-64">
+                <Line
+                  data={revenueChartData}
+                  options={{
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                      legend: { display: false },
+                    },
+                    scales: {
+                      y: {
+                        beginAtZero: true,
+                        ticks: {
+                          callback: function(value) {
+                            return '$' + Number(value).toLocaleString();
+                          },
+                        },
+                      },
+                    },
+                  }}
+                />
+              </div>
+            </div>
+
+            {/* Leads Trend */}
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Leads Trend (7 Days)</h3>
+              <div className="h-64">
+                <Bar
+                  data={leadsChartData}
+                  options={{
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                      legend: { display: false },
+                    },
+                    scales: {
+                      y: {
+                        beginAtZero: true,
+                      },
+                    },
+                  }}
+                />
+              </div>
             </div>
           </div>
 
-          {/* Revenue by Source */}
-          <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Revenue by Source</h2>
-            <div className="space-y-3">
-              {data.revenue.bySource.map((source, index) => (
-                <div key={source.source} className="flex justify-between items-center">
-                  <div className="flex items-center">
-                    <div className={`w-3 h-3 rounded-full mr-3 ${
-                      ['bg-blue-500', 'bg-green-500', 'bg-yellow-500', 'bg-purple-500', 'bg-pink-500', 'bg-indigo-500'][index % 6]
-                    }`}></div>
-                    <span className="text-sm font-medium text-gray-900 capitalize">{source.source}</span>
+          {/* Funnel and Sources */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            {/* Conversion Funnel */}
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Conversion Funnel</h3>
+              <div className="h-64">
+                <Doughnut
+                  data={funnelData}
+                  options={{
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                      legend: {
+                        position: 'bottom' as const,
+                      },
+                    },
+                  }}
+                />
+              </div>
+              <div className="mt-4 space-y-2">
+                <div className="flex justify-between text-sm">
+                  <span>Lead → DIY:</span>
+                  <span className="font-semibold">{data.funnel.conversionRates.leadToDiy}%</span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span>DIY → Review:</span>
+                  <span className="font-semibold">{data.funnel.conversionRates.diyToReview}%</span>
+                </div>
+                <div className="flex justify-between text-sm">
+                  <span>DIY → Full:</span>
+                  <span className="font-semibold">{data.funnel.conversionRates.diyToFull}%</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Traffic Sources */}
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4">Top Traffic Sources</h3>
+              <div className="h-64">
+                <Doughnut
+                  data={sourcesData}
+                  options={{
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                      legend: {
+                        position: 'bottom' as const,
+                      },
+                    },
+                  }}
+                />
+              </div>
+              <div className="mt-4 space-y-2">
+                {data.sources?.top?.slice(0, 5).map((source, index) => (
+                  <div key={source.source} className="flex justify-between text-sm">
+                    <span>{source.source}:</span>
+                    <span className="font-semibold">{source.count} leads</span>
                   </div>
-                  <span className="text-sm font-semibold text-gray-900">{formatCurrency(source.revenue)}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-          {/* Email Performance */}
-          <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Email Performance</h2>
-            <div className="mb-4">
-              <div className="text-2xl font-bold text-gray-900">{data.email.totalSent.toLocaleString()}</div>
-              <div className="text-sm text-gray-500">Total emails sent</div>
-            </div>
-            <div className="space-y-2">
-              {Object.entries(data.email.byStatus).map(([status, count]) => (
-                <div key={status} className="flex justify-between items-center text-sm">
-                  <span className="capitalize text-gray-600">{status.replace('_', ' ')}</span>
-                  <span className="font-medium text-gray-900">{count}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Quick Stats */}
-          <div className="bg-white p-6 rounded-lg shadow-sm border border-gray-200">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Quick Stats</h2>
-            <div className="space-y-4">
-              <div className="flex justify-between">
-                <span className="text-gray-600">Paid Customers</span>
-                <span className="font-semibold">{data.funnel.diyPurchases}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Upgrade Rate</span>
-                <span className="font-semibold">
-                  {data.funnel.diyPurchases > 0 
-                    ? (((data.funnel.reviewUpgrades + data.funnel.fullServiceUpgrades) / data.funnel.diyPurchases) * 100).toFixed(1)
-                    : 0}%
-                </span>
-              </div>
-              <div className="flex justify-between">
-                <span className="text-gray-600">Revenue/Lead</span>
-                <span className="font-semibold">
-                  {formatCurrency(data.overview.totalLeads > 0 ? data.overview.totalRevenue / data.overview.totalLeads : 0)}
-                </span>
+                )) || []}
               </div>
             </div>
           </div>
-        </div>
 
-        {/* Recent Activity */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200">
-          <div className="px-6 py-4 border-b border-gray-200">
-            <h2 className="text-lg font-semibold text-gray-900">Recent Paid Customers</h2>
-          </div>
-          <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Stage</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Revenue</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Source</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                </tr>
-              </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
-                {data.recent.map((lead, index) => (
-                  <tr key={index} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{lead.email}</td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                        lead.stage === 'full_service' ? 'bg-purple-100 text-purple-800' :
-                        lead.stage === 'review_upgrade' ? 'bg-yellow-100 text-yellow-800' :
-                        'bg-green-100 text-green-800'
-                      }`}>
-                        {lead.stage.replace('_', ' ')}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900 font-medium">
-                      {formatCurrency(lead.revenue)}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 capitalize">{lead.source}</td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{formatDate(lead.createdAt)}</td>
+          {/* High Value Leads */}
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-8">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">High Value Leads</h3>
+            <div className="overflow-x-auto">
+              <table className="min-w-full">
+                <thead>
+                  <tr className="border-b border-gray-200">
+                    <th className="text-left py-3 px-4 font-medium text-gray-600">Name</th>
+                    <th className="text-left py-3 px-4 font-medium text-gray-600">Email</th>
+                    <th className="text-left py-3 px-4 font-medium text-gray-600">Revenue</th>
+                    <th className="text-left py-3 px-4 font-medium text-gray-600">Stage</th>
+                    <th className="text-left py-3 px-4 font-medium text-gray-600">Source</th>
+                    <th className="text-left py-3 px-4 font-medium text-gray-600">Date</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {data.highValueLeads?.map((lead) => (
+                    <tr key={lead.id} className="border-b border-gray-100 hover:bg-gray-50">
+                      <td className="py-3 px-4 font-medium text-gray-900">{lead.name}</td>
+                      <td className="py-3 px-4 text-gray-600">{lead.email}</td>
+                      <td className="py-3 px-4 font-semibold text-green-600">${lead.revenue}</td>
+                      <td className="py-3 px-4">
+                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                          lead.stage === 'full_service' ? 'bg-red-100 text-red-800' :
+                          lead.stage === 'review_upgrade' ? 'bg-yellow-100 text-yellow-800' :
+                          lead.stage === 'diy_purchased' ? 'bg-green-100 text-green-800' :
+                          'bg-gray-100 text-gray-800'
+                        }`}>
+                          {lead.stage.replace('_', ' ')}
+                        </span>
+                      </td>
+                      <td className="py-3 px-4 text-gray-600">{lead.source}</td>
+                      <td className="py-3 px-4 text-gray-600">{formatDate(lead.createdAt)}</td>
+                    </tr>
+                  )) || []}
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          {/* Email Performance */}
+          <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4">Email Performance</h3>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="text-center">
+                <div className="text-2xl font-bold text-blue-600">{data.email.totalSent}</div>
+                <div className="text-sm text-gray-500">Total Sent</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-green-600">{data.email.delivered}</div>
+                <div className="text-sm text-gray-500">Delivered</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-yellow-600">{data.email.pending}</div>
+                <div className="text-sm text-gray-500">Pending</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-red-600">{data.email.failed}</div>
+                <div className="text-sm text-gray-500">Failed</div>
+              </div>
+            </div>
           </div>
         </div>
-              </div>
       </div>
     </div>
   );
