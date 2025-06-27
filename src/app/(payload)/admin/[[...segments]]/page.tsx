@@ -22,10 +22,10 @@ const Page = async ({ params, searchParams }: Args) => {
   const resolvedParams = await params;
   const resolvedSearchParams = await searchParams;
   
-  // If no segments (just /admin), show our enhanced dashboard
+  // If no segments (just /admin), redirect to our new professional admin panel
   if (!resolvedParams.segments || resolvedParams.segments.length === 0) {
-    const AdminDashboard = (await import('@/views/AdminDashboard')).default;
-    return <AdminDashboard />;
+    const { redirect } = await import('next/navigation');
+    redirect('/admin-dashboard');
   }
   
   // Otherwise, use the default Payload admin interface for collections, etc.
