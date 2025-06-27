@@ -275,15 +275,27 @@ const Leads: CollectionConfig = {
       label: 'Time on Site',
       admin: { description: 'How long they spent on the website before converting' }
     },
-    { 
-      name: 'pagesViewed', 
-      type: 'number', 
+    {
+      name: 'pagesViewed',
+      type: 'number',
       label: 'Pages Viewed',
       admin: { description: 'Number of pages viewed before converting' }
     },
-    { 
-      name: 'deviceType', 
-      type: 'select', 
+    {
+      name: 'scrollDepth',
+      type: 'number',
+      label: 'Max Scroll Depth',
+      admin: { description: 'Highest percentage scrolled on the site' }
+    },
+    {
+      name: 'clickThroughs',
+      type: 'number',
+      label: 'CTA Clicks',
+      admin: { description: 'Number of call-to-action clicks' }
+    },
+    {
+      name: 'deviceType',
+      type: 'select',
       label: 'Device Type',
       options: [
         { label: 'Desktop', value: 'desktop' },
@@ -363,7 +375,8 @@ const Leads: CollectionConfig = {
 
           // Update email tracking
           const updateEmailStatus = async (status: string) => {
-            await fetch('/api/update-lead-email-status', {
+            const baseUrl = process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000';
+            await fetch(`${baseUrl}/api/update-lead-email-status`, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
