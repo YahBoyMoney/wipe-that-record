@@ -22,10 +22,11 @@ const Page = async ({ params, searchParams }: Args) => {
   const resolvedParams = await params;
   const resolvedSearchParams = await searchParams;
   
-  // If no segments (just /admin), redirect to our new professional admin panel
+  // If no segments (just /admin), force redirect to professional admin panel
   if (!resolvedParams.segments || resolvedParams.segments.length === 0) {
     const { redirect } = await import('next/navigation');
     redirect('/admin-dashboard');
+    return null; // This should never execute due to redirect
   }
   
   // Otherwise, use the default Payload admin interface for collections, etc.
