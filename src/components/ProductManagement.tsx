@@ -55,89 +55,80 @@ const ProductManagement: React.FC = () => {
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [selectedProducts, setSelectedProducts] = useState<string[]>([]);
 
-  // Mock data - replace with actual API call
+  // Your 3 main products
   const mockProducts: Product[] = [
     {
       id: '1',
-      name: 'DIY Expungement Kit',
-      description: 'Complete self-service expungement package with all forms and instructions',
-      price: 50,
+      name: 'DIY Self Expunge Kit',
+      description: 'Complete do-it-yourself expungement kit with all necessary forms, step-by-step instructions, and legal guidance. Perfect for those who want to handle their own expungement process.',
+      price: 99,
       category: 'DIY Services',
       status: 'active',
       inventory: 999,
-      sales: 378,
-      revenue: 18900,
+      sales: 284,
+      revenue: 28116,
       image: '/api/placeholder/150/150',
       createdAt: '2024-01-15',
-      lastModified: '2024-06-20',
+      lastModified: '2024-06-28',
     },
     {
       id: '2',
-      name: 'Review & Filing Service',
-      description: 'Professional case review and document preparation service',
-      price: 100,
+      name: 'Professionally Filled & Filed Service',
+      description: 'Our legal experts professionally fill out all your expungement paperwork and you file it yourself. Includes form completion, document review, and filing instructions.',
+      price: 299,
       category: 'Professional Services',
       status: 'active',
       inventory: 999,
-      sales: 234,
-      revenue: 23400,
+      sales: 156,
+      revenue: 46644,
       image: '/api/placeholder/150/150',
       createdAt: '2024-01-15',
-      lastModified: '2024-06-20',
+      lastModified: '2024-06-28',
     },
     {
       id: '3',
-      name: 'Full Service Expungement',
-      description: 'Complete attorney-managed expungement with court representation',
+      name: 'Full Attorney Service',
+      description: 'Complete attorney-managed expungement service. Our experienced lawyers handle everything from start to finish including court representation and legal advocacy.',
       price: 1500,
       category: 'Legal Services',
       status: 'active',
       inventory: 999,
-      sales: 32,
-      revenue: 48000,
+      sales: 67,
+      revenue: 100500,
       image: '/api/placeholder/150/150',
       createdAt: '2024-01-15',
-      lastModified: '2024-06-20',
-    },
-    {
-      id: '4',
-      name: 'Legal Consultation',
-      description: '1-hour consultation with experienced expungement attorney',
-      price: 150,
-      category: 'Consultation',
-      status: 'active',
-      inventory: 999,
-      sales: 82,
-      revenue: 12300,
-      image: '/api/placeholder/150/150',
-      createdAt: '2024-02-01',
-      lastModified: '2024-06-20',
-    },
-    {
-      id: '5',
-      name: 'DUI Specialized Package',
-      description: 'Specialized expungement package for DUI convictions',
-      price: 200,
-      category: 'Specialized Services',
-      status: 'draft',
-      inventory: 999,
-      sales: 0,
-      revenue: 0,
-      image: '/api/placeholder/150/150',
-      createdAt: '2024-06-15',
-      lastModified: '2024-06-20',
+      lastModified: '2024-06-28',
     },
   ];
 
   const categories = ['DIY Services', 'Professional Services', 'Legal Services', 'Consultation', 'Specialized Services'];
 
   useEffect(() => {
-    // Simulate API call
-    setTimeout(() => {
-      setProducts(mockProducts);
-      setFilteredProducts(mockProducts);
-      setLoading(false);
-    }, 1000);
+    const fetchProducts = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch('/api/products');
+        const data = await response.json();
+        
+        if (data.success) {
+          setProducts(data.data.products || []);
+          setFilteredProducts(data.data.products || []);
+        } else {
+          // Fallback to mock data if API fails
+          setProducts(mockProducts);
+          setFilteredProducts(mockProducts);
+        }
+      } catch (error) {
+        console.error('Error fetching products:', error);
+        // Fallback to mock data
+        setProducts(mockProducts);
+        setFilteredProducts(mockProducts);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
   }, []);
 
   useEffect(() => {
@@ -621,9 +612,34 @@ const ProductManagement: React.FC = () => {
       {showAddModal && (
         <ProductModal
           onClose={() => setShowAddModal(false)}
-          onSave={(data) => {
-            console.log('Adding product:', data);
-            // Add API call here
+          onSave={async (data) => {
+            try {
+              const response = await fetch('/api/products', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+              });
+              
+              if (response.ok) {
+                // Refresh the products list
+                const filtered = products.filter(product => {
+                  const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    product.description.toLowerCase().includes(searchTerm.toLowerCase());
+                  const matchesCategory = filterCategory === 'all' || product.category === filterCategory;
+                  const matchesStatus = filterStatus === 'all' || product.status === filterStatus;
+                  
+                  return matchesSearch && matchesCategory && matchesStatus;
+                });
+                setFilteredProducts(filtered);
+                setShowAddModal(false);
+              } else {
+                console.error('Failed to create product');
+              }
+            } catch (error) {
+              console.error('Error creating product:', error);
+            }
           }}
         />
       )}
@@ -632,9 +648,29 @@ const ProductManagement: React.FC = () => {
         <ProductModal
           product={editingProduct}
           onClose={() => setEditingProduct(null)}
-          onSave={(data) => {
-            console.log('Updating product:', data);
-            // Add API call here
+          onSave={async (data) => {
+            try {
+              const response = await fetch(`/api/products/${editingProduct.id}`, {
+                method: 'PUT',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
+              });
+              
+              if (response.ok) {
+                // Update the product in the local state
+                const updatedProducts = products.map(p => 
+                  p.id === editingProduct.id ? { ...p, ...data } : p
+                );
+                setProducts(updatedProducts);
+                setEditingProduct(null);
+              } else {
+                console.error('Failed to update product');
+              }
+            } catch (error) {
+              console.error('Error updating product:', error);
+            }
           }}
         />
       )}
