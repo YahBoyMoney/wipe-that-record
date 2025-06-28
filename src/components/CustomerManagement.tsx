@@ -176,12 +176,23 @@ const CustomerManagement: React.FC = () => {
   const customerTags = ['DUI', 'Urgent', 'High Value', 'VIP', 'Referrer', 'Multiple Cases', 'New Lead', 'Price Sensitive', 'Consultation', 'Multiple Charges', 'Inactive', 'Single Purchase', 'Engaged Lead', 'Email Subscriber'];
 
   useEffect(() => {
-    // Simulate API call
-    setTimeout(() => {
-      setCustomers(mockCustomers);
-      setFilteredCustomers(mockCustomers);
-      setLoading(false);
-    }, 1000);
+    const fetchCustomers = async () => {
+      try {
+        const response = await fetch('/api/customers');
+        const data = await response.json();
+        setCustomers(data.customers || mockCustomers);
+        setFilteredCustomers(data.customers || mockCustomers);
+      } catch (error) {
+        console.error('Error fetching customers:', error);
+        // Fallback to mock data
+        setCustomers(mockCustomers);
+        setFilteredCustomers(mockCustomers);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCustomers();
   }, []);
 
   useEffect(() => {

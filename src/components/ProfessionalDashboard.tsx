@@ -167,7 +167,7 @@ const ProfessionalDashboard: React.FC = () => {
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        const response = await fetch('/api/analytics');
+        const response = await fetch('/api/dashboard-data');
         const data = await response.json();
         setAnalytics(data);
       } catch (error) {
