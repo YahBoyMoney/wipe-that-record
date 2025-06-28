@@ -167,7 +167,7 @@ const ProfessionalDashboard: React.FC = () => {
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
-        const response = await fetch('/api/dashboard-data');
+        const response = await fetch('/api/admin-stats');
         const data = await response.json();
         setAnalytics(data);
       } catch (error) {
@@ -180,47 +180,47 @@ const ProfessionalDashboard: React.FC = () => {
     fetchDashboardData();
   }, []);
 
-  // Mock data for demonstration
-  const kpiData = [
+  // Use real data from API or fallback to mock data
+  const kpiData = analytics?.data?.kpis || [
     {
       title: 'Total Revenue',
-      value: '$127,540',
-      change: '+12.5%',
+      value: '$175,260',
+      change: '+15.3%',
       changeType: 'increase' as const,
       icon: CurrencyDollarIcon,
       color: 'bg-blue-500',
     },
     {
       title: 'Total Orders',
-      value: '1,429',
-      change: '+8.3%',
+      value: '507',
+      change: '+12.8%',
       changeType: 'increase' as const,
       icon: ShoppingBagIcon,
       color: 'bg-green-500',
     },
     {
       title: 'Active Customers',
-      value: '892',
-      change: '+15.2%',
+      value: '324',
+      change: '+8.2%',
       changeType: 'increase' as const,
       icon: UsersIcon,
       color: 'bg-purple-500',
     },
     {
       title: 'Conversion Rate',
-      value: '24.8%',
-      change: '-2.1%',
-      changeType: 'decrease' as const,
+      value: '3.4%',
+      change: '+2.1%',
+      changeType: 'increase' as const,
       icon: ChartBarIcon,
       color: 'bg-orange-500',
     },
   ];
 
-  const recentActivities: RecentActivity[] = [
+  const recentActivities: RecentActivity[] = analytics?.data?.recentActivity || [
     {
       id: '1',
       type: 'order',
-      title: 'New Order #1247',
+      title: 'New Order #WR-1247',
       description: 'Full Service Expungement - John D.',
       time: '2 minutes ago',
       amount: '$1,500',
