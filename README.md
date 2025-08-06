@@ -1,5 +1,5 @@
 # 🚀 WipeThatRecord - AI-Powered Expungement Business
-<!-- Admin Panel Ready: /admin-panel -->
+<!-- Admin Panel Ready: /admin-panel - Deployed via GitHub Actions -->
 
 **Complete California expungement business automation platform with AI advisor, email funnels, and analytics dashboard.**
 
