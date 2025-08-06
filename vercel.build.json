@@ -1,0 +1,32 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/next"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/admin-dashboard",
+      "status": 301,
+      "headers": { "Location": "/admin-panel" }
+    },
+    {
+      "src": "/marketing-dashboard", 
+      "status": 301,
+      "headers": { "Location": "/admin-panel" }
+    }
+  ],
+  "github": {
+    "enabled": true,
+    "autoAlias": true,
+    "silent": false,
+    "autoJobCancelation": true
+  },
+  "git": {
+    "deploymentEnabled": {
+      "main": true
+    }
+  }
+}
