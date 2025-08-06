@@ -80,7 +80,7 @@ async function testAdminPanel() {
   console.log('\n' + '=' .repeat(50));
   console.log('\n✨ Admin Panel Test Complete!\n');
   console.log('📝 Next Steps:');
-  console.log('1. Visit: ' + API_BASE + '/admin');
+  console.log('1. Visit: ' + API_BASE + '/admin-panel');
   console.log('2. Check that real data is displaying');
   console.log('3. Test the real-time updates');
   console.log('4. Try the customer service features');

@@ -6,12 +6,12 @@ export function middleware(request: NextRequest) {
   
   // Redirect old admin routes to unified admin panel
   if (pathname === '/admin-dashboard' || pathname === '/marketing-dashboard') {
-    return NextResponse.redirect(new URL('/admin', request.url));
+    return NextResponse.redirect(new URL('/admin-panel', request.url));
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ['/admin', '/admin-dashboard', '/marketing-dashboard'],
+  matcher: ['/admin-dashboard', '/marketing-dashboard'],
 };
