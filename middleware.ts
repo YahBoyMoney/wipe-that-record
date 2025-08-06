@@ -4,8 +4,13 @@ import type { NextRequest } from 'next/server';
 export function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
   
-  // Redirect old admin routes to unified admin panel
-  if (pathname === '/admin-dashboard' || pathname === '/marketing-dashboard') {
+  // Redirect all admin routes to unified admin panel
+  if (pathname === '/admin' || pathname === '/admin-dashboard' || pathname === '/marketing-dashboard') {
+    return NextResponse.redirect(new URL('/admin-panel', request.url));
+  }
+
+  // Redirect old Payload admin routes
+  if (pathname.startsWith('/admin/') || pathname.startsWith('/api/admin/')) {
     return NextResponse.redirect(new URL('/admin-panel', request.url));
   }
 
@@ -13,5 +18,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/admin-dashboard', '/marketing-dashboard'],
+  matcher: ['/admin', '/admin/*', '/admin-dashboard', '/marketing-dashboard', '/api/admin/*'],
 };
