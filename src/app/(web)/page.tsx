@@ -130,11 +130,11 @@ export default function LandingPage() {
         </motion.div>
       )}
 
-      {/* Sticky notification bar */}
+      {/* Promo notification bar (rendered below the global header) */}
       <motion.div 
         initial={{ y: -100 }}
         animate={{ y: 0 }}
-        className="sticky top-0 z-40 bg-gradient-to-r from-amber-400 to-amber-500 text-slate-900 text-center py-2 px-4"
+        className="relative z-20 bg-gradient-to-r from-amber-400 to-amber-500 text-slate-900 text-center py-2 px-4"
       >
         <p className="text-sm font-semibold">
           🔥 Limited Time: DIY Expungement Kit - Only $97 (Save $50) | 
