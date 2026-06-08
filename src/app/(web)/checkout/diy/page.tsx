@@ -1,52 +1,16 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
 import Link from 'next/link';
 
 export default function DIYCheckoutPage() {
-  const [timeLeft, setTimeLeft] = useState(1800); // 30 minutes
-  const [showExitIntent, setShowExitIntent] = useState(false);
   const [leadData, setLeadData] = useState<any>(null);
-  
+
   useEffect(() => {
     const stored = sessionStorage.getItem('leadData');
     if (stored) {
       setLeadData(JSON.parse(stored));
     }
   }, []);
-
-  // Countdown timer
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft(prev => {
-        if (prev <= 1) {
-          clearInterval(timer);
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, []);
-
-  // Exit intent detection
-  useEffect(() => {
-    const handleMouseLeave = (e: MouseEvent) => {
-      if (e.clientY <= 0) {
-        setShowExitIntent(true);
-      }
-    };
-
-    document.addEventListener('mouseleave', handleMouseLeave);
-    return () => document.removeEventListener('mouseleave', handleMouseLeave);
-  }, []);
-
-  const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
-  };
 
   const handleCheckout = async (promoCode?: string) => {
     try {
@@ -105,23 +69,20 @@ export default function DIYCheckoutPage() {
         <div className="grid lg:grid-cols-2 gap-8">
           {/* Left Column - Product Details */}
           <div className="space-y-6">
-            {/* Urgency Banner */}
-            <div className="bg-red-500 text-white p-4 rounded-lg text-center">
-              <div className="flex items-center justify-center space-x-2 mb-2">
-                <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
-                </svg>
-                <span className="font-bold">LIMITED TIME OFFER</span>
-              </div>
+            {/* Offer Banner */}
+            <div className="bg-[#0f2747] text-white p-4 rounded-lg text-center">
               <div className="text-lg font-semibold">
-                🔥 Save $50 - Only $97 (Reg. $147) - Expires in 24 Hours!
+                DIY Record-Cleaning Kit &mdash; $97 (Save $50 from $147)
+              </div>
+              <div className="text-sm text-slate-300 mt-1">
+                Instant access &bull; 30-day refund if your case does not qualify after review
               </div>
             </div>
 
             {/* Product Overview */}
             <div className="bg-white rounded-xl shadow-lg p-6">
               <h1 className="text-2xl font-bold text-gray-900 mb-4">
-                DIY Expungement Kit - Complete Package
+                DIY Record-Cleaning Kit - Complete Package
               </h1>
               
               <div className="space-y-4">
@@ -150,8 +111,8 @@ export default function DIYCheckoutPage() {
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                   </svg>
                   <div>
-                    <h3 className="font-semibold text-gray-900">Success Guarantee</h3>
-                    <p className="text-gray-600">Money-back guarantee if your case doesn't qualify</p>
+                    <h3 className="font-semibold text-gray-900">30-Day Refund</h3>
+                    <p className="text-gray-600">Refund if your case does not qualify after review</p>
                   </div>
                 </div>
 
@@ -167,38 +128,23 @@ export default function DIYCheckoutPage() {
               </div>
             </div>
 
-            {/* Social Proof */}
+            {/* What customers say */}
             <div className="bg-white rounded-xl shadow-lg p-6">
-              <h3 className="text-lg font-bold text-gray-900 mb-4">What Our Customers Say</h3>
-              
+              <h3 className="text-lg font-bold text-gray-900 mb-4">What customers say</h3>
+
               <div className="space-y-4">
-                <div className="border-l-4 border-green-500 pl-4">
-                  <div className="flex items-center mb-2">
-                    <div className="flex text-yellow-400">
-                      {'★'.repeat(5)}
-                    </div>
-                    <span className="ml-2 font-semibold text-gray-900">Sarah M.</span>
-                  </div>
+                <div className="border-l-4 border-[#0f2747] pl-4">
                   <p className="text-gray-600 italic">
-                    "This kit saved me thousands! The instructions were so clear that I filed everything myself and got approved in just 6 weeks."
+                    "The instructions were clear and the sample forms made it much easier to prepare my own paperwork."
                   </p>
+                  <span className="mt-1 block text-sm font-semibold text-gray-900">Sarah M.</span>
                 </div>
 
-                <div className="border-l-4 border-green-500 pl-4">
-                  <div className="flex items-center mb-2">
-                    <div className="flex text-yellow-400">
-                      {'★'.repeat(5)}
-                    </div>
-                    <span className="ml-2 font-semibold text-gray-900">Marcus T.</span>
-                  </div>
+                <div className="border-l-4 border-[#0f2747] pl-4">
                   <p className="text-gray-600 italic">
-                    "Finally got my dream job after clearing my DUI record. This kit made it possible!"
+                    "Walked me through addressing my old DUI record step by step. I always knew what to do next."
                   </p>
-                </div>
-
-                <div className="text-center pt-4">
-                  <div className="text-2xl font-bold text-green-600">4.9/5 Stars</div>
-                  <div className="text-gray-600">from 1,847+ customers</div>
+                  <span className="mt-1 block text-sm font-semibold text-gray-900">Marcus T.</span>
                 </div>
               </div>
             </div>
@@ -249,9 +195,9 @@ export default function DIYCheckoutPage() {
                   // Use the proper checkout handler
                   handleCheckout();
                 }}
-                className="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-4 px-6 rounded-lg text-lg transition-colors duration-200 shadow-lg"
+                className="w-full bg-[#0f2747] hover:bg-[#163a66] text-white font-bold py-4 px-6 rounded-lg text-lg transition-colors duration-200 shadow-lg"
               >
-                🚀 Get Instant Access - $97
+                Get Instant Access - $97
               </button>
 
               <div className="text-center text-sm text-gray-800 mt-4 font-medium">
@@ -307,32 +253,19 @@ export default function DIYCheckoutPage() {
         </div>
       </div>
 
-      {/* Conversion Script */}
+      {/* Page view tracking */}
       <script
         dangerouslySetInnerHTML={{
           __html: `
-            // Track page view
             if (window.gtag) {
               window.gtag('event', 'page_view', {
                 page_title: 'DIY Checkout',
                 page_location: window.location.href
               });
             }
-            
-            // Exit intent popup
-            let exitIntentShown = false;
-            document.addEventListener('mouseleave', function(e) {
-              if (e.clientY <= 0 && !exitIntentShown) {
-                exitIntentShown = true;
-                if (confirm('Wait! Get an extra 10% off with code SAVE10 - Stay on this page?')) {
-                  // Apply discount code
-                  console.log('Apply discount code SAVE10');
-                }
-              }
-            });
           `
         }}
       />
     </div>
   );
-} 
+}

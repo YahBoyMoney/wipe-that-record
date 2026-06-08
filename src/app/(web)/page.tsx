@@ -104,20 +104,20 @@ export default function LandingPage() {
             animate={{ scale: 1, opacity: 1 }}
             className="bg-white rounded-2xl max-w-md w-full p-8 shadow-2xl text-center"
           >
-            <div className="text-6xl mb-4">🎉</div>
-            <h3 className="text-2xl font-bold mb-4 text-slate-900">Wait! Special Offer</h3>
+            <h3 className="text-2xl font-bold mb-4 text-slate-900">Before you go</h3>
             <p className="text-slate-800 mb-6">
-              Get 10% off your DIY Expungement Kit - Limited time offer for first-time visitors!
+              Not sure if your case qualifies? Take the free 2-minute eligibility check first &mdash;
+              no payment required.
             </p>
             <div className="flex gap-3">
-              <button 
+              <button
                 onClick={() => {
                   setShowExitModal(false);
-                  window.location.href = '/api/checkout/diy?discount=10';
+                  openQualificationModal();
                 }}
-                className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 rounded-lg font-semibold transition-colors"
+                className="flex-1 bg-[#0f2747] hover:bg-[#163a66] text-white py-3 rounded-lg font-semibold transition-colors"
               >
-                Get 10% Off - $87
+                Check Eligibility Free
               </button>
               <button 
                 onClick={() => setShowExitModal(false)}
@@ -134,15 +134,15 @@ export default function LandingPage() {
       <motion.div 
         initial={{ y: -100 }}
         animate={{ y: 0 }}
-        className="sticky top-0 z-40 bg-gradient-to-r from-amber-400 to-amber-500 text-slate-900 text-center py-2 px-4"
+        className="relative z-30 bg-slate-100 text-slate-800 text-center py-2 px-4 border-b border-slate-200"
       >
-        <p className="text-sm font-semibold">
-          🔥 Limited Time: DIY Expungement Kit - Only $97 (Save $50) | 
-          <button 
+        <p className="text-sm font-medium">
+          DIY Record-Cleaning Kit &mdash; $97 (Save $50 from $147) |
+          <button
             onClick={openQualificationModal}
-            className="ml-2 underline hover:no-underline font-bold"
+            className="ml-2 underline hover:no-underline font-semibold"
           >
-            Check If You Qualify →
+            Check if you qualify
           </button>
         </p>
       </motion.div>
@@ -152,29 +152,29 @@ export default function LandingPage() {
         <Hero variant="a" />
 
         {/* Qualification CTA Section */}
-        <motion.section 
-          className="py-16 px-4 bg-gradient-to-r from-green-600 to-emerald-600 text-white"
+        <motion.section
+          className="py-16 px-4 bg-[#0f2747] text-white"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
           <div className="max-w-4xl mx-auto text-center">
-            <motion.h2 
+            <motion.h2
               className="text-3xl sm:text-4xl font-bold mb-4"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
             >
-              Find Out If You Qualify in 2 Minutes
+              Find Out Which Options May Apply in 2 Minutes
             </motion.h2>
-            <motion.p 
-              className="text-xl text-green-100 mb-8 max-w-2xl mx-auto"
+            <motion.p
+              className="text-xl text-slate-300 mb-8 max-w-2xl mx-auto"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
               viewport={{ once: true }}
             >
-              Most California convictions can be expunged. Take our quick assessment to see if your record qualifies and get your personalized roadmap.
+              Many California cases qualify for some form of record relief. Take our quick assessment to see which options may apply to your situation and get a personalized roadmap.
             </motion.p>
             
             <motion.div 
@@ -184,58 +184,44 @@ export default function LandingPage() {
               transition={{ delay: 0.2 }}
               viewport={{ once: true }}
             >
-              <button 
+              <button
                 onClick={openQualificationModal}
-                className="group bg-white text-green-600 hover:bg-green-50 px-8 py-4 rounded-xl font-bold text-lg transition-all duration-300 hover:scale-105 hover:shadow-xl"
+                className="group bg-white text-[#0f2747] hover:bg-slate-100 px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300 hover:shadow-xl"
               >
                 <span className="flex items-center justify-center gap-2">
-                  ✅ Check My Eligibility - FREE
+                  Check My Eligibility &mdash; Free
                   <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                   </svg>
                 </span>
               </button>
-              <div className="text-green-100 text-sm">
-                ⚡ Get results instantly • 📧 Custom roadmap sent to your email
+              <div className="text-slate-300 text-sm">
+                Get results instantly &bull; Custom roadmap sent to your email
               </div>
             </motion.div>
           </div>
         </motion.section>
 
-        {/* Live counter */}
-        <motion.section 
-          className="py-12 px-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white"
+        {/* Trust strip */}
+        <motion.section
+          className="py-12 px-4 bg-slate-900 text-white"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
         >
-          <div className="max-w-4xl mx-auto text-center">
-            <div className="flex items-center justify-center gap-8 flex-wrap">
-              <div className="flex items-center gap-3">
-                <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
-                <span className="text-lg font-semibold">Live Counter</span>
+          <div className="max-w-5xl mx-auto">
+            <div className="grid gap-6 sm:grid-cols-3 text-center">
+              <div>
+                <div className="text-lg font-semibold">California-focused</div>
+                <div className="text-slate-400 text-sm">Forms and guidance built around California courts and procedures</div>
               </div>
-              
-              <div className="text-center">
-                <motion.div 
-                  className="text-4xl font-bold"
-                  animate={{ scale: [1, 1.1, 1] }}
-                  transition={{ duration: 2, repeat: Infinity }}
-                >
-                  1,847
-                </motion.div>
-                <div className="text-blue-100">Californians Served</div>
+              <div>
+                <div className="text-lg font-semibold">Three clear paths</div>
+                <div className="text-slate-400 text-sm">DIY kit, expert review, and attorney-managed full service</div>
               </div>
-              
-              <div className="flex items-center gap-6 text-sm">
-                <div className="text-center">
-                  <div className="font-semibold">98.7%</div>
-                  <div className="text-blue-100">Success Rate</div>
-                </div>
-                <div className="text-center">
-                  <div className="font-semibold">21 Days</div>
-                  <div className="text-blue-100">Avg. Processing</div>
-                </div>
+              <div>
+                <div className="text-lg font-semibold">Refund protection</div>
+                <div className="text-slate-400 text-sm">Refund if the kit does not match your eligibility after review</div>
               </div>
             </div>
           </div>
@@ -245,22 +231,22 @@ export default function LandingPage() {
         <section id="plans" className="py-20 px-4 bg-slate-50 dark:bg-slate-800">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-16">
-              <motion.h2 
+              <motion.h2
                 className="text-4xl font-bold mb-4 text-slate-900 dark:text-white"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
               >
-                Choose Your Path to Freedom
+                Choose the Right Path for Your Case
               </motion.h2>
-              <motion.p 
+              <motion.p
                 className="text-xl text-slate-800 dark:text-slate-300 max-w-2xl mx-auto mb-8"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
                 viewport={{ once: true }}
               >
-                Three service levels to clear your California record and unlock new opportunities
+                Three service levels to help you pursue California record relief &mdash; pick what fits your situation
               </motion.p>
               
               {/* Qualification CTA in plans section */}
@@ -271,11 +257,11 @@ export default function LandingPage() {
                 transition={{ delay: 0.2 }}
                 viewport={{ once: true }}
               >
-                <button 
+                <button
                   onClick={openQualificationModal}
-                  className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors inline-flex items-center gap-2"
+                  className="bg-[#0f2747] hover:bg-[#163a66] text-white px-6 py-3 rounded-lg font-semibold transition-colors inline-flex items-center gap-2"
                 >
-                  🎯 Find Out Which Option Fits Your Case
+                  Find out which option fits your case
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                   </svg>
@@ -285,16 +271,16 @@ export default function LandingPage() {
             
             <div className="grid lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
               <PlanCard
-                title="DIY Service"
+                title="DIY Kit"
                 price="$97"
                 originalPrice="$147"
-                description="Perfect for straightforward misdemeanor cases"
+                description="Best for straightforward cases where you want the forms and instructions"
                 features={[
                   "Complete California forms package",
                   "Step-by-step instructions",
                   "Sample completed forms",
                   "Email support included",
-                  "Prop 47 & SB 731 compliant"
+                  "Instant access after purchase"
                 ]}
                 cta="Get DIY Kit - $97"
                 ctaVariant="primary"
@@ -305,11 +291,11 @@ export default function LandingPage() {
               <PlanCard
                 title="Expert Review"
                 price="$297"
-                description="Expert form completion and case review"
+                description="Best before you file: a specialist reviews your case and paperwork"
                 features={[
                   "Everything in DIY +",
                   "Expert form completion",
-                  "Case review & analysis",
+                  "Case-specific review & analysis",
                   "Phone consultation",
                   "Filing guidance"
                 ]}
@@ -321,13 +307,13 @@ export default function LandingPage() {
               <PlanCard
                 title="Full Service"
                 price="$1,497"
-                description="Complete attorney representation"
+                description="Best for complex cases: attorney-managed support from start to finish"
                 features={[
-                  "Complete attorney service",
-                  "Attorney files everything",
-                  "Court appearances handled",
+                  "Attorney-managed service",
+                  "Attorney prepares and files paperwork",
+                  "Court appearances handled if required",
                   "Direct attorney access",
-                  "Success guarantee"
+                  "Engagement agreement required"
                 ]}
                 cta="Get Full Service"
                 ctaVariant="secondary"
@@ -335,6 +321,96 @@ export default function LandingPage() {
                 badge="Premium"
                 href="/checkout/full-service"
               />
+            </div>
+          </div>
+        </section>
+
+        {/* Plan comparison */}
+        <section className="py-16 px-4 bg-white dark:bg-slate-900">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-2xl sm:text-3xl font-bold text-center mb-10 text-slate-900 dark:text-white">
+              Compare your options
+            </h2>
+            <div className="overflow-x-auto">
+              <table className="w-full border-collapse text-left text-sm">
+                <thead>
+                  <tr className="border-b-2 border-slate-200 dark:border-slate-700">
+                    <th className="py-3 pr-4 font-semibold text-slate-700 dark:text-slate-200">Feature</th>
+                    <th className="py-3 px-3 text-center font-semibold text-slate-900 dark:text-white">DIY Kit</th>
+                    <th className="py-3 px-3 text-center font-semibold text-slate-900 dark:text-white">Expert Review</th>
+                    <th className="py-3 px-3 text-center font-semibold text-slate-900 dark:text-white">Full Service</th>
+                  </tr>
+                </thead>
+                <tbody className="text-slate-700 dark:text-slate-300">
+                  {[
+                    ['Forms and instructions', 'Yes', 'Yes', 'Yes'],
+                    ['Case-specific review', 'No', 'Yes', 'Yes'],
+                    ['Attorney-managed filing', 'No', 'No', 'Yes'],
+                    ['Court appearances handled', 'No', 'No', 'Yes, if required'],
+                    ['Best for', 'Simple cases', 'Unsure cases', 'Complex cases'],
+                  ].map((row) => (
+                    <tr key={row[0]} className="border-b border-slate-100 dark:border-slate-800">
+                      <td className="py-3 pr-4 font-medium">{row[0]}</td>
+                      <td className="py-3 px-3 text-center">{row[1]}</td>
+                      <td className="py-3 px-3 text-center">{row[2]}</td>
+                      <td className="py-3 px-3 text-center">{row[3]}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        {/* What happens after purchase */}
+        <section className="py-20 px-4 bg-slate-50 dark:bg-slate-800">
+          <div className="max-w-5xl mx-auto">
+            <div className="text-center mb-12">
+              <h2 className="text-3xl sm:text-4xl font-bold mb-4 text-slate-900 dark:text-white">
+                What happens after you buy the DIY kit
+              </h2>
+              <p className="text-lg text-slate-600 dark:text-slate-300 max-w-2xl mx-auto">
+                No waiting and no surprises. You get instant access to everything you need to prepare
+                your California paperwork.
+              </p>
+            </div>
+
+            <div className="grid gap-6 md:grid-cols-2">
+              {[
+                {
+                  title: 'Instant access to your kit',
+                  body: 'Right after checkout you receive the California forms package, step-by-step instructions, and sample completed forms.',
+                },
+                {
+                  title: 'Clear filing instructions',
+                  body: 'Plain-language guidance walks you through completing your forms and filing with the correct court for your county.',
+                },
+                {
+                  title: 'Email support included',
+                  body: 'Questions while you work through the kit? Reach our support team by email for help with the process.',
+                },
+                {
+                  title: 'Upgrade any time',
+                  body: 'If your case turns out to be more complex, you can add expert review or full service so a specialist handles more for you.',
+                },
+              ].map((item) => (
+                <div
+                  key={item.title}
+                  className="rounded-2xl border border-slate-200 bg-white p-6 dark:border-slate-700 dark:bg-slate-900"
+                >
+                  <h3 className="text-lg font-semibold text-slate-900 dark:text-white">{item.title}</h3>
+                  <p className="mt-2 text-slate-600 dark:text-slate-300">{item.body}</p>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-8 rounded-2xl bg-[#0f2747] p-6 text-center text-white">
+              <p className="font-semibold">Eligibility &amp; refund reassurance</p>
+              <p className="mt-2 text-slate-300 text-sm max-w-2xl mx-auto">
+                Not sure you qualify? Start with the free eligibility check. If you buy the kit and your
+                case does not match your eligibility after review, you are covered by our 30-day refund.
+                Court timelines and outcomes vary by county and case type.
+              </p>
             </div>
           </div>
         </section>
@@ -358,7 +434,7 @@ export default function LandingPage() {
                 transition={{ delay: 0.1 }}
                 viewport={{ once: true }}
               >
-                From application to approval, we make expungement straightforward and stress-free
+                From eligibility check to filing, we make record cleaning straightforward and clear
               </motion.p>
             </div>
             
@@ -371,24 +447,21 @@ export default function LandingPage() {
                   {
                     number: 1,
                     title: "Check Eligibility",
-                    description: "Quick 2-minute form to see if your record qualifies for expungement",
-                    icon: "📋",
-                    duration: "2 minutes",
+                    description: "A quick 2-minute assessment to see which record-cleaning options may apply to your case",
+                    duration: "About 2 minutes",
                     cta: true
                   },
                   {
                     number: 2,
-                    title: "File Paperwork",
-                    description: "We handle all court filings and legal documentation for you",
-                    icon: "📄",
-                    duration: "1-2 weeks"
+                    title: "Prepare Your Petition",
+                    description: "Get California-focused forms and instructions, or have a specialist or attorney prepare them for you",
+                    duration: "Get started in minutes"
                   },
                   {
                     number: 3,
-                    title: "Court Approval",
-                    description: "Judge reviews and approves your expungement petition",
-                    icon: "⚖️",
-                    duration: "2-4 weeks"
+                    title: "File With the Court",
+                    description: "File your petition with the correct court. Review and timelines depend on the court and your case",
+                    duration: "Court timelines vary by county"
                   }
                 ].map((step, index) => (
                   <motion.div
@@ -404,11 +477,8 @@ export default function LandingPage() {
                       whileHover={{ scale: 1.1 }}
                       transition={{ type: "spring", stiffness: 300 }}
                     >
-                      <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-blue-600 text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto shadow-lg">
+                      <div className="w-20 h-20 bg-[#0f2747] text-white rounded-full flex items-center justify-center text-2xl font-bold mx-auto shadow-lg">
                         {step.number}
-                      </div>
-                      <div className="absolute -top-2 -right-2 text-2xl">
-                        {step.icon}
                       </div>
                     </motion.div>
                     
@@ -449,7 +519,7 @@ export default function LandingPage() {
                 onClick={openQualificationModal}
                 className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-xl font-bold text-lg transition-all duration-300 hover:scale-105 hover:shadow-xl inline-flex items-center gap-2"
               >
-                ⚡ Get My Instant Eligibility Report
+                Get My Eligibility Report
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                 </svg>
@@ -476,19 +546,19 @@ export default function LandingPage() {
             <div className="grid md:grid-cols-3 gap-8">
               {[
                 {
-                  quote: "The DIY kit was incredibly detailed and easy to follow. Had my misdemeanor expunged in just 3 weeks!",
+                  quote: "The DIY kit was detailed and easy to follow. The instructions made preparing my misdemeanor paperwork far less intimidating.",
                   author: "Sarah M.",
                   location: "Los Angeles, CA",
                   avatar: "https://images.unsplash.com/photo-1494790108755-2616b612b47c?w=100&h=100&fit=crop&crop=face"
                 },
                 {
-                  quote: "Professional service and amazing results. Finally got that old DUI off my record. Life-changing!",
+                  quote: "Clear, professional guidance through the whole process of addressing my old DUI. I always knew what the next step was.",
                   author: "Michael R.",
                   location: "San Diego, CA",
                   avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop&crop=face"
                 },
                 {
-                  quote: "The full-service option was worth every penny. They handled everything while I focused on my life.",
+                  quote: "The full-service option was worth it for my situation. Having a specialist handle the paperwork and filing gave me peace of mind.",
                   author: "Jennifer K.",
                   location: "San Francisco, CA",
                   avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop&crop=face"
@@ -548,7 +618,7 @@ export default function LandingPage() {
                 onClick={openQualificationModal}
                 className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors inline-flex items-center gap-2"
               >
-                🎯 See If Your Case Qualifies
+                See If Your Case Qualifies
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                 </svg>
@@ -572,24 +642,28 @@ export default function LandingPage() {
             <div className="space-y-4">
               {[
                 {
-                  question: "What records can be expunged in California?",
-                  answer: "Most misdemeanor convictions and some felony convictions can be expunged, including DUI, theft, drug possession, and domestic violence cases. We'll check your specific case during the eligibility review."
+                  question: "Is this legal advice?",
+                  answer: "The DIY kit is document-preparation support, not legal advice. Using this site does not create an attorney-client relationship. If you choose full service, an attorney-client relationship is formed only after a written engagement agreement is signed."
                 },
                 {
-                  question: "How long does the expungement process take?",
-                  answer: "DIY cases typically take 2-4 weeks, while full-service cases are completed in 30-60 days depending on court schedules."
+                  question: "Will this erase my record completely?",
+                  answer: "True expungement does not exist in California. Depending on your case, you may be eligible for relief such as dismissal, record sealing, felony reduction, or automatic record relief. We help you identify and pursue the options that may apply to your situation."
                 },
                 {
-                  question: "Will employers be able to see my expunged record?",
-                  answer: "No, expunged records are sealed from most background checks. However, certain government positions and professional licenses may still have access."
+                  question: "Can employers still see my record?",
+                  answer: "Record relief can limit what appears in many public and employment background checks, but some government agencies, licensing bodies, and legally authorized employers may still access certain records. We explain what relief does and does not do for your case."
                 },
                 {
-                  question: "What's the difference between DIY and full-service?",
-                  answer: "DIY provides you with all forms and instructions to file yourself. Full-service means our attorney handles everything including court appearances."
+                  question: "How long does the court take?",
+                  answer: "You can get started and prepare paperwork quickly, but court timelines vary by county, case type, and eligibility. We do not control court schedules and cannot guarantee a specific approval date."
                 },
                 {
-                  question: "Is there a money-back guarantee?",
-                  answer: "Yes, if your case doesn't qualify for expungement after our review, we'll refund your payment in full."
+                  question: "What happens after I buy the DIY kit?",
+                  answer: "You get instant access to the California forms package, step-by-step instructions, and sample completed forms, plus email support. If your case is more complex, you can upgrade to expert review or full service."
+                },
+                {
+                  question: "What if I don't qualify?",
+                  answer: "Start with the free eligibility check before paying. If you buy the DIY kit and your case does not match your eligibility after review, you're covered by our 30-day refund policy."
                 }
               ].map((faq, index) => (
                 <motion.details 
@@ -634,7 +708,7 @@ export default function LandingPage() {
                 onClick={openQualificationModal}
                 className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors inline-flex items-center gap-2"
               >
-                📋 Get My Custom Case Assessment
+                Get My Custom Case Assessment
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                 </svg>
@@ -644,61 +718,60 @@ export default function LandingPage() {
         </section>
 
         {/* Final CTA section */}
-        <section className="py-20 px-4 bg-gradient-to-br from-blue-600 via-blue-700 to-purple-700 relative overflow-hidden">
-          <div className="absolute inset-0 bg-[url('/grid.svg')] opacity-10"></div>
+        <section className="py-20 px-4 bg-[#0f2747] relative overflow-hidden">
           <div className="max-w-4xl mx-auto text-center relative z-10">
-            <motion.h2 
+            <motion.h2
               className="text-4xl font-bold text-white mb-6"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
             >
-              Your Fresh Start Begins Today
+              Take the First Step Today
             </motion.h2>
-            <motion.p 
-              className="text-xl text-blue-100 mb-10 max-w-2xl mx-auto"
+            <motion.p
+              className="text-xl text-slate-300 mb-10 max-w-2xl mx-auto"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
               viewport={{ once: true }}
             >
-              Join thousands of Californians who've successfully cleared their records and transformed their lives
+              Start with a free, private eligibility check to see which California record-cleaning options may apply to your case.
             </motion.p>
-            
-            <motion.div 
+
+            <motion.div
               className="flex flex-col sm:flex-row gap-6 justify-center"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
               viewport={{ once: true }}
             >
-              <button 
+              <button
                 onClick={openQualificationModal}
-                className="group bg-white text-blue-600 hover:bg-blue-50 px-8 py-4 rounded-xl font-bold text-lg transition-all duration-300 hover:scale-105 hover:shadow-xl"
+                className="group bg-white text-[#0f2747] hover:bg-slate-100 px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300 hover:shadow-xl"
               >
                 <span className="flex items-center justify-center gap-2">
-                  🎯 Check If I Qualify - FREE
+                  Check If I Qualify &mdash; Free
                   <svg className="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                   </svg>
                 </span>
               </button>
-              <button 
-                onClick={() => window.location.href = '/api/checkout/diy'}
-                className="group border-2 border-white text-white hover:bg-white hover:text-blue-600 px-8 py-4 rounded-xl font-bold text-lg transition-all duration-300 hover:scale-105"
+              <button
+                onClick={() => window.location.href = '/checkout/diy'}
+                className="group border-2 border-white text-white hover:bg-white hover:text-[#0f2747] px-8 py-4 rounded-xl font-semibold text-lg transition-all duration-300"
               >
-                Start DIY for $50
+                Get the DIY Kit &mdash; $97
               </button>
             </motion.div>
-            
-            <motion.p 
-              className="text-blue-200 mt-6 text-sm"
+
+            <motion.p
+              className="text-slate-400 mt-6 text-sm"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               transition={{ delay: 0.3 }}
               viewport={{ once: true }}
             >
-              💪 1,847 Californians helped this month • ⚡ 98.7% success rate • 🛡️ Money-back guarantee
+              Instant access &bull; 30-day refund if your case does not qualify after review
             </motion.p>
           </div>
         </section>
@@ -710,16 +783,13 @@ export default function LandingPage() {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 3 }}
         >
-          <button 
+          <button
             onClick={openQualificationModal}
-            className="bg-green-600 hover:bg-green-700 text-white p-4 rounded-full shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-110 group"
+            className="bg-[#0f2747] hover:bg-[#163a66] text-white px-5 py-3 rounded-full shadow-xl transition-all duration-300 group"
           >
-            <div className="flex items-center gap-2">
-              <span className="text-2xl">🎯</span>
-              <div className="hidden group-hover:block text-sm font-semibold whitespace-nowrap">
-                Check Eligibility
-              </div>
-            </div>
+            <span className="text-sm font-semibold whitespace-nowrap">
+              Check Eligibility Free
+            </span>
           </button>
         </motion.div>
       </main>

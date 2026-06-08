@@ -218,11 +218,12 @@ export async function GET(req: NextRequest) {
     
   } catch (error) {
     console.error('❌ GET checkout redirect failed:', error);
-    
-    // Fallback to checkout page with error
-    const errorUrl = new URL('/checkout/diy', req.nextUrl.origin);
-    errorUrl.searchParams.set('error', 'checkout_failed');
-    
-    return NextResponse.redirect(errorUrl, 303);
+
+    // Fall back to the on-site checkout page so the user can retry from a normal
+    // buy flow. We intentionally do not append an error query param so that
+    // normal CTA links never surface a "checkout_failed" state in the URL.
+    const fallbackUrl = new URL('/checkout/diy', req.nextUrl.origin);
+
+    return NextResponse.redirect(fallbackUrl, 303);
   }
 } 
