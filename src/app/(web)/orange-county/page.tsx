@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: 'Orange County Expungement Services - Clear Your Criminal Record in OC | Wipe That Record',
-  description: 'Clear your criminal record in Orange County for as low as $97. Expert expungement services in Irvine, Anaheim, Newport Beach. 92% success rate. DIY kits to full attorney service. Prop 47 & felony reduction specialists.',
+  description: 'California record-cleaning help for Orange County, with a DIY kit from $97. Serving Irvine, Anaheim, and Newport Beach. DIY kits to full attorney service. Prop 47 and felony reduction where eligible. Court timelines vary by county.',
   keywords: 'Orange County expungement, OC criminal record clearing, expungement attorney Orange County, clear criminal record Orange County, Irvine expungement, Anaheim expungement, Newport Beach record clearing, Prop 47 Orange County, felony reduction OC, misdemeanor expungement Orange County, DIY expungement kit Orange County',
   openGraph: {
     title: 'Orange County Expungement Services - Clear Your Criminal Record',
@@ -41,57 +41,56 @@ export default function OrangeCountyPage() {
             </h1>
             
             <p className="text-xl text-gray-600 mb-4 max-w-3xl mx-auto">
-              Professional expungement services in Orange County starting at just <strong>$147</strong>. 
-              Clear your criminal record in Irvine, Newport Beach, Anaheim, Huntington Beach, and all OC cities.
+              California record-cleaning help for Orange County, with a DIY kit starting at <strong>$97</strong>.
+              Serving Irvine, Newport Beach, Anaheim, Huntington Beach, and all OC cities.
             </p>
-            
+
             <div className="bg-orange-50 border border-orange-200 rounded-lg p-4 mb-8 max-w-2xl mx-auto">
               <p className="text-orange-800 font-semibold text-center">
-                ✅ 92% Success Rate • ✅ Prop 47 Specialists • ✅ No Court Fees (Thanks to New CA Law)
-                <br />✅ DIY to Full Attorney Service • ✅ Felony Reduction Available
+                Prop 47 reductions • No court filing fees (2022 CA law) • DIY to full attorney service • Felony reduction where eligible
               </p>
             </div>
-            
+
             <p className="text-lg text-gray-600 mb-8 max-w-3xl mx-auto">
-              Whether you need our <strong>DIY expungement service</strong>, expert review, or full attorney representation, 
-              we help Orange County residents clear misdemeanors, felonies, DUI convictions, and Prop 47 eligible cases. 
-              <strong>Get your clean record in 5-7 weeks with our expedited Orange County expungement process.</strong>
+              Whether you choose our <strong>DIY kit</strong>, expert review, or full attorney service,
+              we help Orange County residents pursue relief for misdemeanors, eligible felonies, DUI
+              convictions, and Prop 47 cases. Court timelines vary by county and case type.
             </p>
-            
+
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-              <Link 
-                href="/orange-county/get-started"
+              <Link
+                href="/checkout/diy"
                 className="bg-orange-600 hover:bg-orange-700 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-colors"
               >
-                🚀 Start Your OC Expungement - $297
+                Get DIY Kit - $97
               </Link>
-              <Link 
-                href="/orange-county/free-consultation"
+              <Link
+                href="/eligibility"
                 className="border-2 border-orange-600 text-orange-600 hover:bg-orange-50 px-8 py-4 rounded-lg font-semibold text-lg transition-colors"
               >
-                📞 Free OC Legal Consultation
+                Check Eligibility Free
               </Link>
             </div>
-            
+
             {/* Trust Indicators */}
             <div className="flex flex-wrap justify-center items-center gap-8 text-sm text-gray-600">
               <div className="flex items-center gap-2">
                 <svg className="w-5 h-5 text-orange-600" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                 </svg>
-                <span>California Licensed Attorneys</span>
+                <span>California-focused process</span>
               </div>
               <div className="flex items-center gap-2">
                 <svg className="w-5 h-5 text-orange-600" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                 </svg>
-                <span>92% Success Rate in OC</span>
+                <span>30-day refund policy</span>
               </div>
               <div className="flex items-center gap-2">
                 <svg className="w-5 h-5 text-orange-600" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                 </svg>
-                <span>Expedited 5-7 Week Processing</span>
+                <span>Upgrade to expert or attorney help anytime</span>
               </div>
             </div>
           </div>
@@ -105,32 +104,26 @@ export default function OrangeCountyPage() {
           
           <div className="grid md:grid-cols-3 gap-8">
             <div className="bg-white p-8 rounded-xl shadow-lg">
-              <div className="text-4xl mb-4">🏢</div>
-              <h3 className="text-xl font-bold mb-4">Tech Industry Expertise</h3>
+              <h3 className="text-xl font-bold mb-4">Built for working professionals</h3>
               <p className="text-gray-600">
-                Specialized service for Irvine tech workers, UCI grads, and professionals 
-                at companies like Broadcom, Blizzard, and Edwards Lifesciences. We understand 
-                security clearance and background check requirements.
+                Many Irvine and OC professionals pursue record relief to help with background checks
+                and licensing. Our materials explain what relief does and does not change.
               </p>
             </div>
-            
+
             <div className="bg-white p-8 rounded-xl shadow-lg">
-              <div className="text-4xl mb-4">⚖️</div>
-              <h3 className="text-xl font-bold mb-4">OC Court System Mastery</h3>
+              <h3 className="text-xl font-bold mb-4">Orange County court guidance</h3>
               <p className="text-gray-600">
-                Expert knowledge of Orange County Superior Court procedures, local filing 
-                requirements, and relationships with court clerks in Santa Ana, Newport Beach, 
-                and Westminster courthouses.
+                We provide information on Orange County Superior Court procedures and local filing
+                requirements for the Santa Ana, Westminster, Newport Beach, and Fullerton courthouses.
               </p>
             </div>
-            
+
             <div className="bg-white p-8 rounded-xl shadow-lg">
-              <div className="text-4xl mb-4">🎯</div>
-              <h3 className="text-xl font-bold mb-4">Premium White-Glove Service</h3>
+              <h3 className="text-xl font-bold mb-4">Choose your level of help</h3>
               <p className="text-gray-600">
-                Concierge-level service matching Orange County's affluent lifestyle. 
-                Personal case manager, expedited processing, and premium support for 
-                busy professionals and executives.
+                Start with the DIY kit and upgrade to expert review or full attorney service at any time
+                if your case is more complex or you want someone to manage it for you.
               </p>
             </div>
           </div>
@@ -163,10 +156,10 @@ export default function OrangeCountyPage() {
               </div>
               
               <div className="bg-white p-6 rounded-xl shadow-lg border-l-4 border-orange-500">
-                <h3 className="text-xl font-bold mb-3 text-gray-900">Step 3: Court Review & Approval</h3>
+                <h3 className="text-xl font-bold mb-3 text-gray-900">Step 3: Court Review</h3>
                 <p className="text-gray-600">
-                  Orange County judges review your petition. With our 92% success rate and expert preparation, 
-                  most cases are approved within 5-7 weeks. We handle any court hearings if required.
+                  Orange County judges review your petition on the court's own schedule, which varies by
+                  case type and caseload. With full service, we handle any court hearings if required.
                 </p>
               </div>
             </div>
@@ -206,8 +199,8 @@ export default function OrangeCountyPage() {
               
               <div className="mt-6 p-4 bg-white rounded-lg border border-orange-200">
                 <p className="text-sm text-gray-600">
-                  <strong>Free Eligibility Check:</strong> Not sure if your Orange County conviction qualifies? 
-                  We provide free consultations to review your case and explain your options.
+                  <strong>Free Eligibility Check:</strong> Not sure if your Orange County conviction qualifies?
+                  Our free eligibility check reviews your case and explains your options.
                 </p>
               </div>
             </div>
@@ -263,52 +256,35 @@ export default function OrangeCountyPage() {
         </div>
       </section>
 
-      {/* Success Stories - OC Specific */}
+      {/* Common Orange County cases */}
       <section className="py-16 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-center mb-12">Orange County Success Stories</h2>
-          
+          <h2 className="text-3xl font-bold text-center mb-12">Common Orange County Cases We Help With</h2>
+
           <div className="grid md:grid-cols-2 gap-8">
             <div className="bg-white p-8 rounded-xl shadow-lg">
-              <div className="flex items-center mb-4">
-                <div className="flex text-yellow-400 mr-3">
-                  {'★'.repeat(5)}
-                </div>
-                <div>
-                  <h4 className="font-bold">Sarah K., Software Engineer</h4>
-                  <p className="text-sm text-gray-600">Irvine, CA</p>
-                </div>
-              </div>
-              <p className="text-gray-700 italic mb-4">
-                "As a tech worker in Irvine, I needed my DUI expunged for a security clearance. 
-                Wipe That Record handled everything professionally and got it done in 6 weeks. 
-                Now I have my dream job at a defense contractor!"
+              <h4 className="font-bold mb-3">DUI and misdemeanor relief</h4>
+              <p className="text-gray-700">
+                Many people seek a dismissal for an old DUI or misdemeanor to help with background checks
+                and licensing. Eligibility generally depends on completing probation and the specifics of
+                your case.
               </p>
-              <div className="text-sm text-gray-500">
-                <strong>Case:</strong> DUI (2019) • <strong>Result:</strong> Expunged in 6 weeks • <strong>Outcome:</strong> $120K job at defense contractor
-              </div>
             </div>
-            
+
             <div className="bg-white p-8 rounded-xl shadow-lg">
-              <div className="flex items-center mb-4">
-                <div className="flex text-yellow-400 mr-3">
-                  {'★'.repeat(5)}
-                </div>
-                <div>
-                  <h4 className="font-bold">Michael R., Finance Professional</h4>
-                  <p className="text-sm text-gray-600">Newport Beach, CA</p>
-                </div>
-              </div>
-              <p className="text-gray-700 italic mb-4">
-                "I run a financial advisory firm in Newport Beach and needed to clear an old 
-                theft charge for licensing. The white-glove service was worth every penny. 
-                Discrete, professional, and incredibly fast."
+              <h4 className="font-bold mb-3">Felony reduction under Prop 47</h4>
+              <p className="text-gray-700">
+                Certain felonies may be reduced to misdemeanors under Prop 47, and may then be eligible for
+                dismissal. We help you understand whether your case qualifies before you pay.
               </p>
-              <div className="text-sm text-gray-500">
-                <strong>Case:</strong> Theft (2016) • <strong>Result:</strong> Expunged in 5 weeks • <strong>Outcome:</strong> Financial advisor license approved
-              </div>
             </div>
           </div>
+
+          <p className="mt-8 text-center text-sm text-gray-500 max-w-3xl mx-auto">
+            This page is general information, not legal advice. True expungement does not exist in
+            California; eligible cases may qualify for dismissal, sealing, felony reduction, or other
+            relief. Outcomes and timelines are not guaranteed and vary by case and court.
+          </p>
         </div>
       </section>
 
@@ -324,7 +300,7 @@ export default function OrangeCountyPage() {
               <div className="text-center mb-6">
                 <div className="text-lg text-gray-700 line-through font-medium">$147</div>
                 <div className="text-4xl font-bold text-orange-600">$97</div>
-                <div className="text-sm text-green-600 font-semibold">SAVE $50 - Limited Time</div>
+                <div className="text-sm text-green-600 font-semibold">Save $50 from $147</div>
               </div>
               <ul className="space-y-3 mb-8">
                 <li className="flex items-center">
@@ -440,7 +416,7 @@ export default function OrangeCountyPage() {
                   <svg className="w-5 h-5 text-green-500 mr-3" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                   </svg>
-                  100% success guarantee
+                  30-day refund policy
                 </li>
               </ul>
               <Link 
@@ -456,13 +432,13 @@ export default function OrangeCountyPage() {
             <div className="bg-gradient-to-r from-orange-50 to-blue-50 p-6 rounded-xl max-w-2xl mx-auto">
               <h3 className="text-xl font-bold mb-3">Not Sure Which Option is Right for You?</h3>
               <p className="text-gray-600 mb-4">
-                Take our free eligibility quiz to see which Orange County expungement service fits your case best.
+                Take our free eligibility check to see which Orange County option fits your case best.
               </p>
-              <Link 
-                href="/orange-county/eligibility-quiz"
+              <Link
+                href="/eligibility"
                 className="bg-orange-600 hover:bg-orange-700 text-white px-6 py-3 rounded-lg font-semibold transition-colors inline-block"
               >
-                Take Free Quiz
+                Check Eligibility Free
               </Link>
             </div>
           </div>
@@ -486,11 +462,12 @@ export default function OrangeCountyPage() {
             </div>
             
             <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-200">
-              <h3 className="text-xl font-bold mb-3 text-gray-900">How long does Orange County expungement take?</h3>
+              <h3 className="text-xl font-bold mb-3 text-gray-900">How long does the court take in Orange County?</h3>
               <p className="text-gray-600">
-                Most Orange County expungements are completed within <strong>5-7 weeks</strong> with our expedited service. 
-                The timeline depends on which OC courthouse handles your case (Santa Ana, Westminster, Newport Beach, or Fullerton) 
-                and the court's current caseload. We track your case and provide regular updates.
+                You can prepare and file your paperwork quickly, but the court reviews it on its own
+                schedule. Timelines depend on which OC courthouse handles your case (Santa Ana,
+                Westminster, Newport Beach, or Fullerton) and the court's current caseload. We cannot
+                guarantee a specific approval date.
               </p>
             </div>
             
@@ -516,28 +493,30 @@ export default function OrangeCountyPage() {
             <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-200">
               <h3 className="text-xl font-bold mb-3 text-gray-900">Do I need a lawyer for Orange County expungement?</h3>
               <p className="text-gray-600">
-                While not required, having experienced help significantly improves your chances. Our <strong>92% success rate</strong> 
-                comes from knowing OC court procedures and preparing perfect petitions. You can choose our <strong>$97 DIY service</strong> 
-                for simple cases, $297 expert review for assistance, or $1,497 full attorney representation for complex situations. 
-                We offer free consultations to help you decide.
+                Many straightforward Orange County cases can be handled with the DIY kit. Experienced help
+                can be valuable for complex situations. You can choose our <strong>$97 DIY service</strong>
+                for simple cases, $297 expert review for assistance, or $1,497 full attorney service for
+                complex situations. Start with a free eligibility check to help you decide.
               </p>
             </div>
             
             <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-200">
-              <h3 className="text-xl font-bold mb-3 text-gray-900">Will employers see my record after Orange County expungement?</h3>
+              <h3 className="text-xl font-bold mb-3 text-gray-900">Will employers see my record after relief?</h3>
               <p className="text-gray-600">
-                After expungement, <strong>you can legally answer "no" to most employment questions about convictions</strong>. 
-                However, certain employers (schools, healthcare, law enforcement) may still see dismissed cases. We provide 
-                a detailed explanation of exactly what shows up post-expungement for Orange County cases.
+                A dismissal can limit what many private employers see on background checks, but it does not
+                erase the record. Certain employers and agencies (schools, healthcare, law enforcement, and
+                some licensing bodies) may still access dismissed cases. We explain what a dismissal does
+                and does not change.
               </p>
             </div>
             
             <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-200">
-              <h3 className="text-xl font-bold mb-3 text-gray-900">Can I expunge a DUI in Orange County?</h3>
+              <h3 className="text-xl font-bold mb-3 text-gray-900">Can I get DUI relief in Orange County?</h3>
               <p className="text-gray-600">
-                Yes! <strong>Most DUI convictions can be expunged in Orange County</strong> if you completed probation successfully. 
-                This includes first-time DUIs, some second DUIs, and wet reckless convictions. The DMV record remains, 
-                but the criminal conviction can be dismissed. We handle hundreds of OC DUI expungements annually.
+                Many DUI convictions may be eligible for dismissal in Orange County if you completed
+                probation successfully, including some first and second DUIs and wet reckless convictions.
+                The DMV record remains, but the criminal conviction may be dismissed where eligible.
+                Eligibility depends on your specific case.
               </p>
             </div>
           </div>
@@ -545,13 +524,14 @@ export default function OrangeCountyPage() {
           <div className="mt-12 bg-gradient-to-r from-orange-50 to-blue-50 p-8 rounded-xl text-center">
             <h3 className="text-2xl font-bold mb-4">Still Have Questions About Orange County Expungement?</h3>
             <p className="text-gray-600 mb-6">
-              Every case is unique. Get personalized answers about your specific Orange County criminal record.
+              Every case is unique. Start with a free eligibility check to see which options may apply to
+              your Orange County case.
             </p>
-            <Link 
-              href="/orange-county/free-consultation"
+            <Link
+              href="/eligibility"
               className="bg-orange-600 hover:bg-orange-700 text-white px-8 py-3 rounded-lg font-semibold transition-colors inline-block"
             >
-              Get Free Consultation
+              Check Eligibility Free
             </Link>
           </div>
         </div>
@@ -564,37 +544,33 @@ export default function OrangeCountyPage() {
             Ready to Clear Your Orange County Criminal Record?
           </h2>
           <p className="text-xl text-orange-100 mb-8 max-w-2xl mx-auto">
-            Join hundreds of Orange County professionals who've successfully cleared their records 
-            and advanced their careers with our proven expungement services.
+            Start with a free eligibility check, then choose the Orange County option that fits your case.
           </p>
-          
+
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link 
-              href="/orange-county/get-started"
+            <Link
+              href="/checkout/diy"
               className="bg-white text-orange-600 hover:bg-gray-100 px-8 py-4 rounded-lg font-semibold text-lg transition-colors"
             >
-              🚀 Start My OC Expungement Today
+              Get DIY Kit - $97
             </Link>
-            <Link 
-              href="tel:+1-949-555-0123"
+            <Link
+              href="/eligibility"
               className="border-2 border-white text-white hover:bg-white hover:text-orange-600 px-8 py-4 rounded-lg font-semibold text-lg transition-colors"
             >
-              📞 Call (949) 555-0123
+              Check Eligibility Free
             </Link>
           </div>
-          
+
           <div className="mt-8 flex justify-center items-center space-x-8 text-orange-100">
             <div className="flex items-center space-x-2">
-              <span className="text-2xl">⭐</span>
-              <span>4.9/5 Rating</span>
+              <span>Instant download</span>
             </div>
             <div className="flex items-center space-x-2">
-              <span className="text-2xl">✅</span>
-              <span>92% Success Rate</span>
+              <span>30-day refund policy</span>
             </div>
             <div className="flex items-center space-x-2">
-              <span className="text-2xl">🔒</span>
-              <span>100% Confidential</span>
+              <span>Your information stays private</span>
             </div>
           </div>
         </div>

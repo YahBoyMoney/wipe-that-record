@@ -53,24 +53,24 @@ export default function DIYExpungementCaliforniaPage() {
             </div>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-              <Link 
+              <Link
                 href="/checkout/diy"
                 className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-colors"
               >
-                🚀 Get DIY Kit Now - $97
+                Get DIY Kit - $97
               </Link>
-              <Link 
+              <Link
                 href="#what-included"
                 className="border-2 border-blue-600 text-blue-600 hover:bg-blue-50 px-8 py-4 rounded-lg font-semibold text-lg transition-colors"
               >
-                📋 See What's Included
+                See What's Included
               </Link>
             </div>
-            
-            {/* Special Offer Banner */}
-            <div className="bg-red-100 border border-red-300 rounded-lg p-3 max-w-lg mx-auto">
-              <p className="text-red-800 font-bold text-center">
-                🔥 LIMITED TIME: Save $50 off regular $147 price!
+
+            {/* Offer note */}
+            <div className="bg-slate-50 border border-slate-200 rounded-lg p-3 max-w-lg mx-auto">
+              <p className="text-slate-700 font-semibold text-center">
+                DIY kit is $97, currently $50 off the regular $147 price.
               </p>
             </div>
           </div>
@@ -98,7 +98,7 @@ export default function DIYExpungementCaliforniaPage() {
               <div className="text-center mb-6">
                 <div className="text-lg text-gray-700 line-through font-medium">$147</div>
                 <div className="text-4xl font-bold text-blue-600">$97</div>
-                <div className="text-sm text-green-600 font-semibold">SAVE $50 - Limited Time</div>
+                <div className="text-sm text-green-600 font-semibold">Save $50 from $147</div>
               </div>
               <ul className="space-y-3 mb-8">
                 <li className="flex items-center">
@@ -187,7 +187,7 @@ export default function DIYExpungementCaliforniaPage() {
                 </li>
                 <li className="flex items-center">
                   <span className="text-green-500 mr-3">✓</span>
-                  Success guarantee
+                  30-day refund policy
                 </li>
               </ul>
               <Link 
@@ -208,37 +208,34 @@ export default function DIYExpungementCaliforniaPage() {
             Ready to Clear Your California Criminal Record?
           </h2>
           <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-            Get our complete DIY expungement kit and start your journey to a clean record today. 
-            <strong>Save $50 off the regular price</strong> - limited time offer!
+            Get our complete DIY record-cleaning kit and start your petition today.
+            <strong> Currently $50 off the regular $147 price.</strong>
           </p>
-          
+
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-            <Link 
+            <Link
               href="/checkout/diy"
               className="bg-white text-blue-600 hover:bg-gray-100 px-8 py-4 rounded-lg font-semibold text-lg transition-colors"
             >
-              🚀 Get DIY Kit - $97 (Save $50)
+              Get DIY Kit - $97
             </Link>
-            <Link 
+            <Link
               href="#what-included"
               className="border-2 border-white text-white hover:bg-white hover:text-blue-600 px-8 py-4 rounded-lg font-semibold text-lg transition-colors"
             >
-              📋 See What's Included
+              See What's Included
             </Link>
           </div>
-          
+
           <div className="flex justify-center items-center space-x-8 text-blue-100">
             <div className="flex items-center space-x-2">
-              <span className="text-2xl">⭐</span>
-              <span>4.9/5 Rating</span>
+              <span>Instant download</span>
             </div>
             <div className="flex items-center space-x-2">
-              <span className="text-2xl">📧</span>
-              <span>Instant Download</span>
+              <span>Secure checkout</span>
             </div>
             <div className="flex items-center space-x-2">
-              <span className="text-2xl">🔒</span>
-              <span>100% Secure</span>
+              <span>30-day refund policy</span>
             </div>
           </div>
         </div>

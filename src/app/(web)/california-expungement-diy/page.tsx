@@ -59,24 +59,24 @@ export default function CaliforniaExpungementDIYPage() {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-              <Link 
+              <Link
                 href="/checkout/diy"
                 className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-colors"
               >
-                🚀 Get DIY Kit Now - $97
+                Get DIY Kit - $97
               </Link>
-              <Link 
+              <Link
                 href="#what-included"
                 className="border-2 border-blue-600 text-blue-600 hover:bg-blue-50 px-8 py-4 rounded-lg font-semibold text-lg transition-colors"
               >
-                📋 See What's Included
+                See What's Included
               </Link>
             </div>
-            
-            {/* Special Offer Banner */}
-            <div className="bg-red-100 border border-red-300 rounded-lg p-3 max-w-lg mx-auto">
-              <p className="text-red-800 font-bold text-center">
-                🔥 LIMITED TIME: Save $50 off regular $147 price!
+
+            {/* Offer note */}
+            <div className="bg-slate-50 border border-slate-200 rounded-lg p-3 max-w-lg mx-auto">
+              <p className="text-slate-700 font-semibold text-center">
+                DIY kit is $97, currently $50 off the regular $147 price.
               </p>
             </div>
           </div>
@@ -127,7 +127,7 @@ export default function CaliforniaExpungementDIYPage() {
               <div className="bg-white p-6 rounded-xl shadow-lg border-l-4 border-green-500">
                 <h3 className="text-xl font-bold mb-3 text-gray-900">📧 Expert Email Support</h3>
                 <ul className="text-gray-600 space-y-2">
-                  <li>• Questions answered within 24 hours</li>
+                  <li>• Questions answered promptly by email</li>
                   <li>• Form review before filing (optional)</li>
                   <li>• Guidance on complex situations</li>
                   <li>• Support throughout the entire process</li>
@@ -313,11 +313,11 @@ export default function CaliforniaExpungementDIYPage() {
                   5
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold mb-3">Court Review & Approval</h3>
+                  <h3 className="text-xl font-bold mb-3">Court Review</h3>
                   <p className="text-gray-600">
-                    Most cases are approved within <strong>2-4 months</strong> without a hearing. 
-                    If the court has questions, our email support helps you respond correctly. 
-                    Once approved, your conviction is dismissed and your record shows the case as dismissed.
+                    The court reviews your petition on its own schedule, which varies by county and case
+                    type. If the court has questions, our email support helps you respond. If relief is
+                    granted, your record is updated to reflect the dismissal.
                   </p>
                 </div>
               </div>
@@ -327,16 +327,16 @@ export default function CaliforniaExpungementDIYPage() {
               <h3 className="text-2xl font-bold mb-4">After Your California Expungement</h3>
               <div className="grid md:grid-cols-3 gap-6 text-left">
                 <div>
-                  <h4 className="font-bold text-lg mb-2">✅ Employment</h4>
-                  <p className="text-gray-600">You can legally answer "no" to most job application questions about convictions</p>
+                  <h4 className="font-bold text-lg mb-2">Employment</h4>
+                  <p className="text-gray-600">A dismissal can limit what many private employers see on background checks, though some agencies and licensed roles may still access the record.</p>
                 </div>
                 <div>
-                  <h4 className="font-bold text-lg mb-2">🏠 Housing</h4>
-                  <p className="text-gray-600">Landlords will see the case as dismissed, greatly improving your rental prospects</p>
+                  <h4 className="font-bold text-lg mb-2">Housing</h4>
+                  <p className="text-gray-600">Many background checks will show the case as dismissed, which can help with rental applications.</p>
                 </div>
                 <div>
-                  <h4 className="font-bold text-lg mb-2">🎓 Education</h4>
-                  <p className="text-gray-600">Qualify for financial aid and professional licenses that were previously denied</p>
+                  <h4 className="font-bold text-lg mb-2">Licensing</h4>
+                  <p className="text-gray-600">Record relief may help with some professional licensing, though certain boards can still consider the underlying case.</p>
                 </div>
               </div>
             </div>
@@ -362,7 +362,7 @@ export default function CaliforniaExpungementDIYPage() {
               <div className="text-center mb-6">
                 <div className="text-lg text-gray-700 line-through font-medium">$147</div>
                 <div className="text-4xl font-bold text-blue-600">$97</div>
-                <div className="text-sm text-green-600 font-semibold">SAVE $50 - Limited Time</div>
+                <div className="text-sm text-green-600 font-semibold">Save $50 from $147</div>
               </div>
               <ul className="space-y-3 mb-8">
                 <li className="flex items-center">
@@ -481,7 +481,7 @@ export default function CaliforniaExpungementDIYPage() {
                   <svg className="w-5 h-5 text-green-500 mr-3" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                   </svg>
-                  Success guarantee
+                  30-day refund policy
                 </li>
               </ul>
               <Link 
@@ -534,11 +534,11 @@ export default function CaliforniaExpungementDIYPage() {
             </div>
             
             <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-200">
-              <h3 className="text-xl font-bold mb-3">How long does California expungement take?</h3>
+              <h3 className="text-xl font-bold mb-3">How long does the court take?</h3>
               <p className="text-gray-600">
-                Most California expungements take <strong>2-4 months</strong> from filing to approval. 
-                The timeline depends on the court's caseload and whether they need additional information. 
-                Some courts are faster (Orange County often processes in 5-7 weeks) while others take longer.
+                You can prepare and file your paperwork quickly, but court timelines vary by county, case
+                type, and the court's caseload. We do not control court schedules and cannot guarantee a
+                specific approval date.
               </p>
             </div>
             
@@ -561,11 +561,13 @@ export default function CaliforniaExpungementDIYPage() {
             </div>
             
             <div className="bg-white p-6 rounded-xl shadow-lg border border-gray-200">
-              <h3 className="text-xl font-bold mb-3">What happens after my California record is expunged?</h3>
+              <h3 className="text-xl font-bold mb-3">What happens after relief is granted?</h3>
               <p className="text-gray-600">
-                After expungement, <strong>you can legally answer "no" to most employment questions about convictions</strong>. 
-                Your record will show the case as dismissed. This greatly improves job prospects, housing applications, 
-                and eligibility for professional licenses. However, certain employers (law enforcement, schools) may still see dismissed cases.
+                If a dismissal is granted, your record is updated to show the case as dismissed, which can
+                limit what many private employers and landlords see on background checks. It does not
+                erase the record, and certain employers and agencies (such as law enforcement, schools,
+                and some licensing bodies) may still access it. True expungement does not exist in
+                California.
               </p>
             </div>
             
@@ -588,37 +590,34 @@ export default function CaliforniaExpungementDIYPage() {
             Ready to Clear Your California Criminal Record?
           </h2>
           <p className="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-            Get our complete DIY expungement kit and start your journey to a clean record today. 
-            <strong>Save $50 off the regular price</strong> - limited time offer!
+            Get our complete DIY record-cleaning kit and start your petition today.
+            <strong> Currently $50 off the regular $147 price.</strong>
           </p>
-          
+
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-            <Link 
+            <Link
               href="/checkout/diy"
               className="bg-white text-blue-600 hover:bg-gray-100 px-8 py-4 rounded-lg font-semibold text-lg transition-colors"
             >
-              🚀 Get DIY Kit - $97 (Save $50)
+              Get DIY Kit - $97
             </Link>
-            <Link 
+            <Link
               href="#what-included"
               className="border-2 border-white text-white hover:bg-white hover:text-blue-600 px-8 py-4 rounded-lg font-semibold text-lg transition-colors"
             >
-              📋 See What's Included
+              See What's Included
             </Link>
           </div>
-          
+
           <div className="flex justify-center items-center space-x-8 text-blue-100">
             <div className="flex items-center space-x-2">
-              <span className="text-2xl">⭐</span>
-              <span>4.9/5 Rating</span>
+              <span>Instant download</span>
             </div>
             <div className="flex items-center space-x-2">
-              <span className="text-2xl">📧</span>
-              <span>Instant Download</span>
+              <span>Secure checkout</span>
             </div>
             <div className="flex items-center space-x-2">
-              <span className="text-2xl">🔒</span>
-              <span>100% Secure</span>
+              <span>30-day refund policy</span>
             </div>
           </div>
         </div>
