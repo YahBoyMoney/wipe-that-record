@@ -12,7 +12,7 @@ export default function EligibilityPage() {
             <span className="eyebrow text-[var(--brass)]">Free &amp; private</span>
             <span className="h-px w-10 bg-[var(--brass)]" />
           </div>
-          <h1 className="font-display text-4xl font-semibold leading-tight text-white sm:text-5xl">
+          <h1 className="font-display display-lg font-semibold text-white">
             Free California eligibility check
           </h1>
           <p className="mx-auto mt-5 max-w-2xl text-lg leading-relaxed text-[var(--text-ink-muted)]">

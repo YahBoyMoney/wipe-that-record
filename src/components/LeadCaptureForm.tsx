@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
+import { track } from '@/lib/track'
 
 interface LeadCaptureFormProps {
   variant?: 'modal' | 'inline' | 'exit-intent'
@@ -69,6 +70,9 @@ export function LeadCaptureForm({
   })
 
   useEffect(() => {
+    // Non-PII funnel event: the eligibility quiz was opened/started.
+    track('eligibility_quiz_start', { lead_magnet: leadMagnet, variant })
+
     // Capture analytics data
     const startTime = Date.now()
     const deviceType = /Mobile|Android|iPhone|iPad/.test(navigator.userAgent) ? 'mobile' : 'desktop'
@@ -173,6 +177,8 @@ export function LeadCaptureForm({
 
   const handleNext = () => {
     if (validateStep(step)) {
+      // Non-PII funnel event: which step the user advanced past.
+      track('eligibility_quiz_step', { step, lead_magnet: leadMagnet })
       setStep(step + 1)
     } else {
       setMessage('Please fill in all required fields')
@@ -239,14 +245,21 @@ export function LeadCaptureForm({
 
       if (response.ok) {
         console.log('✅ Lead created:', result)
-        
+
+        // Non-PII funnel event: quiz completed. Only the qualification bucket
+        // is sent — no answers, contact details, or record specifics.
+        track('eligibility_quiz_complete', {
+          lead_magnet: leadMagnet,
+          qualification: qualification || 'unknown',
+        })
+
         // Personalized success message based on qualification
         if (qualification === 'qualified') {
-          setMessage(`✅ Excellent News! Your case looks very promising (Score: ${leadScore}/100). Check your email for your custom expungement roadmap.`)
+          setMessage('✅ Your case looks promising. Check your email for your personalized next steps.')
         } else if (qualification === 'maybe') {
-          setMessage(`✅ Good News! You may qualify for expungement (Score: ${leadScore}/100). Check your email for next steps.`)
+          setMessage('✅ You may qualify. Check your email for next steps and how to confirm your options.')
         } else {
-          setMessage('✅ Assessment complete! Check your email for alternative options and resources.')
+          setMessage('✅ Assessment complete. Check your email for alternative options and resources.')
         }
         
         // Store enhanced lead data for checkout flow
@@ -294,18 +307,18 @@ export function LeadCaptureForm({
 
   const getStepTitle = () => {
     switch (step) {
-      case 1: return 'Do You Qualify for California Expungement?'
-      case 2: return 'Tell Us About Your Conviction'
-      case 3: return 'How Will This Transform Your Life?'
-      default: return 'Complete Your Assessment'
+      case 1: return 'Check your California record-relief options'
+      case 2: return 'Tell us about your case'
+      case 3: return 'What are you hoping to unlock?'
+      default: return 'Complete your assessment'
     }
   }
 
   const getStepDescription = () => {
     switch (step) {
-      case 1: return 'Most Californians qualify - let\'s check your situation'
-      case 2: return 'This helps us prepare your specific legal paperwork'
-      case 3: return 'Understanding your goals helps us recommend the best solution'
+      case 1: return 'A few private questions to see what may apply to your situation'
+      case 2: return 'This helps us point you to the right California paperwork'
+      case 3: return 'Your goals help us recommend the path that fits'
       default: return ''
     }
   }
@@ -324,8 +337,8 @@ export function LeadCaptureForm({
                 </svg>
               </div>
               <div>
-                <div className="font-semibold text-green-800 text-lg">Excellent! You Likely Qualify</div>
-                <div className="text-green-700">Score: {leadScore}/100 - Strong potential for expungement</div>
+                <div className="font-semibold text-green-800 text-lg">Your case looks promising</div>
+                <div className="text-green-700">Based on your answers, several relief paths may apply</div>
               </div>
             </div>
           </div>
@@ -340,8 +353,8 @@ export function LeadCaptureForm({
                 </svg>
               </div>
               <div>
-                <div className="font-semibold text-yellow-800 text-lg">You May Qualify</div>
-                <div className="text-yellow-700">Score: {leadScore}/100 - Let's review your case details</div>
+                <div className="font-semibold text-yellow-800 text-lg">You may qualify</div>
+                <div className="text-yellow-700">A closer review of your case details can confirm your options</div>
               </div>
             </div>
           </div>
@@ -372,11 +385,11 @@ export function LeadCaptureForm({
       {/* Progress bar */}
       <div className="mb-6">
         <div className="flex justify-between items-center mb-2">
-          <span className="text-sm font-medium text-slate-800">Step {step} of 3</span>
-          <span className="text-sm text-slate-700">{Math.round((step / 3) * 100)}% Complete</span>
+          <span className="eyebrow text-[var(--brass-600)]">Step {step} of 3</span>
+          <span className="text-sm text-[var(--text-muted)]">{Math.round((step / 3) * 100)}% complete</span>
         </div>
-        <div className="w-full bg-slate-200 rounded-full h-2">
-          <div 
+        <div className="w-full bg-[var(--parchment-200)] rounded-full h-2">
+          <div
             className="h-2 rounded-full bg-[var(--brass)] transition-all duration-300"
             style={{ width: `${(step / 3) * 100}%` }}
           ></div>
@@ -384,8 +397,8 @@ export function LeadCaptureForm({
       </div>
 
       <div className="text-center mb-6">
-        <h3 className="text-2xl font-bold text-slate-900 mb-2">{getStepTitle()}</h3>
-        <p className="text-slate-800">{getStepDescription()}</p>
+        <h3 className="font-display text-2xl font-semibold text-[var(--ink)] mb-2">{getStepTitle()}</h3>
+        <p className="text-[var(--text-muted)]">{getStepDescription()}</p>
       </div>
 
       {/* Reassurance - only show on first step */}
@@ -430,7 +443,7 @@ export function LeadCaptureForm({
             className="space-y-6"
           >
             <div>
-              <label className="block text-base font-semibold text-slate-900 mb-3">
+              <label className="block text-base font-semibold text-[var(--ink)] mb-3">
                 Do you have a criminal conviction on your record? *
               </label>
               <div className="space-y-3">
@@ -451,7 +464,7 @@ export function LeadCaptureForm({
                       className="sr-only"
                     />
                     <span className="text-2xl mr-3">{option.icon}</span>
-                    <span className="font-medium text-slate-900">{option.label}</span>
+                    <span className="font-medium text-[var(--text)]">{option.label}</span>
                   </label>
                 ))}
               </div>
@@ -464,7 +477,7 @@ export function LeadCaptureForm({
                 className="space-y-4"
               >
                 <div>
-                  <label className="block text-base font-semibold text-slate-900 mb-3">
+                  <label className="block text-base font-semibold text-[var(--ink)] mb-3">
                     Was this conviction in California? *
                   </label>
                   <div className="space-y-2">
@@ -484,7 +497,7 @@ export function LeadCaptureForm({
                           className="sr-only"
                         />
                         <span className="text-xl mr-3">{option.icon}</span>
-                        <span className="font-medium text-slate-900">{option.label}</span>
+                        <span className="font-medium text-[var(--text)]">{option.label}</span>
                       </label>
                     ))}
                   </div>
@@ -495,26 +508,26 @@ export function LeadCaptureForm({
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-slate-900 mb-2">
+                  <label className="block text-sm font-medium text-[var(--text)] mb-2">
                     First Name *
                   </label>
                   <input
                     type="text"
                     required
-                    className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                    className="w-full px-4 py-3 border border-[var(--line)] rounded-lg focus:ring-2 focus:ring-[var(--brass)] focus:border-transparent transition-all"
                     value={formData.firstName}
                     onChange={(e) => handleInputChange('firstName', e.target.value)}
                     placeholder="First name"
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                  <label className="block text-sm font-medium text-[var(--text)] mb-2">
                     Last Name *
                   </label>
                   <input
                     type="text"
                     required
-                    className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                    className="w-full px-4 py-3 border border-[var(--line)] rounded-lg focus:ring-2 focus:ring-[var(--brass)] focus:border-transparent transition-all"
                     value={formData.lastName}
                     onChange={(e) => handleInputChange('lastName', e.target.value)}
                     placeholder="Last name"
@@ -523,13 +536,13 @@ export function LeadCaptureForm({
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label className="block text-sm font-medium text-[var(--text)] mb-2">
                   Email Address *
                 </label>
                 <input
                   type="email"
                   required
-                  className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                  className="w-full px-4 py-3 border border-[var(--line)] rounded-lg focus:ring-2 focus:ring-[var(--brass)] focus:border-transparent transition-all"
                   value={formData.email}
                   onChange={(e) => handleInputChange('email', e.target.value)}
                   placeholder="your@email.com"
@@ -537,13 +550,13 @@ export function LeadCaptureForm({
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label className="block text-sm font-medium text-[var(--text)] mb-2">
                   Phone Number 
                   <span className="text-[var(--brass-600)] font-normal">(Priority support)</span>
                 </label>
                 <input
                   type="tel"
-                  className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                  className="w-full px-4 py-3 border border-[var(--line)] rounded-lg focus:ring-2 focus:ring-[var(--brass)] focus:border-transparent transition-all"
                   value={formData.phone}
                   onChange={(e) => handleInputChange('phone', e.target.value)}
                   placeholder="(555) 123-4567"
@@ -570,12 +583,12 @@ export function LeadCaptureForm({
             className="space-y-6"
           >
             <div>
-              <label className="block text-base font-semibold text-slate-700 mb-3">
+              <label className="block text-base font-semibold text-[var(--ink)] mb-3">
                 What type of conviction do you have? *
               </label>
               <select
                 required
-                className="w-full px-4 py-3 border-2 border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-lg"
+                className="w-full px-4 py-3 border-2 border-[var(--line)] rounded-lg focus:ring-2 focus:ring-[var(--brass)] focus:border-transparent transition-all text-lg"
                 value={formData.convictionType}
                 onChange={(e) => handleInputChange('convictionType', e.target.value)}
               >
@@ -594,11 +607,11 @@ export function LeadCaptureForm({
 
             <div className="grid md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label className="block text-sm font-medium text-[var(--text)] mb-2">
                   County of Conviction
                 </label>
                 <select
-                  className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                  className="w-full px-4 py-3 border border-[var(--line)] rounded-lg focus:ring-2 focus:ring-[var(--brass)] focus:border-transparent transition-all"
                   value={formData.county}
                   onChange={(e) => handleInputChange('county', e.target.value)}
                 >
@@ -614,11 +627,11 @@ export function LeadCaptureForm({
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-2">
+                <label className="block text-sm font-medium text-[var(--text)] mb-2">
                   Year of Conviction
                 </label>
                 <select
-                  className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                  className="w-full px-4 py-3 border border-[var(--line)] rounded-lg focus:ring-2 focus:ring-[var(--brass)] focus:border-transparent transition-all"
                   value={formData.convictionYear}
                   onChange={(e) => handleInputChange('convictionYear', e.target.value)}
                 >
@@ -634,7 +647,7 @@ export function LeadCaptureForm({
             </div>
 
             <div>
-              <label className="block text-base font-semibold text-slate-700 mb-3">
+              <label className="block text-base font-semibold text-[var(--ink)] mb-3">
                 How urgent is clearing your record? *
               </label>
               <div className="space-y-2">
@@ -657,19 +670,19 @@ export function LeadCaptureForm({
                       className="sr-only"
                     />
                     <span className="text-xl mr-3">{option.icon}</span>
-                    <span className="font-medium text-slate-700">{option.label}</span>
+                    <span className="font-medium text-[var(--text)]">{option.label}</span>
                   </label>
                 ))}
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
+              <label className="block text-sm font-medium text-[var(--text)] mb-2">
                 Case Number (if known)
               </label>
               <input
                 type="text"
-                className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                className="w-full px-4 py-3 border border-[var(--line)] rounded-lg focus:ring-2 focus:ring-[var(--brass)] focus:border-transparent transition-all"
                 value={formData.caseNumber}
                 onChange={(e) => handleInputChange('caseNumber', e.target.value)}
                 placeholder="e.g., 21CR12345"
@@ -679,19 +692,18 @@ export function LeadCaptureForm({
 
             {/* Address Information - Required for Legal Paperwork */}
             <div className="rounded-lg border border-[var(--brass)]/30 bg-[var(--brass-100)]/40 p-4">
-              <h4 className="font-semibold text-blue-900 mb-3 flex items-center gap-2">
-                <span>📋</span>
-                Address Information (Required for Legal Paperwork)
+              <h4 className="font-semibold text-[var(--ink)] mb-3 flex items-center gap-2">
+                Address information (required for your paperwork)
               </h4>
               <div className="space-y-4">
                 <div>
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                  <label className="block text-sm font-medium text-[var(--text)] mb-2">
                     Street Address *
                   </label>
                   <input
                     type="text"
                     required
-                    className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                    className="w-full px-4 py-3 border border-[var(--line)] rounded-lg focus:ring-2 focus:ring-[var(--brass)] focus:border-transparent transition-all"
                     value={formData.street}
                     onChange={(e) => handleInputChange('street', e.target.value)}
                     placeholder="123 Main Street"
@@ -700,13 +712,13 @@ export function LeadCaptureForm({
                 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                    <label className="block text-sm font-medium text-[var(--text)] mb-2">
                       City *
                     </label>
                     <input
                       type="text"
                       required
-                      className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                      className="w-full px-4 py-3 border border-[var(--line)] rounded-lg focus:ring-2 focus:ring-[var(--brass)] focus:border-transparent transition-all"
                       value={formData.city}
                       onChange={(e) => handleInputChange('city', e.target.value)}
                       placeholder="Los Angeles"
@@ -714,12 +726,12 @@ export function LeadCaptureForm({
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium text-slate-700 mb-2">
+                    <label className="block text-sm font-medium text-[var(--text)] mb-2">
                       State *
                     </label>
                     <select
                       required
-                      className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                      className="w-full px-4 py-3 border border-[var(--line)] rounded-lg focus:ring-2 focus:ring-[var(--brass)] focus:border-transparent transition-all"
                       value={formData.state}
                       onChange={(e) => handleInputChange('state', e.target.value)}
                     >
@@ -731,21 +743,21 @@ export function LeadCaptureForm({
                 </div>
                 
                 <div className="w-1/2">
-                  <label className="block text-sm font-medium text-slate-700 mb-2">
+                  <label className="block text-sm font-medium text-[var(--text)] mb-2">
                     ZIP Code *
                   </label>
                   <input
                     type="text"
                     required
-                    className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                    className="w-full px-4 py-3 border border-[var(--line)] rounded-lg focus:ring-2 focus:ring-[var(--brass)] focus:border-transparent transition-all"
                     value={formData.zipCode}
                     onChange={(e) => handleInputChange('zipCode', e.target.value)}
                     placeholder="90210"
                   />
                 </div>
                 
-                <p className="text-xs text-blue-700">
-                  This address will be used for legal paperwork and court filings.
+                <p className="text-xs text-[var(--text-muted)]">
+                  This address will be used for your paperwork and court filings.
                 </p>
               </div>
             </div>
@@ -754,7 +766,7 @@ export function LeadCaptureForm({
               <button
                 type="button"
                 onClick={() => setStep(1)}
-                className="flex-1 border-2 border-slate-300 text-slate-700 py-3 rounded-lg font-semibold hover:bg-slate-50 transition-colors"
+                className="flex-1 border border-[var(--ink)] text-[var(--ink)] py-3 rounded-lg font-semibold hover:bg-[var(--parchment-200)] transition-colors"
               >
                 ← Back
               </button>
@@ -778,7 +790,7 @@ export function LeadCaptureForm({
             className="space-y-6"
           >
             <div>
-              <label className="block text-base font-semibold text-slate-700 mb-3">
+              <label className="block text-base font-semibold text-[var(--ink)] mb-3">
                 How has your record affected your life? (Select all that apply) *
               </label>
               <div className="space-y-3">
@@ -802,18 +814,18 @@ export function LeadCaptureForm({
                       onChange={() => handleInterestToggle(impact.value)}
                     />
                     <span className="text-2xl mr-3">{impact.icon}</span>
-                    <span className="font-medium text-slate-700">{impact.label}</span>
+                    <span className="font-medium text-[var(--text)]">{impact.label}</span>
                   </label>
                 ))}
               </div>
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
+              <label className="block text-sm font-medium text-[var(--text)] mb-2">
                 What's your employment situation?
               </label>
               <select
-                className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                className="w-full px-4 py-3 border border-[var(--line)] rounded-lg focus:ring-2 focus:ring-[var(--brass)] focus:border-transparent transition-all"
                 value={formData.employmentImpact}
                 onChange={(e) => handleInputChange('employmentImpact', e.target.value)}
               >
@@ -828,11 +840,11 @@ export function LeadCaptureForm({
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
+              <label className="block text-sm font-medium text-[var(--text)] mb-2">
                 Do you need professional licensing?
               </label>
               <select
-                className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                className="w-full px-4 py-3 border border-[var(--line)] rounded-lg focus:ring-2 focus:ring-[var(--brass)] focus:border-transparent transition-all"
                 value={formData.professionalLicense}
                 onChange={(e) => handleInputChange('professionalLicense', e.target.value)}
               >
@@ -844,11 +856,11 @@ export function LeadCaptureForm({
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
+              <label className="block text-sm font-medium text-[var(--text)] mb-2">
                 Investment Range for Your Fresh Start
               </label>
               <select
-                className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                className="w-full px-4 py-3 border border-[var(--line)] rounded-lg focus:ring-2 focus:ring-[var(--brass)] focus:border-transparent transition-all"
                 value={formData.budget}
                 onChange={(e) => handleInputChange('budget', e.target.value)}
               >
@@ -862,11 +874,11 @@ export function LeadCaptureForm({
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-2">
+              <label className="block text-sm font-medium text-[var(--text)] mb-2">
                 Previous expungement attempts?
               </label>
               <select
-                className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+                className="w-full px-4 py-3 border border-[var(--line)] rounded-lg focus:ring-2 focus:ring-[var(--brass)] focus:border-transparent transition-all"
                 value={formData.previousAttempts}
                 onChange={(e) => handleInputChange('previousAttempts', e.target.value)}
               >
@@ -896,7 +908,7 @@ export function LeadCaptureForm({
               <button
                 type="button"
                 onClick={() => setStep(2)}
-                className="flex-1 border-2 border-slate-300 text-slate-700 py-3 rounded-lg font-semibold hover:bg-slate-50 transition-colors"
+                className="flex-1 border border-[var(--ink)] text-[var(--ink)] py-3 rounded-lg font-semibold hover:bg-[var(--parchment-200)] transition-colors"
               >
                 ← Back
               </button>
@@ -905,10 +917,11 @@ export function LeadCaptureForm({
                 disabled={isSubmitting || !validateStep(3)}
                 className="btn btn-brass flex-1 text-lg disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {isSubmitting ? 'Processing...' : qualification === 'qualified' ? 
-                  '🚀 Get My Custom Expungement Plan' : 
-                  '📋 Complete My Assessment'
-                }
+                {isSubmitting
+                  ? 'Processing…'
+                  : qualification === 'qualified'
+                    ? 'See my recommended path'
+                    : 'Complete my assessment'}
               </button>
             </div>
           </motion.div>
@@ -916,7 +929,7 @@ export function LeadCaptureForm({
       </form>
 
       {/* Trust indicators */}
-      <div className="mt-6 pt-6 border-t border-slate-200">
+      <div className="mt-6 pt-6 border-t border-[var(--line)]">
         <div className="flex items-center justify-center gap-4 text-xs text-gray-800 font-medium">
           <div className="flex items-center gap-1">
             <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
@@ -925,7 +938,7 @@ export function LeadCaptureForm({
             Secure & Confidential
           </div>
           <div className="flex items-center gap-1">
-            <svg className="w-4 h-4 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+            <svg className="w-4 h-4 text-[var(--brass-600)]" fill="currentColor" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
             </svg>
             No Spam

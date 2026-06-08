@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { track } from '@/lib/track';
 
 export default function DIYCheckoutPage() {
   const [leadData, setLeadData] = useState<any>(null);
@@ -10,6 +11,7 @@ export default function DIYCheckoutPage() {
     if (stored) {
       setLeadData(JSON.parse(stored));
     }
+    track('checkout_view', { source_page: '/checkout/diy', plan: 'diy' });
   }, []);
 
   const handleCheckout = async (promoCode?: string) => {
@@ -176,9 +178,16 @@ export default function DIYCheckoutPage() {
               </div>
 
               {/* Checkout Button */}
-              <button 
+              <button
                 onClick={() => {
-                  // Track conversion event
+                  // Non-PII funnel event (Vercel Analytics)
+                  track('checkout_cta_click', {
+                    source_page: '/checkout/diy',
+                    plan: 'diy',
+                    value: 97,
+                  });
+
+                  // GA enhanced-ecommerce event, if GA is configured
                   if (typeof window !== 'undefined' && (window as any).gtag) {
                     (window as any).gtag('event', 'begin_checkout', {
                       currency: 'USD',
@@ -191,7 +200,7 @@ export default function DIYCheckoutPage() {
                       }]
                     });
                   }
-                  
+
                   // Use the proper checkout handler
                   handleCheckout();
                 }}

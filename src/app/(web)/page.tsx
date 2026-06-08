@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { Hero } from '@/components/Hero';
 import { PlanCard } from '@/components/PlanCard';
 import { LeadCaptureForm } from '@/components/LeadCaptureForm';
+import { track } from '@/lib/track';
 
 const fadeUp = {
   initial: { opacity: 0, y: 20 },
@@ -37,7 +38,10 @@ export default function LandingPage() {
     setShowCookieBanner(false);
   };
 
-  const openQualificationModal = () => setShowQualificationModal(true);
+  const openQualificationModal = (ctaLabel = 'unknown') => {
+    track('eligibility_cta_click', { source_page: '/', cta_label: ctaLabel });
+    setShowQualificationModal(true);
+  };
 
   return (
     <>
@@ -107,7 +111,7 @@ export default function LandingPage() {
               <button
                 onClick={() => {
                   setShowExitModal(false);
-                  openQualificationModal();
+                  openQualificationModal('exit_intent_modal');
                 }}
                 className="btn btn-primary flex-1"
               >
@@ -124,42 +128,48 @@ export default function LandingPage() {
       <main className="overflow-x-hidden bg-[var(--parchment)]">
         <Hero variant="a" />
 
-        {/* The stakes — why a record matters */}
+        {/* The stakes — why a record matters (asymmetric editorial layout) */}
         <section className="section-paper border-y border-[var(--line)] py-20 px-4 sm:px-6">
-          <div className="mx-auto max-w-6xl">
-            <motion.div {...fadeUp} className="max-w-2xl">
-              <span className="eyebrow text-[var(--brass-600)]">What&rsquo;s at stake</span>
-              <h2 className="font-display mt-3 text-3xl font-semibold leading-tight text-[var(--ink)] sm:text-4xl">
+          <div className="mx-auto grid max-w-6xl gap-12 lg:grid-cols-[5fr_7fr] lg:gap-16">
+            <motion.div {...fadeUp} className="lg:sticky lg:top-28 lg:self-start">
+              <span className="eyebrow-line eyebrow text-[var(--brass-600)]">What&rsquo;s at stake</span>
+              <h2 className="font-display display-lg mt-4 font-semibold text-[var(--ink)]">
                 A closed case can still follow you for years.
               </h2>
-              <p className="mt-4 text-lg leading-relaxed text-[var(--text-muted)]">
+              <p className="mt-5 text-lg leading-relaxed text-[var(--text-muted)]">
                 Long after a sentence is served, a record keeps showing up where it matters most.
                 Relief won&rsquo;t rewrite the past &mdash; but for many Californians it changes what
                 others can see going forward.
               </p>
             </motion.div>
 
-            <div className="mt-12 grid gap-px overflow-hidden rounded-xl border border-[var(--line)] bg-[var(--line)] sm:grid-cols-3">
+            <motion.div {...fadeUp} className="divide-y divide-[var(--line)]">
               {[
                 {
+                  n: '01',
                   label: 'Employment',
                   body: 'Background checks can stall hiring and promotions, even for roles you are qualified for.',
                 },
                 {
+                  n: '02',
                   label: 'Housing',
                   body: 'Landlords routinely screen applicants, and a record can quietly remove you from the list.',
                 },
                 {
+                  n: '03',
                   label: 'Licensing',
                   body: 'Professional and occupational boards may weigh a conviction when reviewing your application.',
                 },
               ].map((item) => (
-                <div key={item.label} className="bg-[var(--paper)] p-8">
-                  <span className="eyebrow text-[var(--brass-600)]">{item.label}</span>
-                  <p className="mt-3 leading-relaxed text-[var(--text)]">{item.body}</p>
+                <div key={item.label} className="grid grid-cols-[auto_1fr] gap-x-6 py-7 first:pt-0">
+                  <span className="font-display text-2xl font-semibold text-[var(--brass)]">{item.n}</span>
+                  <div>
+                    <h3 className="font-display text-xl font-semibold text-[var(--ink)]">{item.label}</h3>
+                    <p className="mt-2 leading-relaxed text-[var(--text-muted)]">{item.body}</p>
+                  </div>
                 </div>
               ))}
-            </div>
+            </motion.div>
           </div>
         </section>
 
@@ -176,7 +186,7 @@ export default function LandingPage() {
                 turns on your conviction type, county, and timeline. Our private 2-minute review
                 points you to the options that may actually apply, then to the service that fits.
               </p>
-              <button onClick={openQualificationModal} className="btn btn-brass mt-8 text-base">
+              <button onClick={() => openQualificationModal('find_your_path')} className="btn btn-brass mt-8 text-base">
                 Start the free eligibility review
                 <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
@@ -237,6 +247,7 @@ export default function LandingPage() {
                 popular={true}
                 badge="Most chosen"
                 href="/checkout/diy"
+                plan="diy"
               />
               <PlanCard
                 title="Expert Review"
@@ -253,6 +264,7 @@ export default function LandingPage() {
                 ctaVariant="secondary"
                 popular={false}
                 href="/checkout/review"
+                plan="review"
               />
               <PlanCard
                 title="Full Service"
@@ -270,11 +282,12 @@ export default function LandingPage() {
                 popular={false}
                 badge="Premium"
                 href="/checkout/full-service"
+                plan="full_service"
               />
             </div>
 
             <div className="mt-8 flex justify-center">
-              <button onClick={openQualificationModal} className="link-ink inline-flex items-center gap-2 text-sm">
+              <button onClick={() => openQualificationModal('plans_helper')} className="link-ink inline-flex items-center gap-2 text-sm">
                 Not sure which fits your case? Find out free
                 <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
@@ -467,7 +480,7 @@ export default function LandingPage() {
               <p className="mt-2 text-[var(--text-muted)]">
                 The free eligibility review gives you answers based on your conviction type and county.
               </p>
-              <button onClick={openQualificationModal} className="btn btn-primary mt-5">
+              <button onClick={() => openQualificationModal('faq_cta')} className="btn btn-primary mt-5">
                 Get my eligibility review
               </button>
             </motion.div>
@@ -485,13 +498,17 @@ export default function LandingPage() {
               options may apply to your case.
             </motion.p>
             <motion.div {...fadeUp} className="mt-9 flex flex-col justify-center gap-3 sm:flex-row">
-              <button onClick={openQualificationModal} className="btn btn-brass text-base">
+              <button onClick={() => openQualificationModal('final_cta')} className="btn btn-brass text-base">
                 Check if I qualify — free
                 <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
                 </svg>
               </button>
-              <a href="/checkout/diy" className="btn btn-ghost-ink text-base">
+              <a
+                href="/checkout/diy"
+                onClick={() => track('plan_cta_click', { source_page: '/', plan: 'diy', cta_label: 'final_cta' })}
+                className="btn btn-ghost-ink text-base"
+              >
                 Get the DIY Kit — $97
               </a>
             </motion.div>
