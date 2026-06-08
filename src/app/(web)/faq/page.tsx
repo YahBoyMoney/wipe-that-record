@@ -48,34 +48,37 @@ const faqs = [
 
 export default function FaqPage() {
   return (
-    <main className="min-h-screen bg-white">
-      <section className="bg-[#0f2747] py-16 text-white">
-        <div className="mx-auto max-w-3xl px-4 text-center sm:px-6">
-          <h1 className="text-3xl font-bold sm:text-4xl">Frequently asked questions</h1>
-          <p className="mx-auto mt-4 max-w-2xl text-lg text-slate-300">
+    <main className="min-h-screen bg-[var(--parchment)]">
+      <section className="ink-texture py-20 text-[var(--text-ink)]">
+        <div className="mx-auto max-w-3xl px-4 sm:px-6">
+          <div className="flex items-center gap-3">
+            <span className="h-px w-10 bg-[var(--brass)]" />
+            <span className="eyebrow text-[var(--brass)]">Answers</span>
+          </div>
+          <h1 className="font-display mt-6 text-4xl font-semibold leading-tight text-white sm:text-5xl">
+            Frequently asked questions
+          </h1>
+          <p className="mt-5 max-w-2xl text-lg leading-relaxed text-[var(--text-ink-muted)]">
             Straight answers about California record cleaning, what to expect, and how our service works.
           </p>
         </div>
       </section>
 
       <section className="py-14">
-        <div className="mx-auto max-w-3xl space-y-4 px-4 sm:px-6">
+        <div className="mx-auto max-w-3xl space-y-3 px-4 sm:px-6">
           {faqs.map((faq) => (
-            <details key={faq.q} className="group rounded-lg border border-slate-200">
-              <summary className="flex cursor-pointer items-center justify-between rounded-lg p-5 hover:bg-slate-50">
-                <h2 className="pr-4 font-semibold text-slate-900">{faq.q}</h2>
-                <span className="text-slate-500 transition-transform group-open:rotate-180">&#9662;</span>
+            <details key={faq.q} className="group card-paper">
+              <summary className="flex cursor-pointer items-center justify-between p-5">
+                <h2 className="pr-4 font-semibold text-[var(--ink)]">{faq.q}</h2>
+                <span className="text-xl leading-none text-[var(--brass-600)] transition-transform group-open:rotate-45">+</span>
               </summary>
-              <p className="px-5 pb-5 leading-relaxed text-slate-600">{faq.a}</p>
+              <p className="px-5 pb-5 leading-relaxed text-[var(--text-muted)]">{faq.a}</p>
             </details>
           ))}
 
-          <div className="mt-8 rounded-xl bg-slate-50 p-6 text-center">
-            <p className="font-semibold text-slate-900">Still have questions about your case?</p>
-            <Link
-              href="/contact"
-              className="mt-4 inline-block rounded-lg bg-[#0f2747] px-6 py-3 font-semibold text-white transition-colors hover:bg-[#163a66]"
-            >
+          <div className="mt-8 rounded-xl border border-[var(--brass)]/30 bg-[var(--brass-100)]/40 p-7 text-center">
+            <p className="font-display text-xl font-semibold text-[var(--ink)]">Still have questions about your case?</p>
+            <Link href="/contact" className="btn btn-primary mt-5">
               Contact us
             </Link>
           </div>

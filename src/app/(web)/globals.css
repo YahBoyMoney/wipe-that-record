@@ -1,26 +1,170 @@
 @import "tailwindcss";
 
+/* ============================================================
+   Wipe That Record — premium California legal-tech design system
+   Palette: deep ink/navy, warm parchment/ivory, restrained brass.
+   ============================================================ */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Surfaces */
+  --ink: #11202f;          /* deep navy ink — primary brand */
+  --ink-700: #1c344c;
+  --ink-600: #244361;
+  --parchment: #f7f3ea;    /* warm ivory background */
+  --parchment-200: #efe8d8;
+  --paper: #fffdf8;        /* near-white card paper */
+  --brass: #b08642;        /* restrained warm accent */
+  --brass-600: #997232;
+  --brass-100: #efe3cd;
+  --line: #e4ddcd;         /* hairline on parchment */
+  --line-ink: rgba(255, 255, 255, 0.12);
+
+  /* Text */
+  --text: #1a2733;
+  --text-muted: #51606e;
+  --text-ink: #f4efe4;
+  --text-ink-muted: #b9c4cf;
+
+  --background: var(--parchment);
+  --foreground: var(--text);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-ink: var(--ink);
+  --color-ink-700: var(--ink-700);
+  --color-ink-600: var(--ink-600);
+  --color-parchment: var(--parchment);
+  --color-parchment-200: var(--parchment-200);
+  --color-paper: var(--paper);
+  --color-brass: var(--brass);
+  --color-brass-600: var(--brass-600);
+  --color-brass-100: var(--brass-100);
+  --color-line: var(--line);
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-fraunces), ui-serif, Georgia, "Times New Roman", serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  border-color: var(--line);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--parchment);
+  color: var(--text);
+  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Editorial display type for headings */
+.font-display {
+  font-family: var(--font-fraunces), ui-serif, Georgia, serif;
+  font-optical-sizing: auto;
+  letter-spacing: -0.015em;
+}
+
+/* Eyebrow / kicker label */
+.eyebrow {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+/* Hairline rule used between editorial sections */
+.rule-brass {
+  height: 1px;
+  background: linear-gradient(90deg, var(--brass) 0%, transparent 60%);
+}
+
+/* Buttons --------------------------------------------------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  border-radius: 0.5rem;
+  padding: 0.875rem 1.5rem;
+  line-height: 1;
+  transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+.btn-primary {
+  background: var(--ink);
+  color: var(--text-ink);
+  box-shadow: 0 1px 2px rgba(17, 32, 47, 0.18);
+}
+.btn-primary:hover {
+  background: var(--ink-600);
+}
+.btn-brass {
+  background: var(--brass);
+  color: #2a1f0c;
+}
+.btn-brass:hover {
+  background: var(--brass-600);
+  color: #fff;
+}
+.btn-outline {
+  background: transparent;
+  color: var(--ink);
+  border: 1px solid var(--ink);
+}
+.btn-outline:hover {
+  background: var(--ink);
+  color: var(--text-ink);
+}
+.btn-ghost-ink {
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-ink);
+  border: 1px solid var(--line-ink);
+}
+.btn-ghost-ink:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* Card on parchment ---------------------------------------- */
+.card-paper {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 0.75rem;
+}
+
+/* Section helpers ------------------------------------------ */
+.section-ink {
+  background: var(--ink);
+  color: var(--text-ink);
+}
+.section-parchment {
+  background: var(--parchment);
+}
+.section-paper {
+  background: var(--paper);
+}
+
+/* Subtle ink texture (very low-cost radial, no images) */
+.ink-texture {
+  background-color: var(--ink);
+  background-image:
+    radial-gradient(60% 80% at 85% 0%, rgba(176, 134, 66, 0.12) 0%, transparent 60%),
+    radial-gradient(50% 60% at 0% 100%, rgba(255, 255, 255, 0.05) 0%, transparent 55%);
+}
+
+/* Links inside prose */
+.link-ink {
+  color: var(--ink);
+  font-weight: 600;
+}
+.link-ink:hover {
+  color: var(--brass-600);
+}
+
+/* Native details marker reset for FAQ accordions */
+details > summary {
+  list-style: none;
+}
+details > summary::-webkit-details-marker {
+  display: none;
 }

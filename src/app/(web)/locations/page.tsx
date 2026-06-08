@@ -27,42 +27,45 @@ const counties = [
 
 export default function LocationsPage() {
   return (
-    <main className="min-h-screen bg-white">
-      <section className="bg-[#0f2747] py-16 text-white">
-        <div className="mx-auto max-w-4xl px-4 text-center sm:px-6">
-          <h1 className="text-3xl font-bold sm:text-4xl">Where we help in California</h1>
-          <p className="mx-auto mt-4 max-w-2xl text-lg text-slate-300">
+    <main className="min-h-screen bg-[var(--parchment)]">
+      <section className="ink-texture py-20 text-[var(--text-ink)]">
+        <div className="mx-auto max-w-4xl px-4 sm:px-6">
+          <div className="flex items-center gap-3">
+            <span className="h-px w-10 bg-[var(--brass)]" />
+            <span className="eyebrow text-[var(--brass)]">Statewide California</span>
+          </div>
+          <h1 className="font-display mt-6 max-w-2xl text-4xl font-semibold leading-tight text-white sm:text-5xl">
+            Where we help in California
+          </h1>
+          <p className="mt-5 max-w-2xl text-lg leading-relaxed text-[var(--text-ink-muted)]">
             Our forms and guidance are built around California courts and procedures. Each county has
             its own filing process, and court timelines vary by county and case type.
           </p>
-          <Link
-            href="/eligibility"
-            className="mt-8 inline-block rounded-lg bg-white px-6 py-3 font-semibold text-[#0f2747] transition-colors hover:bg-slate-100"
-          >
-            Check Eligibility Free
+          <Link href="/eligibility" className="btn btn-brass mt-8">
+            Check eligibility free
           </Link>
         </div>
       </section>
 
       <section className="py-16">
         <div className="mx-auto max-w-5xl px-4 sm:px-6">
-          <h2 className="text-xl font-bold text-slate-900">Featured areas</h2>
+          <h2 className="font-display text-2xl font-semibold text-[var(--ink)]">Featured areas</h2>
           <div className="mt-6 grid gap-6 sm:grid-cols-2">
             {featured.map((f) => (
               <Link
                 key={f.href}
                 href={f.href}
-                className="block rounded-2xl border border-slate-200 p-6 shadow-sm transition-colors hover:border-[#0f2747]"
+                className="card-paper block p-7 transition-colors hover:border-[var(--brass)]"
               >
-                <h3 className="text-lg font-bold text-slate-900">{f.name}</h3>
-                <p className="mt-1 text-sm text-slate-600">{f.note}</p>
-                <span className="mt-4 inline-block font-semibold text-[#0f2747]">View page &rarr;</span>
+                <h3 className="font-display text-lg font-semibold text-[var(--ink)]">{f.name}</h3>
+                <p className="mt-1 text-sm text-[var(--text-muted)]">{f.note}</p>
+                <span className="link-ink mt-4 inline-block">View page &rarr;</span>
               </Link>
             ))}
           </div>
 
-          <h2 className="mt-14 text-xl font-bold text-slate-900">Other California counties we serve</h2>
-          <p className="mt-2 text-sm text-slate-600">
+          <h2 className="font-display mt-14 text-2xl font-semibold text-[var(--ink)]">Other California counties we serve</h2>
+          <p className="mt-2 text-sm text-[var(--text-muted)]">
             We support record-cleaning paperwork statewide. Start with a free eligibility check for
             your county.
           </p>
@@ -70,7 +73,7 @@ export default function LocationsPage() {
             {counties.map((c) => (
               <span
                 key={c}
-                className="rounded-full border border-slate-200 bg-slate-50 px-4 py-2 text-sm font-medium text-slate-700"
+                className="rounded-full border border-[var(--line)] bg-[var(--paper)] px-4 py-2 text-sm font-medium text-[var(--text)]"
               >
                 {c} County
               </span>

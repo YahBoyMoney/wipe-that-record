@@ -44,19 +44,22 @@ const services = [
 
 export default function ServicesPage() {
   return (
-    <main className="min-h-screen bg-white">
-      <section className="bg-[#0f2747] py-16 text-white">
-        <div className="mx-auto max-w-4xl px-4 text-center sm:px-6">
-          <h1 className="text-3xl font-bold sm:text-4xl">What kind of record help do you need?</h1>
-          <p className="mx-auto mt-4 max-w-2xl text-lg text-slate-300">
+    <main className="min-h-screen bg-[var(--parchment)]">
+      <section className="ink-texture py-20 text-[var(--text-ink)]">
+        <div className="mx-auto max-w-4xl px-4 sm:px-6">
+          <div className="flex items-center gap-3">
+            <span className="h-px w-10 bg-[var(--brass)]" />
+            <span className="eyebrow text-[var(--brass)]">Relief paths</span>
+          </div>
+          <h1 className="font-display mt-6 max-w-2xl text-4xl font-semibold leading-tight text-white sm:text-5xl">
+            What kind of record help do you need?
+          </h1>
+          <p className="mt-5 max-w-2xl text-lg leading-relaxed text-[var(--text-ink-muted)]">
             We help Californians pursue several forms of record relief. True expungement does not exist
             in California, so we focus on the options that may actually apply to your case.
           </p>
-          <Link
-            href="/eligibility"
-            className="mt-8 inline-block rounded-lg bg-white px-6 py-3 font-semibold text-[#0f2747] transition-colors hover:bg-slate-100"
-          >
-            Check Eligibility Free
+          <Link href="/eligibility" className="btn btn-brass mt-8">
+            Check eligibility free
           </Link>
         </div>
       </section>
@@ -65,30 +68,27 @@ export default function ServicesPage() {
         <div className="mx-auto max-w-5xl px-4 sm:px-6">
           <div className="grid gap-6 md:grid-cols-2">
             {services.map((s) => (
-              <div key={s.href} className="rounded-2xl border border-slate-200 p-6 shadow-sm">
-                <h2 className="text-xl font-bold text-slate-900">{s.title}</h2>
-                <dl className="mt-4 space-y-3 text-sm">
+              <div key={s.href} className="card-paper flex flex-col p-7">
+                <h2 className="font-display text-xl font-semibold text-[var(--ink)]">{s.title}</h2>
+                <dl className="mt-5 space-y-4 text-sm">
                   <div>
-                    <dt className="font-semibold text-slate-700">Who it&rsquo;s for</dt>
-                    <dd className="text-slate-600">{s.forWho}</dd>
+                    <dt className="eyebrow text-[var(--brass-600)]">Who it&rsquo;s for</dt>
+                    <dd className="mt-1 text-[var(--text-muted)]">{s.forWho}</dd>
                   </div>
                   <div>
-                    <dt className="font-semibold text-slate-700">What it can help with</dt>
-                    <dd className="text-slate-600">{s.helps}</dd>
+                    <dt className="eyebrow text-[var(--brass-600)]">What it can help with</dt>
+                    <dd className="mt-1 text-[var(--text-muted)]">{s.helps}</dd>
                   </div>
                   <div>
-                    <dt className="font-semibold text-slate-700">What it cannot guarantee</dt>
-                    <dd className="text-slate-600">{s.cannot}</dd>
+                    <dt className="eyebrow text-[var(--brass-600)]">What it cannot guarantee</dt>
+                    <dd className="mt-1 text-[var(--text-muted)]">{s.cannot}</dd>
                   </div>
                   <div>
-                    <dt className="font-semibold text-slate-700">Which plan usually fits</dt>
-                    <dd className="text-slate-600">{s.fits}</dd>
+                    <dt className="eyebrow text-[var(--brass-600)]">Which plan usually fits</dt>
+                    <dd className="mt-1 text-[var(--text-muted)]">{s.fits}</dd>
                   </div>
                 </dl>
-                <Link
-                  href={s.href}
-                  className="mt-5 inline-block font-semibold text-[#0f2747] hover:underline"
-                >
+                <Link href={s.href} className="link-ink mt-6 inline-block">
                   Learn more &rarr;
                 </Link>
               </div>

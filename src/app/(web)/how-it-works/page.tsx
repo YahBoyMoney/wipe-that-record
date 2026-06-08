@@ -28,11 +28,15 @@ const steps = [
 
 export default function HowItWorksPage() {
   return (
-    <main className="min-h-screen bg-white">
-      <section className="bg-[#0f2747] py-16 text-white">
-        <div className="mx-auto max-w-3xl px-4 text-center sm:px-6">
-          <h1 className="text-3xl font-bold sm:text-4xl">How it works</h1>
-          <p className="mx-auto mt-4 max-w-2xl text-lg text-slate-300">
+    <main className="min-h-screen bg-[var(--parchment)]">
+      <section className="ink-texture py-20 text-[var(--text-ink)]">
+        <div className="mx-auto max-w-3xl px-4 sm:px-6">
+          <div className="flex items-center gap-3">
+            <span className="h-px w-10 bg-[var(--brass)]" />
+            <span className="eyebrow text-[var(--brass)]">The process</span>
+          </div>
+          <h1 className="font-display mt-6 text-4xl font-semibold leading-tight text-white sm:text-5xl">How it works</h1>
+          <p className="mt-5 max-w-2xl text-lg leading-relaxed text-[var(--text-ink-muted)]">
             A clear, four-step process for pursuing California record relief. You can get started in
             minutes; court approval depends on the court, case type, and eligibility.
           </p>
@@ -41,31 +45,28 @@ export default function HowItWorksPage() {
 
       <section className="py-16">
         <div className="mx-auto max-w-3xl px-4 sm:px-6">
-          <ol className="space-y-8">
+          <ol className="space-y-6">
             {steps.map((step, i) => (
-              <li key={step.title} className="flex gap-5">
-                <span className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-[#0f2747] font-bold text-white">
+              <li key={step.title} className="card-paper flex gap-5 p-6">
+                <span className="font-display flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full border border-[var(--brass)] text-lg font-semibold text-[var(--brass-600)]">
                   {i + 1}
                 </span>
                 <div>
-                  <h2 className="text-lg font-bold text-slate-900">{step.title}</h2>
-                  <p className="mt-1 text-slate-600">{step.body}</p>
+                  <h2 className="font-display text-lg font-semibold text-[var(--ink)]">{step.title}</h2>
+                  <p className="mt-1 leading-relaxed text-[var(--text-muted)]">{step.body}</p>
                 </div>
               </li>
             ))}
           </ol>
 
-          <div className="mt-12 rounded-2xl bg-slate-50 p-6 text-center">
-            <p className="font-semibold text-slate-900">Ready to see your options?</p>
-            <Link
-              href="/eligibility"
-              className="mt-4 inline-block rounded-lg bg-[#0f2747] px-6 py-3 font-semibold text-white transition-colors hover:bg-[#163a66]"
-            >
-              Check Eligibility Free
+          <div className="mt-12 rounded-xl border border-[var(--brass)]/30 bg-[var(--brass-100)]/40 p-7 text-center">
+            <p className="font-display text-xl font-semibold text-[var(--ink)]">Ready to see your options?</p>
+            <Link href="/eligibility" className="btn btn-primary mt-5">
+              Check eligibility free
             </Link>
           </div>
 
-          <p className="mt-8 text-sm text-slate-500">
+          <p className="mt-8 text-sm leading-relaxed text-[var(--text-muted)]">
             This page is general information and not legal advice. True expungement does not exist in
             California; eligible cases may qualify for dismissal, sealing, felony reduction, or other
             relief. Court timelines vary by county.

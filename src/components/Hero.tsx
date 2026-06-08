@@ -14,139 +14,129 @@ export function Hero({ variant = 'a' }: HeroProps) {
 
   const headline =
     variant === 'b'
-      ? 'Clean Up Your California Record the Right Way'
-      : 'Find Out How to Clean Up Your California Record'
+      ? 'Your record should not keep deciding your future.'
+      : 'An old record is still costing you. California law may let you change that.'
 
   return (
-    <section className="relative flex items-center overflow-hidden bg-gradient-to-br from-slate-50 via-white to-slate-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
-      <div className="relative z-10 mx-auto max-w-7xl px-4 py-20 lg:py-28">
-        <div className="grid items-center gap-16 lg:grid-cols-2">
-          {/* Left column - Hero content */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="space-y-7"
-          >
-            <div className="inline-flex items-center gap-2 rounded-full bg-slate-100 px-4 py-1.5 text-sm font-medium text-slate-700 dark:bg-slate-800 dark:text-slate-200">
-              <span className="h-2 w-2 rounded-full bg-emerald-500"></span>
-              California-focused record-cleaning support
-            </div>
+    <section className="ink-texture relative overflow-hidden text-[var(--text-ink)]">
+      <div className="relative z-10 mx-auto grid max-w-7xl gap-14 px-4 py-20 sm:px-6 lg:grid-cols-12 lg:gap-10 lg:py-28">
+        {/* Left column — editorial statement */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="lg:col-span-7 lg:pr-8"
+        >
+          <div className="flex items-center gap-3">
+            <span className="h-px w-10 bg-[var(--brass)]" />
+            <span className="eyebrow text-[var(--brass)]">California Record Relief · Statewide</span>
+          </div>
 
-            <h1 className="text-4xl font-bold leading-tight tracking-tight text-slate-900 dark:text-white lg:text-5xl">
-              {headline}
-            </h1>
+          <h1 className="font-display mt-7 text-4xl font-semibold leading-[1.08] text-white sm:text-5xl lg:text-[3.4rem]">
+            {headline}
+          </h1>
 
-            <p className="max-w-xl text-lg leading-relaxed text-slate-600 dark:text-slate-300">
-              Take a private 2-minute eligibility check to see which California record-cleaning
-              options may apply to your case &mdash; including dismissal, sealing, felony reduction,
-              or attorney-managed support.
-            </p>
+          <p className="mt-7 max-w-xl text-lg leading-relaxed text-[var(--text-ink-muted)]">
+            A past conviction or arrest can quietly block jobs, housing, and professional licenses
+            for years. California offers several relief paths &mdash; dismissal, record sealing,
+            felony reduction, and more. A private 2-minute review shows which ones may apply to your
+            case.
+          </p>
 
-            <div className="flex flex-col gap-4 sm:flex-row">
-              <motion.button
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                onClick={() => setShowModal(true)}
-                className="group rounded-xl bg-[#0f2747] px-8 py-4 text-lg font-semibold text-white shadow-sm transition-all duration-300 hover:bg-[#163a66]"
-                autoFocus
-              >
-                <span className="flex items-center justify-center gap-2">
-                  Check Eligibility Free
-                  <svg
-                    className="h-5 w-5 transition-transform group-hover:translate-x-1"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
-                  </svg>
-                </span>
-              </motion.button>
+          <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+            <motion.button
+              whileTap={{ scale: 0.985 }}
+              onClick={() => setShowModal(true)}
+              className="btn btn-brass text-base"
+              autoFocus
+            >
+              Check your eligibility — free
+              <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
+            </motion.button>
 
-              <Link
-                href="/#plans"
-                className="rounded-xl border-2 border-slate-300 px-8 py-4 text-center text-lg font-semibold text-slate-800 transition-all duration-300 hover:border-slate-400 hover:bg-slate-50 dark:border-slate-600 dark:text-slate-200 dark:hover:bg-slate-800"
-              >
-                See Pricing
-              </Link>
-            </div>
+            <Link href="/#plans" className="btn btn-ghost-ink text-base">
+              See pricing &amp; process
+            </Link>
+          </div>
 
-            <p className="text-sm text-slate-500 dark:text-slate-400">
-              Private assessment. California-focused forms. Attorney review available.
-            </p>
+          <p className="mt-5 text-sm text-[var(--text-ink-muted)]">
+            Private assessment. No payment to find out where you stand.
+          </p>
 
-            {/* Trust indicators */}
-            <div className="flex flex-wrap items-center gap-x-6 gap-y-3 border-t border-slate-200 pt-7 dark:border-slate-700">
-              <div className="flex items-center gap-2 text-sm font-medium text-slate-700 dark:text-slate-200">
-                <svg className="h-5 w-5 text-emerald-500" fill="currentColor" viewBox="0 0 20 20">
+          {/* Trust row */}
+          <div className="mt-10 grid max-w-lg grid-cols-1 gap-x-8 gap-y-4 border-t border-[var(--line-ink)] pt-8 sm:grid-cols-2">
+            {[
+              'California courts & procedures only',
+              'Confidential — your details stay private',
+              'Three clear paths: DIY, Review, Full Service',
+              'Refund if your case does not qualify after review',
+            ].map((item) => (
+              <div key={item} className="flex items-start gap-2.5 text-sm font-medium text-[var(--text-ink)]">
+                <svg className="mt-0.5 h-4 w-4 flex-shrink-0 text-[var(--brass)]" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                 </svg>
-                Refund if your case does not qualify after review
+                {item}
               </div>
-              <div className="flex items-center gap-2 text-sm font-medium text-slate-700 dark:text-slate-200">
-                <svg className="h-5 w-5 text-[#0f2747] dark:text-blue-400" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
-                </svg>
-                100% confidential
-              </div>
-            </div>
-          </motion.div>
+            ))}
+          </div>
+        </motion.div>
 
-          {/* Right column - process / proof card */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.15 }}
-            className="relative"
-          >
-            <div className="rounded-2xl border border-slate-200 bg-white p-8 shadow-xl dark:border-slate-700 dark:bg-slate-800">
-              <h2 className="text-lg font-semibold text-slate-900 dark:text-white">
-                How the process works
-              </h2>
-              <ol className="mt-6 space-y-5">
-                {[
-                  {
-                    title: 'Check your eligibility',
-                    body: 'Answer a few private questions about your case and county.',
-                  },
-                  {
-                    title: 'Get your recommended path',
-                    body: 'See whether a DIY kit, expert review, or full service fits your situation.',
-                  },
-                  {
-                    title: 'Prepare and file',
-                    body: 'Get California-focused forms and instructions. Court timelines vary by county.',
-                  },
-                ].map((step, i) => (
-                  <li key={step.title} className="flex gap-4">
-                    <span className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-[#0f2747] text-sm font-semibold text-white">
-                      {i + 1}
-                    </span>
-                    <div>
-                      <p className="font-semibold text-slate-900 dark:text-white">{step.title}</p>
-                      <p className="text-sm text-slate-600 dark:text-slate-300">{step.body}</p>
-                    </div>
-                  </li>
-                ))}
-              </ol>
+        {/* Right column — process card */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.12 }}
+          className="lg:col-span-5"
+        >
+          <div className="card-paper p-8 text-[var(--text)] shadow-[0_24px_60px_-30px_rgba(17,32,47,0.55)]">
+            <span className="eyebrow text-[var(--brass-600)]">How it works</span>
+            <h2 className="font-display mt-2 text-xl font-semibold text-[var(--ink)]">
+              From uncertainty to a filing plan
+            </h2>
+            <ol className="mt-7 space-y-6">
+              {[
+                {
+                  title: 'Tell us about your case',
+                  body: 'A few private questions about your conviction, county, and goals.',
+                },
+                {
+                  title: 'See the path that fits',
+                  body: 'We route you to DIY, expert review, or full service based on complexity.',
+                },
+                {
+                  title: 'Prepare and file',
+                  body: 'California-focused forms and instructions. Court timelines vary by county.',
+                },
+              ].map((step, i) => (
+                <li key={step.title} className="flex gap-4">
+                  <span className="font-display flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border border-[var(--brass)] text-sm font-semibold text-[var(--brass-600)]">
+                    {i + 1}
+                  </span>
+                  <div>
+                    <p className="font-semibold text-[var(--ink)]">{step.title}</p>
+                    <p className="mt-0.5 text-sm text-[var(--text-muted)]">{step.body}</p>
+                  </div>
+                </li>
+              ))}
+            </ol>
 
-              <div className="mt-7 rounded-xl bg-slate-50 p-4 text-sm text-slate-600 dark:bg-slate-900/40 dark:text-slate-300">
-                DIY Record-Cleaning Kit &mdash; <span className="font-semibold text-slate-900 dark:text-white">$97</span>{' '}
-                <span className="text-slate-400 line-through">$147</span>. Instant access. 30-day refund if
-                your case does not qualify after review.
-              </div>
+            <div className="mt-7 rounded-lg bg-[var(--parchment)] p-4 text-sm text-[var(--text-muted)]">
+              DIY Record-Cleaning Kit &mdash;{' '}
+              <span className="font-semibold text-[var(--ink)]">$97</span>{' '}
+              <span className="text-[var(--text-muted)]/70 line-through">$147</span>. Instant access.
+              30-day refund if your case does not qualify after review.
             </div>
-          </motion.div>
-        </div>
+          </div>
+        </motion.div>
       </div>
 
-      {/* Eligibility modal with lead capture form */}
       {showModal && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/55 p-4"
         >
           <LeadCaptureForm
             variant="modal"
