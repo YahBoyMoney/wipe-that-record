@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getPayloadHMR } from '@payloadcms/next/utilities'
+import { getPayload } from 'payload'
 import config from '../../../../payload.config'
 import { SalesAdvisorBot, sendTelegramMessage } from '@/lib/ai-sales-bot'
 
-const payload = await getPayloadHMR({ config })
+export const dynamic = 'force-dynamic'
 
 export async function GET(request: NextRequest) {
   try {
@@ -97,6 +97,7 @@ async function collectBusinessMetrics() {
   tomorrow.setDate(tomorrow.getDate() + 1)
 
   try {
+    const payload = await getPayload({ config })
     // Get today's leads
     const todayLeads = await payload.find({
       collection: 'leads',
