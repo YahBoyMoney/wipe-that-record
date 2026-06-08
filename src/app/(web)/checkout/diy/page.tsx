@@ -166,7 +166,7 @@ export default function DIYCheckoutPage() {
                   <span className="font-semibold">$97.00</span>
                 </div>
                 <div className="flex justify-between items-center py-2 border-b border-[var(--line)]">
-                  <span className="text-[var(--brass-600)]">Launch discount</span>
+                  <span className="text-[var(--brass-600)]">Current price savings</span>
                   <span className="font-semibold text-[var(--brass-600)]">-$50.00</span>
                 </div>
                 <div className="flex justify-between items-center py-2 text-lg font-bold">
