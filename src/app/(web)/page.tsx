@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { Hero } from '@/components/Hero';
 import { PlanCard } from '@/components/PlanCard';
 import { LeadCaptureForm } from '@/components/LeadCaptureForm';
+import { LocalCourthouses } from '@/components/LocalCourthouses';
 import { track } from '@/lib/track';
 
 const fadeUp = {
@@ -444,6 +445,9 @@ export default function LandingPage() {
             </motion.div>
           </div>
         </section>
+
+        {/* Local trust — Inland Empire courthouse coverage */}
+        <LocalCourthouses sourcePage="/" />
 
         {/* FAQ tied to conversion */}
         <section className="section-paper border-t border-[var(--line)] py-20 px-4 sm:px-6">
