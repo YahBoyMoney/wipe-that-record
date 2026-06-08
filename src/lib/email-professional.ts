@@ -203,13 +203,13 @@ export const professionalEmailTemplates = {
               </p>
             </div>
             
-            <!-- Social Proof -->
+            <!-- Reassurance -->
             <div style="text-align: center; margin: 40px 0;">
               <p style="color: #6b7280; font-size: 16px; margin: 0 0 15px 0;">
-                ⭐⭐⭐⭐⭐ <strong>4.9/5 rating</strong> from 1,847+ satisfied customers
+                California-focused record-cleaning support, backed by our 30-day refund policy.
               </p>
-              <p style="color: #6b7280; font-size: 14px; font-style: italic; margin: 0;">
-                "The DIY kit made the process so much easier than I expected!" - Sarah M.
+              <p style="color: #6b7280; font-size: 14px; margin: 0;">
+                Not sure where to start? Reply to this email and we'll help point you in the right direction.
               </p>
             </div>
           </div>

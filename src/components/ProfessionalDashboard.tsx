@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { Line, Bar, Doughnut, Area } from 'react-chartjs-2';
+import { Line, Bar, Doughnut } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -340,7 +340,7 @@ const ProfessionalDashboard: React.FC = () => {
 
       {/* KPI Cards */}
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        {kpiData.map((kpi, index) => (
+        {kpiData.map((kpi: KPICardProps, index: number) => (
           <KPICard key={index} {...kpi} />
         ))}
       </div>

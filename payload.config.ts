@@ -16,6 +16,25 @@ import EmailSequences from './src/collections/EmailSequences'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
+// Only connect to MongoDB when DATABASE_URI is a valid Mongo connection string.
+// Anything else (missing, empty, or a non-Mongo URI such as Postgres) resolves to
+// `false`, which tells the Mongoose adapter to start Payload without connecting.
+// This prevents build-time crashes during Next.js "Collecting page data" when an
+// invalid/non-Mongo DATABASE_URI is present, while preserving normal runtime
+// behavior whenever a real mongodb:// or mongodb+srv:// URI is configured.
+const rawDatabaseUri = process.env.DATABASE_URI?.trim()
+const databaseUrl: string | false =
+  rawDatabaseUri && /^mongodb(\+srv)?:\/\//.test(rawDatabaseUri)
+    ? rawDatabaseUri
+    : false
+
+if (databaseUrl === false && rawDatabaseUri) {
+  console.warn(
+    '[payload.config] DATABASE_URI is not a valid MongoDB connection string ' +
+      '(expected mongodb:// or mongodb+srv://). Starting Payload without a database connection.',
+  )
+}
+
 export default buildConfig({
   serverURL: process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000',
   admin: {
@@ -154,7 +173,7 @@ export default buildConfig({
     outputFile: path.resolve(__dirname, './src/payload-types.ts'),
   },
   db: mongooseAdapter({
-    url: process.env.DATABASE_URI || '',
+    url: databaseUrl,
   }),
   sharp,
   plugins: [

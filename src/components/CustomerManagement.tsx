@@ -15,6 +15,7 @@ import {
   CalendarDaysIcon,
   CurrencyDollarIcon,
   UserIcon,
+  UsersIcon,
   MapPinIcon,
   TagIcon,
   ChartBarIcon,
@@ -196,7 +197,7 @@ const CustomerManagement: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    let filtered = customers.filter(customer => {
+    const filtered = customers.filter(customer => {
       const matchesSearch = 
         customer.name.toLowerCase().includes(filters.search.toLowerCase()) ||
         customer.email.toLowerCase().includes(filters.search.toLowerCase()) ||
@@ -212,9 +213,9 @@ const CustomerManagement: React.FC = () => {
 
     // Sort customers
     filtered.sort((a, b) => {
-      let aValue = a[sortBy as keyof Customer];
-      let bValue = b[sortBy as keyof Customer];
-      
+      let aValue: string | number = (a[sortBy as keyof Customer] ?? '') as string | number;
+      let bValue: string | number = (b[sortBy as keyof Customer] ?? '') as string | number;
+
       if (sortBy === 'registrationDate' || sortBy === 'lastOrderDate') {
         aValue = new Date(aValue as string).getTime();
         bValue = new Date(bValue as string).getTime();

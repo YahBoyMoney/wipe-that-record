@@ -1,42 +1,31 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import Link from 'next/link';
+
+const included = [
+  'A specialist looks up your case record',
+  'Eligibility verification and case review',
+  'Your California forms completed for you',
+  'Accuracy check before you file',
+  'Filing guidance and email support',
+];
+
+const diyRisks = [
+  'Choosing the wrong form for your relief path',
+  'Missing signatures or required attachments',
+  'Filing at the wrong courthouse',
+  'Re-filing delays if paperwork is rejected',
+];
 
 export default function ReviewCheckoutPage() {
-  const [timeLeft, setTimeLeft] = useState(1800);
-  const [showExitIntent, setShowExitIntent] = useState(false);
   const [leadData, setLeadData] = useState<any>(null);
-  
+
   useEffect(() => {
     const stored = sessionStorage.getItem('leadData');
     if (stored) {
       setLeadData(JSON.parse(stored));
     }
   }, []);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft(prev => prev <= 1 ? 0 : prev - 1);
-    }, 1000);
-    return () => clearInterval(timer);
-  }, []);
-
-  useEffect(() => {
-    const handleMouseLeave = (e: MouseEvent) => {
-      if (e.clientY <= 0) {
-        setShowExitIntent(true);
-      }
-    };
-
-    document.addEventListener('mouseleave', handleMouseLeave);
-    return () => document.removeEventListener('mouseleave', handleMouseLeave);
-  }, []);
-
-  const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
-  };
 
   const handleCheckout = async () => {
     try {
@@ -48,12 +37,12 @@ export default function ReviewCheckoutPage() {
           amount: 297,
           email: leadData?.email || 'customer@example.com',
           fullName: leadData?.fullName || 'Customer',
-          leadId: leadData?.id || ''
-        })
+          leadId: leadData?.id || '',
+        }),
       });
-      
+
       const result = await response.json();
-      
+
       if (result.url) {
         window.location.href = result.url;
       } else {
@@ -67,212 +56,151 @@ export default function ReviewCheckoutPage() {
   };
 
   return (
-    <>
-      {/* Exit Intent Modal */}
-      {showExitIntent && (
-        <motion.div 
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4"
-        >
-          <motion.div 
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            className="bg-white rounded-2xl max-w-md w-full p-8 shadow-2xl text-center"
-          >
-            <div className="text-6xl mb-4">🎯</div>
-            <h3 className="text-2xl font-bold mb-4 text-red-600">Before You Go...</h3>
-            <p className="text-gray-600 mb-6">
-              Get an additional 20% off your Expert Review! 
-              Use code <strong>EXPERT20</strong> - Only for next 5 minutes!
-            </p>
-            <div className="flex gap-3">
-              <button 
-                onClick={() => {
-                  setShowExitIntent(false);
-                  handleCheckout();
-                }}
-                className="flex-1 bg-red-600 hover:bg-red-700 text-white py-3 rounded-lg font-semibold transition-colors"
-              >
-                Apply EXPERT20 & Continue
-              </button>
-              <button 
-                onClick={() => setShowExitIntent(false)}
-                className="flex-1 border border-gray-300 hover:bg-gray-50 py-3 rounded-lg font-semibold text-gray-700 transition-colors"
-              >
-                No Thanks
-              </button>
-            </div>
-          </motion.div>
-        </motion.div>
-      )}
+    <div className="min-h-screen bg-[var(--parchment)]">
+      {/* Header */}
+      <header className="border-b border-[var(--line)] bg-[var(--paper)]">
+        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
+          <Link href="/" className="font-display text-xl font-semibold text-[var(--ink)]">
+            Wipe That Record
+          </Link>
+          <div className="flex items-center gap-2 text-[var(--brass-600)]">
+            <svg className="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+              <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
+            </svg>
+            <span className="font-semibold">Secure checkout</span>
+          </div>
+        </div>
+      </header>
 
-      <div className="min-h-screen bg-gray-50">
-        {/* Urgency Banner */}
-        <div className="bg-orange-600 text-white py-3 px-4 text-center">
-          <div className="flex items-center justify-center gap-4 text-sm font-semibold">
-            <span>🎯 EXPERT REVIEW SPECIAL ENDS IN:</span>
-            <div className="bg-orange-700 px-3 py-1 rounded font-mono">
-              {formatTime(timeLeft)}
-            </div>
-            <span>Price goes up to $300 after timer!</span>
+      <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6">
+        <div className="mx-auto max-w-2xl text-center">
+          <span className="eyebrow text-[var(--brass-600)]">Expert Review &mdash; $297</span>
+          <h1 className="font-display mt-3 text-3xl font-semibold text-[var(--ink)] sm:text-4xl">
+            {leadData?.fullName ? `${leadData.fullName}, have ` : 'Have '}
+            a specialist review your case before you file
+          </h1>
+          <p className="mt-4 text-lg leading-relaxed text-[var(--text-muted)]">
+            A small mistake on your paperwork can lead to a rejection and weeks of delay. Expert Review
+            adds a specialist case look-up, completed forms, and an accuracy check before filing.
+          </p>
+        </div>
+
+        <div className="mt-12 grid gap-6 md:grid-cols-2">
+          {/* Common DIY pitfalls */}
+          <div className="card-paper p-7">
+            <h2 className="font-display text-lg font-semibold text-[var(--ink)]">
+              Common filing pitfalls Expert Review helps you avoid
+            </h2>
+            <ul className="mt-5 space-y-3">
+              {diyRisks.map((r) => (
+                <li key={r} className="flex items-start gap-3 text-sm text-[var(--text)]">
+                  <svg className="mt-0.5 h-4 w-4 flex-shrink-0 text-[var(--brass-600)]" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                  </svg>
+                  {r}
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* What's included */}
+          <div className="section-ink rounded-xl p-7 text-[var(--text-ink)] ring-1 ring-[var(--brass)]/40">
+            <h2 className="font-display text-lg font-semibold text-white">What Expert Review includes</h2>
+            <ul className="mt-5 space-y-3">
+              {included.map((f) => (
+                <li key={f} className="flex items-start gap-3 text-sm text-[var(--text-ink)]">
+                  <svg className="mt-0.5 h-4 w-4 flex-shrink-0 text-[var(--brass)]" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                  </svg>
+                  {f}
+                </li>
+              ))}
+            </ul>
           </div>
         </div>
 
-        <div className="max-w-4xl mx-auto px-4 py-12">
-          <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold text-gray-900 mb-4">
-              {leadData?.fullName ? `${leadData.fullName}, ` : ""}
-              Get Expert Review for Just $297
-              <span className="text-orange-600"> (Expert Assistance!)</span>
-            </h1>
-            <p className="text-xl text-gray-600">
-              Don't risk costly mistakes. Have a licensed attorney review your case before filing.
-            </p>
+        {/* Checkout box */}
+        <div className="mx-auto mt-10 max-w-md">
+          <div className="card-paper p-8 text-center ring-1 ring-[var(--brass)]/40">
+            <div className="font-display text-4xl font-semibold text-[var(--ink)]">$297</div>
+            <div className="mt-1 text-[var(--text-muted)]">One-time payment &middot; Expert Review</div>
+            <button
+              onClick={handleCheckout}
+              className="btn btn-primary mt-6 w-full text-lg"
+            >
+              Get Expert Review &mdash; $297
+            </button>
+            <div className="mt-4 flex items-center justify-center gap-2 text-sm text-[var(--text-muted)]">
+              <svg className="h-4 w-4 text-[var(--brass-600)]" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
+              </svg>
+              <span>Secure 256-bit SSL encryption</span>
+            </div>
           </div>
+        </div>
 
-          <div className="grid md:grid-cols-2 gap-8">
-            {/* Risk Warning */}
-            <div className="bg-red-50 p-6 rounded-xl border-2 border-red-200">
-              <h3 className="font-bold text-red-800 text-lg mb-3">
-                ⚠️ Why 95% of DIY Filers Need Expert Review
-              </h3>
-              <ul className="text-red-700 text-sm space-y-2">
-                <li>• Wrong forms = Automatic rejection</li>
-                <li>• Missing signatures = Case dismissed</li>
-                <li>• Filing errors = $1,400+ in refiling fees</li>
-                <li>• Only 65% DIY success rate vs 96% with expert review</li>
+        {/* Compare options */}
+        <div className="mt-14">
+          <h2 className="font-display text-center text-2xl font-semibold text-[var(--ink)]">
+            Compare your options
+          </h2>
+          <div className="mt-8 grid gap-6 md:grid-cols-3">
+            {/* DIY */}
+            <div className="card-paper flex flex-col p-7">
+              <h3 className="font-display text-lg font-semibold text-[var(--ink)]">DIY Kit &mdash; $97</h3>
+              <ul className="mt-4 space-y-2 text-sm text-[var(--text-muted)]">
+                <li>California forms and instructions</li>
+                <li>Samples to guide your paperwork</li>
+                <li>You prepare and file yourself</li>
               </ul>
-            </div>
-
-            {/* Value Stack */}
-            <div className="bg-white p-6 rounded-xl shadow-lg">
-              <h3 className="font-bold text-green-800 text-lg mb-3">
-                ✅ Expert Review Includes (High Value)
-              </h3>
-              <ul className="text-green-700 text-sm space-y-2">
-                <li>• Licensed attorney reviews your case</li>
-                <li>• Personalized eligibility assessment</li>
-                <li>• Form accuracy verification</li>
-                <li>• Strategic filing recommendations</li>
-                <li>• 30-day money-back guarantee</li>
-              </ul>
-              <div className="mt-4 p-3 bg-yellow-50 rounded text-center">
-                <div className="text-lg font-bold text-green-600">Professional Service - $297</div>
-              </div>
-            </div>
-          </div>
-
-          {/* Success Stories */}
-          <div className="mt-12 bg-white p-8 rounded-xl shadow-lg">
-            <h3 className="text-2xl font-bold mb-6 text-center">⭐ Success Stories</h3>
-            <div className="grid md:grid-cols-2 gap-6">
-              <div className="border-l-4 border-orange-500 pl-4 bg-orange-50 p-4 rounded-r-lg">
-                <div className="flex mb-2">
-                  {[...Array(5)].map((_, i) => (
-                    <span key={i} className="text-yellow-400">★</span>
-                  ))}
-                </div>
-                <p className="text-gray-700 italic mb-2">
-                  "The attorney caught 3 critical errors that would have gotten my case rejected!"
-                </p>
-                <div className="text-sm text-gray-600">- Maria L., Teacher, Fresno CA</div>
-              </div>
-              <div className="border-l-4 border-orange-500 pl-4 bg-orange-50 p-4 rounded-r-lg">
-                <div className="flex mb-2">
-                  {[...Array(5)].map((_, i) => (
-                    <span key={i} className="text-yellow-400">★</span>
-                  ))}
-                </div>
-                <p className="text-gray-700 italic mb-2">
-                  "Almost filed DIY but attorney found I wasn't eligible - saved me $1,400!"
-                </p>
-                <div className="text-sm text-gray-600">- David K., Software Engineer, SF</div>
-              </div>
-            </div>
-          </div>
-
-          {/* Checkout Button */}
-          <div className="mt-12 text-center">
-            <div className="bg-blue-50 p-8 rounded-2xl border-2 border-blue-200 max-w-md mx-auto">
-              <h3 className="text-2xl font-bold mb-4">🛡️ 96% Success Rate</h3>
-              <div className="mb-6">
-                <div className="text-3xl font-bold text-green-600">$297</div>
-                <div className="text-sm text-gray-800 font-medium">Professional Expert Review</div>
-              </div>
               <button
-                onClick={handleCheckout}
-                className="w-full bg-orange-600 hover:bg-orange-700 text-white py-4 px-6 rounded-lg font-bold text-lg transition-colors mb-4"
+                onClick={() => (window.location.href = '/checkout/diy')}
+                className="btn btn-outline mt-auto w-full pt-3"
               >
-                🎯 Get Expert Review Now - $297
+                Choose DIY
               </button>
-              <div className="text-xs text-gray-800 font-medium">
-                ⚡ 96% success rate • 30-day guarantee • SSL secured
-              </div>
             </div>
-          </div>
 
-          {/* Comparison */}
-          <div className="mt-12 bg-white p-8 rounded-xl shadow-lg">
-            <h3 className="text-2xl font-bold mb-6 text-center">📊 Compare Your Options</h3>
-            <div className="grid md:grid-cols-3 gap-6">
-              {/* DIY */}
-              <div className="border p-4 rounded-lg">
-                <h4 className="font-bold text-lg mb-3">DIY Service - $97</h4>
-                <ul className="text-sm space-y-2 mb-4">
-                  <li>✅ Forms & instructions</li>
-                  <li>❌ No attorney review</li>
-                  <li>❌ 65% success rate</li>
-                  <li>❌ High refiling risk</li>
-                </ul>
-                <button 
-                  onClick={() => window.location.href = '/checkout/diy'}
-                  className="w-full border border-gray-300 hover:bg-gray-50 py-2 rounded text-sm"
-                >
-                  Choose DIY
-                </button>
-              </div>
+            {/* Expert Review */}
+            <div className="card-paper relative flex flex-col p-7 ring-1 ring-[var(--brass)]/50">
+              <span className="eyebrow absolute -top-3 left-7 rounded-full bg-[var(--brass)] px-3 py-1 text-[10px] text-[#2a1f0c]">
+                Most chosen
+              </span>
+              <h3 className="font-display text-lg font-semibold text-[var(--ink)]">Expert Review &mdash; $297</h3>
+              <ul className="mt-4 space-y-2 text-sm text-[var(--text-muted)]">
+                <li>Everything in DIY</li>
+                <li>Specialist case look-up</li>
+                <li>Forms completed and checked for you</li>
+              </ul>
+              <button onClick={handleCheckout} className="btn btn-primary mt-auto w-full">
+                Get Expert Review
+              </button>
+            </div>
 
-              {/* Expert Review */}
-              <div className="border-2 border-orange-500 p-4 rounded-lg bg-orange-50 relative">
-                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-orange-500 text-white px-3 py-1 rounded text-xs font-bold">
-                  BEST VALUE
-                </div>
-                <h4 className="font-bold text-lg mb-3 text-orange-700">Expert Review - $297</h4>
-                <ul className="text-sm space-y-2 mb-4">
-                  <li>✅ Everything in DIY</li>
-                  <li>✅ Attorney case review</li>
-                  <li>✅ 96% success rate</li>
-                  <li>✅ Minimal refiling risk</li>
-                </ul>
-                <button 
-                  onClick={handleCheckout}
-                  className="w-full bg-orange-600 hover:bg-orange-700 text-white py-2 rounded text-sm"
-                >
-                  Get Expert Review
-                </button>
-              </div>
-
-              {/* Full Service */}
-              <div className="border p-4 rounded-lg">
-                <h4 className="font-bold text-lg mb-3">Full Service - $1,497</h4>
-                <ul className="text-sm space-y-2 mb-4">
-                  <li>✅ Everything done for you</li>
-                  <li>✅ Attorney handles filing</li>
-                  <li>✅ 99% success rate</li>
-                  <li>✅ Zero work required</li>
-                </ul>
-                <button 
-                  onClick={() => window.location.href = '/checkout/full-service'}
-                  className="w-full bg-purple-600 hover:bg-purple-700 text-white py-2 rounded text-sm"
-                >
-                  Go Full Service
-                </button>
-              </div>
+            {/* Full Service */}
+            <div className="card-paper flex flex-col p-7">
+              <h3 className="font-display text-lg font-semibold text-[var(--ink)]">Full Service &mdash; $1,497</h3>
+              <ul className="mt-4 space-y-2 text-sm text-[var(--text-muted)]">
+                <li>Attorney-managed from prep to filing</li>
+                <li>Court appearances handled if required</li>
+                <li>Direct attorney access</li>
+              </ul>
+              <button
+                onClick={() => (window.location.href = '/checkout/full-service')}
+                className="btn btn-outline mt-auto w-full"
+              >
+                Go Full Service
+              </button>
             </div>
           </div>
         </div>
+
+        <p className="mx-auto mt-10 max-w-3xl text-center text-sm leading-relaxed text-[var(--text-muted)]">
+          Results vary by case. Expert Review is a document-preparation and review service and does not
+          by itself create an attorney-client relationship. We do not control court schedules and cannot
+          guarantee a specific outcome or timeline.
+        </p>
       </div>
-    </>
+    </div>
   );
-} 
+}

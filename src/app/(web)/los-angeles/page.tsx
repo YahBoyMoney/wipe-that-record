@@ -2,201 +2,128 @@ import { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: 'Los Angeles Expungement Attorney | Clear Your Record in LA | Wipe That Record',
-  description: 'Los Angeles expungement specialist. Clear your criminal record in Hollywood, Downtown LA, Santa Monica, and all LA cities. 89% success rate. Fast service.',
-  keywords: 'Los Angeles expungement, LA criminal record clearing, Hollywood expungement attorney, Santa Monica record sealing, Downtown LA criminal defense'
+  title: 'Los Angeles Record Cleaning | California Record Relief | Wipe That Record',
+  description:
+    'Record-cleaning help for Los Angeles County. We prepare California forms for LA Superior Court filings in Downtown LA, Santa Monica, Van Nuys, and surrounding courts. Court timelines vary by county.',
+  keywords:
+    'Los Angeles expungement, LA criminal record clearing, dismissal, record sealing, LA Superior Court',
 };
+
+const courts = [
+  'Stanley Mosk (Downtown LA)',
+  'Santa Monica',
+  'Van Nuys',
+  'Pasadena',
+  'Long Beach',
+  'Norwalk',
+];
+
+const benefits = [
+  {
+    title: 'Built around LA Superior Court',
+    body: 'LA County has its own filing procedures across multiple courthouses. Our forms and guidance are prepared for California courts so your paperwork matches what the court expects.',
+  },
+  {
+    title: 'County-specific filing guidance',
+    body: 'Where you file in Los Angeles depends on where your case was originally heard. We help you identify the right courthouse and prepare the matching California forms.',
+  },
+  {
+    title: 'Choose the level of help you need',
+    body: 'Prepare your own paperwork with the DIY kit, add a specialist review before filing, or hand the whole process to an attorney with Full Service.',
+  },
+];
 
 export default function LosAngelesPage() {
   return (
-    <div className="min-h-screen bg-white">
-      {/* Hero Section */}
-      <section className="bg-gradient-to-br from-purple-50 to-blue-50 py-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h1 className="text-5xl font-bold text-gray-900 mb-6">
-              Los Angeles County's #1<br />
-              <span className="text-purple-600">Expungement Service</span>
-            </h1>
-            
-            <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
-              Clear your criminal record in Los Angeles County with our proven expungement service. 
-              Serving Hollywood, Santa Monica, Downtown LA, and all 88 LA cities with 
-              <strong> 89% success rate</strong> and expert knowledge of LA Superior Court.
+    <main className="min-h-screen bg-[var(--parchment)]">
+      {/* Hero */}
+      <section className="ink-texture py-20 text-[var(--text-ink)]">
+        <div className="mx-auto max-w-4xl px-4 sm:px-6">
+          <div className="flex items-center gap-3">
+            <span className="h-px w-10 bg-[var(--brass)]" />
+            <span className="eyebrow text-[var(--brass)]">Los Angeles County, California</span>
+          </div>
+          <h1 className="font-display mt-6 max-w-2xl text-4xl font-semibold leading-tight text-white sm:text-5xl">
+            Clean your record in Los Angeles County
+          </h1>
+          <p className="mt-5 max-w-2xl text-lg leading-relaxed text-[var(--text-ink-muted)]">
+            We help people across Los Angeles County pursue California record relief &mdash; dismissal,
+            sealing, or felony reduction where eligible. Our forms and guidance are built around LA
+            Superior Court procedures. Filing processes and court timelines vary by county and case type.
+          </p>
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+            <Link href="/eligibility" className="btn btn-brass">
+              Check eligibility free
+            </Link>
+            <Link href="/#plans" className="btn btn-ghost-ink">
+              See service options
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Why LA */}
+      <section className="py-16">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6">
+          <h2 className="font-display text-2xl font-semibold text-[var(--ink)] sm:text-3xl">
+            Record-cleaning help built for LA
+          </h2>
+          <div className="mt-8 grid gap-6 md:grid-cols-3">
+            {benefits.map((b) => (
+              <div key={b.title} className="card-paper p-7">
+                <h3 className="font-display text-lg font-semibold text-[var(--ink)]">{b.title}</h3>
+                <p className="mt-2 text-[var(--text-muted)]">{b.body}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Courts served */}
+      <section className="py-4 pb-16">
+        <div className="mx-auto max-w-5xl px-4 sm:px-6">
+          <div className="rounded-xl border border-[var(--brass)]/30 bg-[var(--brass-100)]/40 p-7">
+            <h2 className="font-display text-lg font-semibold text-[var(--ink)]">
+              LA Superior Court locations we prepare filings for
+            </h2>
+            <p className="mt-2 text-sm text-[var(--text-muted)]">
+              Where you file depends on where your case was originally heard. We help you identify the
+              correct courthouse.
             </p>
-            
-            <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
-              <Link 
-                href="/los-angeles/get-started"
-                className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-4 rounded-lg font-semibold text-lg transition-colors"
-              >
-                🎬 Start Your LA Expungement - $197
-              </Link>
-              <Link 
-                href="/los-angeles/free-consultation"
-                className="border-2 border-purple-600 text-purple-600 hover:bg-purple-50 px-8 py-4 rounded-lg font-semibold text-lg transition-colors"
-              >
-                📞 Free LA Legal Consultation
-              </Link>
-            </div>
-            
-            {/* Trust Indicators */}
-            <div className="flex flex-wrap justify-center items-center gap-8 text-sm text-gray-600">
-              <div className="flex items-center gap-2">
-                <svg className="w-5 h-5 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                </svg>
-                <span>California Licensed Attorneys</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <svg className="w-5 h-5 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                </svg>
-                <span>89% Success Rate in LA</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <svg className="w-5 h-5 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                </svg>
-                <span>6-8 Week Processing</span>
-              </div>
+            <div className="mt-5 flex flex-wrap gap-3">
+              {courts.map((c) => (
+                <span
+                  key={c}
+                  className="rounded-full border border-[var(--line)] bg-[var(--paper)] px-4 py-2 text-sm font-medium text-[var(--text)]"
+                >
+                  {c}
+                </span>
+              ))}
             </div>
           </div>
         </div>
       </section>
 
-      {/* LA Specific Benefits */}
-      <section className="py-16 bg-gray-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-center mb-12">Why Los Angeles Professionals Choose Us</h2>
-          
-          <div className="grid md:grid-cols-3 gap-8">
-            <div className="bg-white p-8 rounded-xl shadow-lg">
-              <div className="text-4xl mb-4">🎬</div>
-              <h3 className="text-xl font-bold mb-4">Entertainment Industry Expertise</h3>
-              <p className="text-gray-600">
-                Specialized service for Hollywood professionals, actors, crew members, and 
-                entertainment industry workers. We understand union requirements, studio 
-                background checks, and industry-specific clearance needs.
-              </p>
-            </div>
-            
-            <div className="bg-white p-8 rounded-xl shadow-lg">
-              <div className="text-4xl mb-4">🏛️</div>
-              <h3 className="text-xl font-bold mb-4">LA Superior Court Mastery</h3>
-              <p className="text-gray-600">
-                Expert knowledge of all LA Superior Court locations including Downtown, 
-                Beverly Hills, Santa Monica, Van Nuys, and Pasadena. We know the local 
-                procedures and have relationships with court staff.
-              </p>
-            </div>
-            
-            <div className="bg-white p-8 rounded-xl shadow-lg">
-              <div className="text-4xl mb-4">💰</div>
-              <h3 className="text-xl font-bold mb-4">Affordable LA Pricing</h3>
-              <p className="text-gray-600">
-                Competitive pricing designed for LA's diverse economy. Payment plans 
-                available for entertainment workers, gig economy professionals, and 
-                those between projects.
-              </p>
-            </div>
-          </div>
+      {/* CTA */}
+      <section className="border-t border-[var(--line)] bg-[var(--paper)] py-16 px-4 text-center sm:px-6">
+        <div className="mx-auto max-w-3xl">
+          <h2 className="font-display text-2xl font-semibold text-[var(--ink)] sm:text-3xl">
+            Start with a free eligibility check
+          </h2>
+          <p className="mx-auto mt-4 max-w-2xl text-[var(--text-muted)]">
+            Answer a few private questions to see which California record-cleaning options may apply to
+            your LA County case. This is not legal advice, and results vary by case.
+          </p>
+          <Link href="/eligibility" className="btn btn-primary mt-7">
+            Check eligibility free
+          </Link>
+          <p className="mx-auto mt-8 max-w-2xl text-xs leading-relaxed text-[var(--text-muted)]">
+            Wipe That Record provides California-focused record-cleaning support. We do not control
+            court schedules and cannot guarantee a specific outcome or timeline. With Full Service, an
+            attorney-client relationship is formed only after a written engagement agreement is signed.
+          </p>
         </div>
       </section>
-
-      {/* Pricing - LA Accessible Pricing */}
-      <section className="py-16" id="pricing">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-3xl font-bold text-center mb-12">Los Angeles Service Plans</h2>
-          
-          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            {/* Standard Plan */}
-            <div className="bg-white border-2 border-purple-200 rounded-xl p-8">
-              <h3 className="text-2xl font-bold mb-4">LA Standard</h3>
-              <div className="text-4xl font-bold text-purple-600 mb-6">$197</div>
-              <ul className="space-y-3 mb-8">
-                <li className="flex items-center">
-                  <svg className="w-5 h-5 text-green-500 mr-3" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                  </svg>
-                  Complete case review & filing
-                </li>
-                <li className="flex items-center">
-                  <svg className="w-5 h-5 text-green-500 mr-3" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                  </svg>
-                  LA Superior Court expertise
-                </li>
-                <li className="flex items-center">
-                  <svg className="w-5 h-5 text-green-500 mr-3" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                  </svg>
-                  6-8 week completion
-                </li>
-                <li className="flex items-center">
-                  <svg className="w-5 h-5 text-green-500 mr-3" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                  </svg>
-                  Payment plan available
-                </li>
-              </ul>
-              <Link 
-                href="/los-angeles/checkout/standard"
-                className="w-full bg-purple-600 hover:bg-purple-700 text-white py-3 px-6 rounded-lg font-semibold transition-colors block text-center"
-              >
-                Get Started
-              </Link>
-            </div>
-
-            {/* Premium Plan */}
-            <div className="bg-white border-2 border-purple-500 rounded-xl p-8 relative transform scale-105">
-              <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 bg-purple-500 text-white px-4 py-1 rounded-full text-sm font-semibold">
-                Most Popular
-              </div>
-              <h3 className="text-2xl font-bold mb-4">LA Premium</h3>
-              <div className="text-4xl font-bold text-purple-600 mb-6">$397</div>
-              <ul className="space-y-3 mb-8">
-                <li className="flex items-center">
-                  <svg className="w-5 h-5 text-green-500 mr-3" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                  </svg>
-                  <strong>Everything in Standard +</strong>
-                </li>
-                <li className="flex items-center">
-                  <svg className="w-5 h-5 text-green-500 mr-3" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                  </svg>
-                  <strong>Expedited 4-6 week processing</strong>
-                </li>
-                <li className="flex items-center">
-                  <svg className="w-5 h-5 text-green-500 mr-3" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                  </svg>
-                  Priority case manager
-                </li>
-                <li className="flex items-center">
-                  <svg className="w-5 h-5 text-green-500 mr-3" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                  </svg>
-                  Phone & text support
-                </li>
-                <li className="flex items-center">
-                  <svg className="w-5 h-5 text-green-500 mr-3" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                  </svg>
-                  Entertainment industry expertise
-                </li>
-              </ul>
-              <Link 
-                href="/los-angeles/checkout/premium"
-                className="w-full bg-purple-600 hover:bg-purple-700 text-white py-3 px-6 rounded-lg font-semibold transition-colors block text-center"
-              >
-                Get Premium Service
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-    </div>
+    </main>
   );
-} 
+}

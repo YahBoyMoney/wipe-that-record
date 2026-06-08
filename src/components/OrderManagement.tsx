@@ -186,7 +186,7 @@ const OrderManagement: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    let filtered = orders.filter(order => {
+    const filtered = orders.filter(order => {
       const matchesSearch = 
         order.orderNumber.toLowerCase().includes(filters.search.toLowerCase()) ||
         order.customer.name.toLowerCase().includes(filters.search.toLowerCase()) ||
@@ -202,9 +202,9 @@ const OrderManagement: React.FC = () => {
 
     // Sort orders
     filtered.sort((a, b) => {
-      let aValue = a[sortBy as keyof Order];
-      let bValue = b[sortBy as keyof Order];
-      
+      let aValue: string | number = (a[sortBy as keyof Order] ?? '') as string | number;
+      let bValue: string | number = (b[sortBy as keyof Order] ?? '') as string | number;
+
       if (sortBy === 'createdAt' || sortBy === 'updatedAt') {
         aValue = new Date(aValue as string).getTime();
         bValue = new Date(bValue as string).getTime();
