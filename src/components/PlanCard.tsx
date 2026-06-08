@@ -1,5 +1,7 @@
 'use client'
 
+import { track } from '@/lib/track'
+
 interface PlanCardProps {
   title: string
   price: string
@@ -12,6 +14,7 @@ interface PlanCardProps {
   savings?: string
   badge?: string
   href: string
+  plan?: string
 }
 
 export function PlanCard({
@@ -24,13 +27,14 @@ export function PlanCard({
   popular,
   badge,
   href,
+  plan,
 }: PlanCardProps) {
   return (
     <div
-      className={`relative flex h-full flex-col rounded-xl p-8 transition-shadow duration-300 ${
+      className={`relative flex h-full flex-col rounded-xl p-8 ${
         popular
           ? 'section-ink text-[var(--text-ink)] shadow-[0_24px_60px_-30px_rgba(17,32,47,0.55)] ring-1 ring-[var(--brass)]/40'
-          : 'card-paper shadow-sm hover:shadow-md'
+          : 'card-paper card-lift shadow-sm'
       }`}
     >
       {popular && (
@@ -76,6 +80,13 @@ export function PlanCard({
 
       <a
         href={href}
+        onClick={() =>
+          track('plan_cta_click', {
+            source_page: '/',
+            plan: plan || title.toLowerCase().replace(/\s+/g, '_'),
+            cta_label: 'plan_card',
+          })
+        }
         className={`btn mt-8 w-full ${popular ? 'btn-brass' : 'btn-outline'}`}
       >
         {cta}

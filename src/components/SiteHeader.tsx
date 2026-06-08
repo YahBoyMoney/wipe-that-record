@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { track } from '@/lib/track';
 
 const navLinks = [
   { href: '/services', label: 'Services' },
@@ -59,7 +60,11 @@ export default function SiteHeader() {
         </nav>
 
         <div className="hidden items-center gap-3 lg:flex">
-          <Link href="/eligibility" className="btn btn-brass text-sm">
+          <Link
+            href="/eligibility"
+            onClick={() => track('eligibility_cta_click', { source_page: 'header', cta_label: 'header_nav' })}
+            className="btn btn-brass text-sm"
+          >
             Check Eligibility
           </Link>
         </div>
@@ -96,7 +101,10 @@ export default function SiteHeader() {
             ))}
             <Link
               href="/eligibility"
-              onClick={() => setOpen(false)}
+              onClick={() => {
+                track('eligibility_cta_click', { source_page: 'header', cta_label: 'mobile_nav' });
+                setOpen(false);
+              }}
               className="btn btn-brass mt-2 text-base"
             >
               Check Eligibility

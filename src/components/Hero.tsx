@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { motion } from 'framer-motion'
 import Link from 'next/link'
 import { LeadCaptureForm } from './LeadCaptureForm'
+import { track } from '@/lib/track'
 
 interface HeroProps {
   variant?: 'a' | 'b'
@@ -27,12 +28,11 @@ export function Hero({ variant = 'a' }: HeroProps) {
           transition={{ duration: 0.6 }}
           className="lg:col-span-7 lg:pr-8"
         >
-          <div className="flex items-center gap-3">
-            <span className="h-px w-10 bg-[var(--brass)]" />
-            <span className="eyebrow text-[var(--brass)]">California Record Relief · Statewide</span>
-          </div>
+          <span className="eyebrow-line eyebrow text-[var(--brass)]">
+            California Record Relief · Statewide
+          </span>
 
-          <h1 className="font-display mt-7 text-4xl font-semibold leading-[1.08] text-white sm:text-5xl lg:text-[3.4rem]">
+          <h1 className="font-display display-xl mt-7 font-semibold text-white">
             {headline}
           </h1>
 
@@ -46,7 +46,10 @@ export function Hero({ variant = 'a' }: HeroProps) {
           <div className="mt-9 flex flex-col gap-3 sm:flex-row">
             <motion.button
               whileTap={{ scale: 0.985 }}
-              onClick={() => setShowModal(true)}
+              onClick={() => {
+                track('eligibility_cta_click', { source_page: '/', cta_label: 'hero_primary' })
+                setShowModal(true)
+              }}
               className="btn btn-brass text-base"
               autoFocus
             >
@@ -56,7 +59,11 @@ export function Hero({ variant = 'a' }: HeroProps) {
               </svg>
             </motion.button>
 
-            <Link href="/#plans" className="btn btn-ghost-ink text-base">
+            <Link
+              href="/#plans"
+              onClick={() => track('pricing_cta_click', { source_page: '/', cta_label: 'hero_secondary' })}
+              className="btn btn-ghost-ink text-base"
+            >
               See pricing &amp; process
             </Link>
           </div>

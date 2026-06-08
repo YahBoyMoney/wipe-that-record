@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
-import Link from 'next/link';
+import { EligibilityCtaLink } from '@/components/EligibilityCtaLink';
+import { ServiceCardLink } from '@/components/ServiceCardLink';
 
 export const metadata: Metadata = {
   title: 'California Record-Cleaning Services | Wipe That Record',
@@ -9,6 +10,7 @@ export const metadata: Metadata = {
 
 const services = [
   {
+    slug: 'misdemeanor-dismissal',
     href: '/services/misdemeanor-dismissal',
     title: 'Misdemeanor Dismissal',
     forWho: 'People with eligible misdemeanor convictions who have completed probation.',
@@ -17,6 +19,7 @@ const services = [
     fits: 'DIY Kit for straightforward cases; Expert Review if you are unsure.',
   },
   {
+    slug: 'dui-record-relief',
     href: '/services/dui-record-relief',
     title: 'DUI Record Relief',
     forWho: 'People with an eligible DUI conviction seeking to limit its impact.',
@@ -25,6 +28,7 @@ const services = [
     fits: 'DIY Kit or Expert Review depending on complexity.',
   },
   {
+    slug: 'felony-reduction',
     href: '/services/felony-reduction',
     title: 'Felony Reduction',
     forWho: 'People with certain "wobbler" felony convictions who may qualify for reduction.',
@@ -33,6 +37,7 @@ const services = [
     fits: 'Expert Review or Full Service for complex cases.',
   },
   {
+    slug: 'record-sealing',
     href: '/services/record-sealing',
     title: 'Arrest Record Sealing',
     forWho: 'People arrested without a conviction who want the arrest sealed.',
@@ -45,32 +50,49 @@ const services = [
 export default function ServicesPage() {
   return (
     <main className="min-h-screen bg-[var(--parchment)]">
-      <section className="ink-texture py-20 text-[var(--text-ink)]">
-        <div className="mx-auto max-w-4xl px-4 sm:px-6">
-          <div className="flex items-center gap-3">
-            <span className="h-px w-10 bg-[var(--brass)]" />
-            <span className="eyebrow text-[var(--brass)]">Relief paths</span>
+      <section className="ink-texture overflow-hidden py-20 text-[var(--text-ink)] sm:py-24">
+        <div className="mx-auto grid max-w-6xl items-end gap-10 px-4 sm:px-6 lg:grid-cols-[7fr_5fr]">
+          <div>
+            <span className="eyebrow-line eyebrow text-[var(--brass)]">Relief paths</span>
+            <h1 className="font-display display-xl mt-5 font-semibold text-white">
+              What kind of record help do you need?
+            </h1>
+            <p className="mt-6 max-w-xl text-lg leading-relaxed text-[var(--text-ink-muted)]">
+              We help Californians pursue several forms of record relief. True expungement does not
+              exist in California, so we focus on the options that may actually apply to your case.
+            </p>
+            <EligibilityCtaLink
+              sourcePage="/services"
+              ctaLabel="services_hero"
+              className="btn btn-brass mt-8"
+            >
+              Check eligibility free
+            </EligibilityCtaLink>
           </div>
-          <h1 className="font-display mt-6 max-w-2xl text-4xl font-semibold leading-tight text-white sm:text-5xl">
-            What kind of record help do you need?
-          </h1>
-          <p className="mt-5 max-w-2xl text-lg leading-relaxed text-[var(--text-ink-muted)]">
-            We help Californians pursue several forms of record relief. True expungement does not exist
-            in California, so we focus on the options that may actually apply to your case.
-          </p>
-          <Link href="/eligibility" className="btn btn-brass mt-8">
-            Check eligibility free
-          </Link>
+          <div className="hidden lg:block">
+            <div className="rounded-xl border border-[var(--line-ink)] bg-white/[0.04] p-7">
+              <span className="eyebrow text-[var(--brass)]">Not sure which applies?</span>
+              <p className="mt-3 text-[var(--text-ink-muted)]">
+                The free 2-minute review reads your conviction type, county, and timeline, then points
+                you to the paths that may fit &mdash; before you pay anything.
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 
-      <section className="py-16">
+      <section className="py-16 sm:py-20">
         <div className="mx-auto max-w-5xl px-4 sm:px-6">
-          <div className="grid gap-6 md:grid-cols-2">
-            {services.map((s) => (
-              <div key={s.href} className="card-paper flex flex-col p-7">
-                <h2 className="font-display text-xl font-semibold text-[var(--ink)]">{s.title}</h2>
-                <dl className="mt-5 space-y-4 text-sm">
+          <div className="grid gap-px overflow-hidden rounded-xl border border-[var(--line)] bg-[var(--line)] md:grid-cols-2">
+            {services.map((s, i) => (
+              <div key={s.href} className="card-lift flex flex-col bg-[var(--paper)] p-8">
+                <div className="flex items-baseline gap-4">
+                  <span className="font-display text-2xl font-semibold text-[var(--brass)]">
+                    {String(i + 1).padStart(2, '0')}
+                  </span>
+                  <h2 className="font-display text-xl font-semibold text-[var(--ink)]">{s.title}</h2>
+                </div>
+                <dl className="mt-6 space-y-4 text-sm">
                   <div>
                     <dt className="eyebrow text-[var(--brass-600)]">Who it&rsquo;s for</dt>
                     <dd className="mt-1 text-[var(--text-muted)]">{s.forWho}</dd>
@@ -88,9 +110,9 @@ export default function ServicesPage() {
                     <dd className="mt-1 text-[var(--text-muted)]">{s.fits}</dd>
                   </div>
                 </dl>
-                <Link href={s.href} className="link-ink mt-6 inline-block">
+                <ServiceCardLink href={s.href} service={s.slug} className="link-ink mt-6 inline-block">
                   Learn more &rarr;
-                </Link>
+                </ServiceCardLink>
               </div>
             ))}
           </div>

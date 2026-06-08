@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Inter, Fraunces } from "next/font/google";
 import "./globals.css";
 import Analytics from "@/components/Analytics";
+import { Analytics as VercelAnalytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import SiteHeader from "@/components/SiteHeader";
 import SiteFooter from "@/components/SiteFooter";
 
@@ -119,6 +121,8 @@ export default function RootLayout({
         <SiteHeader />
         {children}
         <SiteFooter />
+        <VercelAnalytics />
+        <SpeedInsights />
       </body>
     </html>
   );
