@@ -4,7 +4,7 @@
 
 import type { Payload } from 'payload';
 import * as coreTyped from './service-core.mjs';
-import type { DocumentStatus, TemplateKey } from './types';
+import type { DocumentStatus, OfficialIntake, TemplateKey } from './types';
 
 const core = coreTyped as any;
 
@@ -40,6 +40,17 @@ export function approvePackage(
 export function generatePackage(
   payload: Payload,
   args: { id: string | number; actor?: string },
-): Promise<{ status: DocumentStatus; blocked?: boolean }> {
+): Promise<{ status: DocumentStatus; blocked?: boolean; reasons?: string[] }> {
   return core.generatePackage(payload, args);
+}
+
+// Generates the official CA dismissal packet (filled CR-180 + draft CR-181) from
+// staff-reviewed intake. Blocked (needs_manual_review / blocked) with non-PII `reasons` if
+// review is not approved or required intake data is missing. `sample: true` watermarks the
+// output SAMPLE / NOT FOR FILING (demos/tests only).
+export function generateOfficialPacket(
+  payload: Payload,
+  args: { id: string | number; actor?: string; intake: OfficialIntake; sample?: boolean },
+): Promise<{ status: DocumentStatus; blocked?: boolean; reasons?: string[] }> {
+  return core.generateOfficialPacket(payload, args);
 }

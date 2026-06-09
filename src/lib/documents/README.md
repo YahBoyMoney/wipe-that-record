@@ -3,12 +3,12 @@
 Turns a **paid order** into a tracked **document package** with a clear lifecycle,
 a branded PDF packet, a human-review gate, and PII-safe handling.
 
-> **Scope / safety:** Phase 1 does **not** generate official California court forms
-> (e.g. CR-180) and does **not** auto-email personalized legal filings. It produces a
-> branded, **non-personalized** informational cover sheet + checklist packet that
-> explicitly states an official form template and human review are required before any
-> filing. Personalized legal filings are a later phase (official templates + deterministic
-> data mapping + mandatory human review).
+> **Scope / safety:** Phase 1 produces a branded, **non-personalized** informational
+> cover sheet + checklist packet that explicitly states an official form template and
+> human review are required before any filing. The **official CR-180 / CR-181 dismissal
+> packet** (the first real court-document output, filled from staff-reviewed intake) lives
+> alongside it in [`official/`](./official/README.md) — it keeps the same human-review gate
+> and is never auto-delivered. Neither path auto-emails personalized legal filings.
 
 ## Modules (`src/lib/documents/`)
 
@@ -115,12 +115,18 @@ npm run typecheck
 Covers status transitions, template selection, idempotency, review gating, PDF validity
 (`%PDF`/`%%EOF`/disclaimers), and PII redaction.
 
-## Future phases (official court forms)
+## Official court forms (CR-180 / CR-181)
 
-1. Add official Judicial Council form templates (e.g. CR-180) as fillable assets.
-2. Build a **deterministic** data mapping from verified `orders.caseDetails` → form fields.
-3. Keep the human-review gate mandatory before any personalized filing is delivered.
-4. Add a signed-download route backed by `downloadToken` (short-lived, single-use).
-5. Optionally render official forms by overlaying mapped data — replacing the Phase 1
-   informational packet for personalized filings only.
+The first real court-document packet is implemented in [`official/`](./official/README.md):
+the Judicial Council **CR-180 (Petition for Dismissal)** + **CR-181 (Order for Dismissal)**
+forms, filled deterministically from **staff-reviewed** intake (never the marketing quiz),
+merged into one PDF, behind the same mandatory human-review gate and never auto-delivered.
+See that README for modules, dismissal bases, supported counties, guardrails, and the
+internal generate route.
+
+## Remaining phases
+
+1. Add a signed-download route backed by `downloadToken` (short-lived, single-use).
+2. Expand the official packet's deterministic mapping (multi-count conviction rows, more
+   counties' court addresses) as reviewers supply verified data.
 ```

@@ -1,10 +1,20 @@
 // Template registry mapping paid products to document-package templates.
 //
-// IMPORTANT: Sections contain only generic, non-personalized guidance and checklist
-// items. They deliberately contain NO official court-form field content (e.g. CR-180).
-// Official forms + deterministic data mapping + human review are a later phase.
+// IMPORTANT: The informational templates (diy_kit / expert_review / full_service) contain
+// only generic, non-personalized guidance and checklist items — they deliberately contain
+// NO official court-form field content. The `official_ca_dismissal_packet` template (added
+// in the official-forms phase) DOES assemble the real CR-180 / CR-181 Judicial Council
+// forms, but only from staff-reviewed data and always behind the human-review gate.
+
+import { OFFICIAL_FORMS } from './official/forms.mjs';
 
 export const TEMPLATE_KEYS = ['diy_kit', 'expert_review', 'full_service'];
+
+// The official court-document packet is tracked as its own template key. It is not selected
+// automatically from a Stripe session / quiz answers — staff opt a reviewed package into it
+// (see service-core.mjs). Listed separately so the marketing-driven mappings below cannot
+// ever resolve to it by accident.
+export const OFFICIAL_TEMPLATE_KEY = 'official_ca_dismissal_packet';
 
 export const TEMPLATES = {
   diy_kit: {
@@ -113,10 +123,34 @@ export const TEMPLATES = {
   },
 };
 
+// Official CA dismissal packet: the first template that produces real court forms. It
+// always requires human review and carries the official-form metadata (ids, revisions,
+// source URLs) so the registry stays the single source of truth for what the packet
+// contains. It has no informational sections/checklist — its content is the filled PDFs.
+export const OFFICIAL_TEMPLATE = {
+  key: OFFICIAL_TEMPLATE_KEY,
+  title: 'California Dismissal Packet (CR-180 + CR-181)',
+  productLabel: 'Official CA Dismissal Packet',
+  requiresHumanReview: true,
+  requiresOfficialCourtForms: true,
+  official: true,
+  forms: Object.values(OFFICIAL_FORMS).map((f) => ({
+    id: f.id,
+    title: f.title,
+    revision: f.revision,
+    sourceUrl: f.sourceUrl,
+  })),
+};
+
 export function getTemplate(key) {
+  if (key === OFFICIAL_TEMPLATE_KEY) return OFFICIAL_TEMPLATE;
   const tpl = TEMPLATES[key];
   if (!tpl) throw new Error(`Unknown template key: ${key}`);
   return tpl;
+}
+
+export function isOfficialTemplate(key) {
+  return key === OFFICIAL_TEMPLATE_KEY;
 }
 
 // Maps the Stripe checkout session metadata (see src/app/api/webhook/route.ts) to a

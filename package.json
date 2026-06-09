@@ -37,6 +37,7 @@
     "nodemailer": "^7.0.3",
     "openai": "^5.7.0",
     "payload": "^3.43.0",
+    "pdf-lib": "^1.17.1",
     "react": "^19.0.0",
     "react-chartjs-2": "^5.3.0",
     "react-dom": "^19.0.0",
