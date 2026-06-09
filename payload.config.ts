@@ -13,6 +13,7 @@ import Products from './src/collections/Products'
 import Orders from './src/collections/Orders'
 import Analytics from './src/collections/Analytics'
 import EmailSequences from './src/collections/EmailSequences'
+import DocumentPackages from './src/collections/DocumentPackages'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
@@ -65,6 +66,7 @@ export default buildConfig({
     Orders,
     Analytics,
     EmailSequences,
+    DocumentPackages,
   ],
   globals: [
     // Add global settings for site configuration

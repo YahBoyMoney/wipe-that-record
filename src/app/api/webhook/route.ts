@@ -2,6 +2,32 @@ import { NextRequest, NextResponse } from 'next/server';
 import { stripe } from '@/lib/stripe';
 import payload from 'payload';
 
+// Creates a document package for a paid checkout session. Additive and idempotent:
+// dedups on the Stripe session id, so webhook retries never duplicate packages. Any
+// failure is swallowed so it can never 500 the webhook or block lead creation.
+async function createDocumentPackage(session: any, leadId: string | number) {
+  try {
+    const { createPackageForSession } = await import('@/lib/documents/service');
+    const { templateKeyForSession } = await import('@/lib/documents/registry.mjs');
+    await createPackageForSession(payload as any, {
+      sourceSessionId: session.id,
+      templateKey: templateKeyForSession({
+        type: session.metadata?.type,
+        upgradeType: session.metadata?.upgradeType,
+      }),
+      customerEmail: session.customer_details?.email,
+      linkedLeadId: leadId,
+    });
+  } catch (error) {
+    try {
+      const { safeLog } = await import('@/lib/documents/redact.mjs');
+      safeLog('webhook.package_failed', { sessionPresent: !!session?.id });
+    } catch {
+      // never let logging failures bubble up
+    }
+  }
+}
+
 export async function POST(req: NextRequest) {
   const sig  = req.headers.get('stripe-signature') as string;
   const body = await req.text();
@@ -23,7 +49,7 @@ export async function POST(req: NextRequest) {
     // Handle different payment types
     if (s.metadata.type === 'diy') {
       // Initial DIY payment with analytics data
-      await payload.create({
+      const lead = await payload.create({
         collection: 'leads',
         data: {
           email: s.customer_details.email,
@@ -65,14 +91,16 @@ export async function POST(req: NextRequest) {
       } catch (error) {
         console.error('❌ Failed to send purchase notification:', error);
       }
-      
+
+      await createDocumentPackage(s, lead.id);
+
       return NextResponse.json({ ok: true });
-      
+
     } else if (s.metadata.type === 'upgrade') {
       // Upgrade payment - create a new lead record for the upgrade
       const upgradeType = s.metadata.upgradeType;
-      
-      await payload.create({
+
+      const lead = await payload.create({
         collection: 'leads',
         data: {
           first: s.customer_details.name?.split(' ')[0] || 'Customer',
@@ -95,6 +123,9 @@ export async function POST(req: NextRequest) {
       });
       
       console.log(`🚀 ${upgradeType} upgrade: ${s.customer_details.email} - $${s.amount_total / 100}`);
+
+      await createDocumentPackage(s, lead.id);
+
       return NextResponse.json({ ok: true });
     }
 
