@@ -49,7 +49,10 @@ export const buildAuditEntry = (args: {
 
 export const TEMPLATE_KEYS = registryImpl.TEMPLATE_KEYS as TemplateKey[];
 export const TEMPLATES = registryImpl.TEMPLATES as Record<TemplateKey, TemplateDefinition>;
+export const OFFICIAL_TEMPLATE_KEY = registryImpl.OFFICIAL_TEMPLATE_KEY as TemplateKey;
 export const getTemplate = (key: TemplateKey): TemplateDefinition => registryImpl.getTemplate(key);
+export const isOfficialTemplate = (key: TemplateKey): boolean =>
+  registryImpl.isOfficialTemplate(key);
 export const templateKeyForSession = (args: {
   type?: string;
   upgradeType?: string;

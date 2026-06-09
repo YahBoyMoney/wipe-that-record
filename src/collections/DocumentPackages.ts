@@ -41,6 +41,7 @@ const DocumentPackages: CollectionConfig = {
         { label: 'DIY Kit', value: 'diy_kit' },
         { label: 'Expert Review', value: 'expert_review' },
         { label: 'Full Service', value: 'full_service' },
+        { label: 'Official CA Dismissal Packet (CR-180 + CR-181)', value: 'official_ca_dismissal_packet' },
       ],
     },
     {
