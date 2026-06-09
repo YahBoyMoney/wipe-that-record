@@ -78,6 +78,113 @@ async function loadPackage(payload, id) {
   return doc;
 }
 
+// The collection stores the intake under `officialIntake` with `caseInfo` (the word `case`
+// is awkward as a Payload field name). The validator/mapping layer expects the canonical
+// OfficialIntake shape with a `case` key. This adapts the stored shape into that canonical
+// shape without copying anything extra.
+export function intakeFromStored(stored) {
+  if (!stored || typeof stored !== 'object') return undefined;
+  const caseInfo = stored.caseInfo || {};
+  return {
+    staffReviewed: stored.staffReviewed === true,
+    selfRepresented: stored.selfRepresented === true,
+    petitioner: { ...(stored.petitioner || {}) },
+    court: { ...(stored.court || {}) },
+    case: {
+      caseNumber: caseInfo.caseNumber,
+      convictionDate: caseInfo.convictionDate,
+      charges: Array.isArray(caseInfo.charges)
+        ? caseInfo.charges.map((c) => ({ code: c.code, section: c.section, type: c.type }))
+        : undefined,
+    },
+    relief: { ...(stored.relief || {}) },
+  };
+}
+
+// Maps a canonical OfficialIntake (as posted by the staff dashboard) into the stored
+// collection shape. Drops unknown keys; never persists anything beyond the known fields.
+function intakeToStored(intake, { savedBy } = {}) {
+  const c = intake.case || {};
+  return {
+    staffReviewed: intake.staffReviewed === true,
+    selfRepresented: intake.selfRepresented === true,
+    petitioner: {
+      fullName: intake.petitioner?.fullName,
+      street: intake.petitioner?.street,
+      city: intake.petitioner?.city,
+      state: intake.petitioner?.state,
+      zip: intake.petitioner?.zip,
+      phone: intake.petitioner?.phone,
+      email: intake.petitioner?.email,
+    },
+    court: {
+      county: intake.court?.county,
+      courtName: intake.court?.courtName,
+      courtStreet: intake.court?.courtStreet,
+      courtCityZip: intake.court?.courtCityZip,
+    },
+    caseInfo: {
+      caseNumber: c.caseNumber,
+      convictionDate: c.convictionDate,
+      charges: Array.isArray(c.charges)
+        ? c.charges.map((ch) => ({ code: ch.code, section: ch.section, type: ch.type }))
+        : [],
+    },
+    relief: {
+      dismissalBasis: intake.relief?.dismissalBasis,
+      felonyReductionRequested: intake.relief?.felonyReductionRequested === true,
+    },
+    savedBy: savedBy || 'staff',
+    savedAt: new Date().toISOString(),
+  };
+}
+
+// Persists staff-reviewed official intake on the package and records the latest validation
+// outcome (non-PII reasons only). Does NOT change the package status or generate anything —
+// it is a pure save so staff can iterate on the form. Only valid for official packages.
+//
+// Returns { validation: { ok, reasons } } so the UI can show the missing-field checklist.
+export async function saveOfficialIntake(payload, args) {
+  const pkg = await loadPackage(payload, args.id);
+  if (!isOfficialTemplate(pkg.templateKey)) {
+    throw new Error('Package is not an official_ca_dismissal_packet');
+  }
+
+  const stored = intakeToStored(args.intake || {}, { savedBy: args.actor });
+  const canonical = intakeFromStored(stored);
+  const validation = validateOfficialIntake(canonical);
+
+  const entry = buildAuditEntry({
+    action: 'intake_saved',
+    fromStatus: pkg.status,
+    toStatus: pkg.status,
+    actor: args.actor || 'staff',
+    detail: validation.ok
+      ? 'Official intake saved; passes validation'
+      : `Official intake saved; ${validation.reasons.length} validation issue(s)`,
+  });
+
+  await payload.update({
+    collection: COLLECTION,
+    id: args.id,
+    data: {
+      officialIntake: stored,
+      validation: {
+        ok: validation.ok === true,
+        reasons: (validation.ok ? [] : validation.reasons).map((reason) => ({ reason })),
+        checkedAt: new Date().toISOString(),
+      },
+      auditLog: [...(pkg.auditLog || []), entry],
+    },
+  });
+  safeLog('official.intake_saved', {
+    id: String(args.id),
+    ok: validation.ok === true,
+    issues: validation.ok ? 0 : validation.reasons.length,
+  });
+  return { validation: { ok: validation.ok === true, reasons: validation.ok ? [] : validation.reasons } };
+}
+
 export async function approvePackage(payload, args) {
   const pkg = await loadPackage(payload, args.id);
   const { status, entry } = transition({
@@ -209,9 +316,12 @@ export async function generateOfficialPacket(payload, args) {
     return { status, blocked: true, reasons: ['Human review required before generation'] };
   }
 
-  // Validate the staff-reviewed intake. Failure => needs_manual_review / blocked with
-  // non-PII reasons. We log only the count and the short rule strings (never the data).
-  const validation = validateOfficialIntake(args.intake);
+  // Validate the staff-reviewed intake. The caller may pass `intake` explicitly (CRON_SECRET
+  // tooling) or rely on the intake the staff dashboard already saved on the package. Failure
+  // => needs_manual_review / blocked with non-PII reasons. We log only the count and the
+  // short rule strings (never the data).
+  const intake = args.intake || intakeFromStored(pkg.officialIntake);
+  const validation = validateOfficialIntake(intake);
   if (!validation.ok) {
     const { status, entry } = transition({
       from: pkg.status,
@@ -231,13 +341,14 @@ export async function generateOfficialPacket(payload, args) {
   const { buildOfficialDismissalPacket } = await import('./official/fill.mjs');
   const pdf = await buildOfficialDismissalPacket(validation.data, { sample: args.sample === true });
 
+  const artifactName = `ca-dismissal-${pkg.sourceSessionId}.pdf`.replace(/[^a-zA-Z0-9.-]/g, '_');
   const media = await payload.create({
     collection: 'media',
     data: { alt: 'Official CA dismissal packet (CR-180 + CR-181)' },
     file: {
       data: Buffer.from(pdf),
       mimetype: 'application/pdf',
-      name: `ca-dismissal-${pkg.sourceSessionId}.pdf`.replace(/[^a-zA-Z0-9.-]/g, '_'),
+      name: artifactName,
       size: pdf.byteLength,
     },
   });
@@ -273,6 +384,12 @@ export async function generateOfficialPacket(payload, args) {
     data: {
       status,
       generatedFile: media.id,
+      generatedArtifact: {
+        fileName: artifactName,
+        byteSize: pdf.byteLength,
+        sample: args.sample === true,
+        generatedAt: new Date().toISOString(),
+      },
       auditLog,
     },
   });
