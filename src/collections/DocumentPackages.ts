@@ -99,12 +99,124 @@ const DocumentPackages: CollectionConfig = {
       ],
     },
     {
+      name: 'officialIntake',
+      type: 'group',
+      admin: {
+        description:
+          'Staff-reviewed intake for official CR-180/CR-181 generation. Contains case PII; ' +
+          'admin-gated, never logged or sent to analytics. Every legal choice here must be ' +
+          'entered by a human reviewer — never inferred from marketing-quiz answers.',
+        condition: (data) => data?.templateKey === 'official_ca_dismissal_packet',
+      },
+      fields: [
+        {
+          name: 'staffReviewed',
+          type: 'checkbox',
+          defaultValue: false,
+          admin: { description: 'Hard gate: must be true before generation can fill official forms.' },
+        },
+        { name: 'selfRepresented', type: 'checkbox', defaultValue: false },
+        {
+          name: 'petitioner',
+          type: 'group',
+          fields: [
+            { name: 'fullName', type: 'text' },
+            { name: 'street', type: 'text' },
+            { name: 'city', type: 'text' },
+            { name: 'state', type: 'text' },
+            { name: 'zip', type: 'text' },
+            { name: 'phone', type: 'text' },
+            { name: 'email', type: 'email' },
+          ],
+        },
+        {
+          name: 'court',
+          type: 'group',
+          fields: [
+            { name: 'county', type: 'text' },
+            { name: 'courtName', type: 'text' },
+            { name: 'courtStreet', type: 'text' },
+            { name: 'courtCityZip', type: 'text' },
+          ],
+        },
+        {
+          name: 'caseInfo',
+          type: 'group',
+          fields: [
+            { name: 'caseNumber', type: 'text' },
+            { name: 'convictionDate', type: 'text' },
+            {
+              name: 'charges',
+              type: 'array',
+              fields: [
+                { name: 'code', type: 'text' },
+                { name: 'section', type: 'text' },
+                { name: 'type', type: 'text' },
+              ],
+            },
+          ],
+        },
+        {
+          name: 'relief',
+          type: 'group',
+          fields: [
+            {
+              name: 'dismissalBasis',
+              type: 'select',
+              options: [
+                { label: '§ 1203.4 — probation granted', value: '1203.4' },
+                { label: '§ 1203.4a — non-probation misdemeanor/infraction', value: '1203.4a' },
+                { label: '§ 1203.41 — felony jail/prison', value: '1203.41' },
+                { label: '§ 1203.42 — pre-realignment felony prison', value: '1203.42' },
+                { label: '§ 1203.49 — § 647(b) trafficking victim', value: '1203.49' },
+              ],
+            },
+            { name: 'felonyReductionRequested', type: 'checkbox', defaultValue: false },
+          ],
+        },
+        { name: 'savedBy', type: 'text', admin: { readOnly: true } },
+        { name: 'savedAt', type: 'date', admin: { readOnly: true, date: { pickerAppearance: 'dayAndTime' } } },
+      ],
+    },
+    {
+      name: 'validation',
+      type: 'group',
+      admin: {
+        readOnly: true,
+        description: 'Last validation result for the official intake. Reasons are non-PII strings only.',
+        condition: (data) => data?.templateKey === 'official_ca_dismissal_packet',
+      },
+      fields: [
+        { name: 'ok', type: 'checkbox', defaultValue: false },
+        {
+          name: 'reasons',
+          type: 'array',
+          fields: [{ name: 'reason', type: 'text' }],
+        },
+        { name: 'checkedAt', type: 'date', admin: { date: { pickerAppearance: 'dayAndTime' } } },
+      ],
+    },
+    {
       name: 'generatedFile',
       type: 'upload',
       relationTo: 'media',
       admin: {
         description: 'Generated PDF packet (admin-gated storage). No public download route exists yet.',
       },
+    },
+    {
+      name: 'generatedArtifact',
+      type: 'group',
+      admin: {
+        readOnly: true,
+        description: 'Non-PII metadata about the most recently generated packet artifact.',
+      },
+      fields: [
+        { name: 'fileName', type: 'text' },
+        { name: 'byteSize', type: 'number' },
+        { name: 'sample', type: 'checkbox', defaultValue: false },
+        { name: 'generatedAt', type: 'date', admin: { date: { pickerAppearance: 'dayAndTime' } } },
+      ],
     },
     {
       name: 'downloadToken',

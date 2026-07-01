@@ -44,13 +44,29 @@ export function generatePackage(
   return core.generatePackage(payload, args);
 }
 
+// Persists staff-reviewed official intake on a package and records the latest validation
+// outcome (non-PII reasons). Does not change status or generate; lets staff iterate on the
+// form before approving/generating. Returns the validation result for the UI checklist.
+export function saveOfficialIntake(
+  payload: Payload,
+  args: { id: string | number; actor?: string; intake: OfficialIntake },
+): Promise<{ validation: { ok: boolean; reasons: string[] } }> {
+  return core.saveOfficialIntake(payload, args);
+}
+
+// Adapts the collection-stored intake shape (with `caseInfo`) into the canonical
+// OfficialIntake shape used by validation/mapping.
+export function intakeFromStored(stored: unknown): OfficialIntake | undefined {
+  return core.intakeFromStored(stored);
+}
+
 // Generates the official CA dismissal packet (filled CR-180 + draft CR-181) from
 // staff-reviewed intake. Blocked (needs_manual_review / blocked) with non-PII `reasons` if
 // review is not approved or required intake data is missing. `sample: true` watermarks the
 // output SAMPLE / NOT FOR FILING (demos/tests only).
 export function generateOfficialPacket(
   payload: Payload,
-  args: { id: string | number; actor?: string; intake: OfficialIntake; sample?: boolean },
+  args: { id: string | number; actor?: string; intake?: OfficialIntake; sample?: boolean },
 ): Promise<{ status: DocumentStatus; blocked?: boolean; reasons?: string[] }> {
   return core.generateOfficialPacket(payload, args);
 }
