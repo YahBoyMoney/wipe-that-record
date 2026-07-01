@@ -1,8 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getPayload } from 'payload';
 import config from '../../../../payload.config';
+import { authorizeInternal } from '@/app/api/documents/_auth';
 
 export async function POST(req: NextRequest) {
+  // Creates/promotes a superadmin — must never be public. Requires Bearer CRON_SECRET.
+  const unauthorized = authorizeInternal(req);
+  if (unauthorized) return unauthorized;
+
   try {
     console.log('🔄 Initializing admin user...');
     

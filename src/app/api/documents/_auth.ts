@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { isValidBearer } from '@/lib/auth/roles.mjs';
 
 // Internal/admin auth for the document endpoints, mirroring the cron routes
 // (src/app/api/cron/*). Staff drive these via tooling that holds CRON_SECRET; humans
@@ -13,7 +14,7 @@ export function authorizeInternal(request: NextRequest): NextResponse | null {
     );
   }
   const authHeader = request.headers.get('authorization');
-  if (authHeader !== `Bearer ${secret}`) {
+  if (!isValidBearer(authHeader, secret)) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
   return null;

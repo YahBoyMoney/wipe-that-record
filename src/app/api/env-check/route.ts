@@ -1,6 +1,11 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
+import { authorizeInternal } from '@/app/api/documents/_auth'
 
-export async function GET() {
+export async function GET(req: NextRequest) {
+  // Leaks env-var presence and secret prefixes — must never be public. Requires Bearer CRON_SECRET.
+  const unauthorized = authorizeInternal(req)
+  if (unauthorized) return unauthorized
+
   try {
     console.log('🔍 Environment check requested')
     

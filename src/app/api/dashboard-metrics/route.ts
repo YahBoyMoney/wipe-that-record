@@ -1,11 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getPayload } from 'payload';
-import config from '../../../../payload.config';
+import { requireStaff } from '@/app/api/staff/_session';
 
 export async function GET(req: NextRequest) {
+  // Aggregated revenue/lead metrics — staff-only (admin/superadmin).
+  const auth = await requireStaff(req);
+  if ('response' in auth) return auth.response;
+  const { payload } = auth.session;
+
   try {
-    const payload = await getPayload({ config });
-    
+
     // Date calculations
     const now = new Date();
     const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());

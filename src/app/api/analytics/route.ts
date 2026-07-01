@@ -1,13 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getPayload } from 'payload';
-import config from '../../../../payload.config';
+import { requireStaff } from '@/app/api/staff/_session';
 
 export async function GET(req: NextRequest) {
+  // Aggregates over all leads (PII source) — staff-only (admin/superadmin).
+  const auth = await requireStaff(req);
+  if ('response' in auth) return auth.response;
+  const { payload } = auth.session;
+
   try {
     console.log('📊 Fetching comprehensive analytics data...');
-    
-    const payload = await getPayload({ config });
-    
+
     // Get all leads for analysis
     const allLeads = await payload.find({
       collection: 'leads',

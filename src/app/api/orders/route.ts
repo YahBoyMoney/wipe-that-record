@@ -1,9 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getPayload } from 'payload';
-import config from '../../../../payload.config';
+import { requireStaff } from '@/app/api/staff/_session';
 
 // GET /api/orders - list orders with filtering & pagination
 export async function GET(request: NextRequest) {
+  // Returns order + customer PII — staff-only (admin/superadmin).
+  const auth = await requireStaff(request);
+  if ('response' in auth) return auth.response;
+  const { payload } = auth.session;
+
   try {
     const { searchParams } = new URL(request.url);
     const page = parseInt(searchParams.get('page') || '1');
@@ -28,7 +32,6 @@ export async function GET(request: NextRequest) {
       where.status = { equals: status };
     }
 
-    const payload = await getPayload({ config });
     const orders = await payload.find({
       collection: 'orders',
       where: Object.keys(where).length ? where : undefined,

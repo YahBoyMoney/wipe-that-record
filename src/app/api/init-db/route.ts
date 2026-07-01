@@ -1,7 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import payload from 'payload';
+import { authorizeInternal } from '@/app/api/documents/_auth';
 
 export async function POST(req: NextRequest) {
+  // Writes/seeds the database — must never be public. Requires Bearer CRON_SECRET.
+  const unauthorized = authorizeInternal(req);
+  if (unauthorized) return unauthorized;
+
   try {
     console.log('🔍 Initializing database...');
     

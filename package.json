@@ -7,7 +7,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "test": "node --test src/lib/documents/__tests__/",
+    "test": "node --test src/lib/documents/__tests__/ src/lib/auth/__tests__/",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

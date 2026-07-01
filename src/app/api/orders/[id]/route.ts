@@ -1,17 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getPayload } from 'payload';
-import config from '@payload-config';
+import { requireStaff } from '@/app/api/staff/_session';
 
 // PATCH /api/orders/[id] - Update order status and handle actions
 export async function PATCH(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  // Mutates orders — staff-only (admin/superadmin).
+  const auth = await requireStaff(request);
+  if ('response' in auth) return auth.response;
+  const { payload } = auth.session;
+
   try {
     const { id } = await params;
     const { action, status, ...updateData } = await request.json();
-    
-    const payload = await getPayload({ config });
 
     // Map actions to statuses
     let newStatus = status;
@@ -102,9 +104,13 @@ export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  // Returns order + customer PII — staff-only (admin/superadmin).
+  const auth = await requireStaff(request);
+  if ('response' in auth) return auth.response;
+  const { payload } = auth.session;
+
   try {
     const { id } = await params;
-    const payload = await getPayload({ config });
 
     const order = await payload.findByID({
       collection: 'orders',

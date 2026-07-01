@@ -1,14 +1,27 @@
 import { CollectionConfig } from 'payload';
-import { 
-  sendDiyConfirmationEmail, 
-  sendReviewConfirmationEmail, 
-  sendFullServiceConfirmationEmail 
+import {
+  sendDiyConfirmationEmail,
+  sendReviewConfirmationEmail,
+  sendFullServiceConfirmationEmail
 } from '@/lib/email';
+import { isStaffRole, isSuperadmin } from '@/lib/auth/roles.mjs';
 
 const Leads: CollectionConfig = {
   slug: 'leads',
-  admin: { 
-    useAsTitle: 'email', 
+  // Leads hold customer PII (name, email, phone, address, conviction type). Without an
+  // explicit access block Payload falls back to "any authenticated user", which would let
+  // the default `user`/`manager` roles read, edit, and delete every lead through the REST
+  // and GraphQL APIs. Restrict to admin/superadmin, matching Orders/Analytics. Frontend
+  // lead capture goes through the Local API (`/api/lead`, overrideAccess), so `create`
+  // stays open and public capture is unaffected.
+  access: {
+    read: ({ req }) => isStaffRole(req.user?.role),
+    create: () => true,
+    update: ({ req }) => isStaffRole(req.user?.role),
+    delete: ({ req }) => isSuperadmin(req.user?.role),
+  },
+  admin: {
+    useAsTitle: 'email',
     defaultColumns: [
       'first',
       'last', 

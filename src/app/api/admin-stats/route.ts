@@ -1,10 +1,13 @@
-import { NextResponse } from 'next/server';
-import { getPayload } from 'payload';
-import config from '../../../../payload.config';
+import { NextRequest, NextResponse } from 'next/server';
+import { requireStaff } from '@/app/api/staff/_session';
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+  // Aggregated business/customer stats — staff-only (admin/superadmin).
+  const auth = await requireStaff(request);
+  if ('response' in auth) return auth.response;
+  const { payload } = auth.session;
+
   try {
-    const payload = await getPayload({ config });
 
     // Get real product stats
     const products = await payload.find({
