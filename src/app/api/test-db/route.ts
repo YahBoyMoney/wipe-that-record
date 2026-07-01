@@ -1,7 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import payload from 'payload';
+import { authorizeInternal } from '@/app/api/documents/_auth';
 
 export async function GET(req: NextRequest) {
+  // Probes DB connectivity and record counts — must never be public. Requires Bearer CRON_SECRET.
+  const unauthorized = authorizeInternal(req);
+  if (unauthorized) return unauthorized;
+
   try {
     console.log('🔍 Testing database connection...');
     

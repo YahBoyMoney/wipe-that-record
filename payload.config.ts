@@ -184,11 +184,13 @@ export default buildConfig({
   cors: [
     'http://localhost:3000',
     'http://localhost:3001',
-    'https://your-domain.com', // production
+    'https://www.wipethatrecord.com',
+    'https://wipethatrecord.com',
   ],
   csrf: [
     'http://localhost:3000',
     'http://localhost:3001',
-    'https://your-domain.com',
+    'https://www.wipethatrecord.com',
+    'https://wipethatrecord.com',
   ],
 }) 

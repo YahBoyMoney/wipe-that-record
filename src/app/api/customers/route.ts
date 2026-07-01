@@ -1,6 +1,11 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
+import { requireStaff } from '@/app/api/staff/_session';
 
-export async function GET() {
+export async function GET(request: NextRequest) {
+  // Customer directory (names, emails, phones) — staff-only (admin/superadmin).
+  const auth = await requireStaff(request);
+  if ('response' in auth) return auth.response;
+
   try {
     // Mock customer data
     const customers = [

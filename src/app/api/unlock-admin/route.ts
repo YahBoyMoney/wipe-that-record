@@ -1,8 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getPayload } from 'payload';
 import config from '../../../../payload.config';
+import { authorizeInternal } from '@/app/api/documents/_auth';
 
 export async function POST(req: NextRequest) {
+  // Resets admin login-attempt lockout (brute-force protection) — must never be public.
+  // Requires Bearer CRON_SECRET.
+  const unauthorized = authorizeInternal(req);
+  if (unauthorized) return unauthorized;
+
   try {
     const payload = await getPayload({ config });
     

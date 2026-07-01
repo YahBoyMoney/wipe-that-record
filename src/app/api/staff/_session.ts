@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getPayload } from 'payload';
 import config from '@payload-config';
 import type { Payload } from 'payload';
+import { isStaffRole } from '@/lib/auth/roles.mjs';
 
 // Staff-session authorization for the staff dashboard endpoints.
 //
@@ -17,8 +18,6 @@ export interface StaffSession {
   user: { id: string | number; email?: string; role?: string };
   actor: string;
 }
-
-const STAFF_ROLES: StaffRole[] = ['admin', 'superadmin'];
 
 // Resolves and authorizes the staff session. Returns either an error `response` to return
 // immediately, or the authenticated `session`. Errors are intentionally terse (no internal
@@ -44,7 +43,7 @@ export async function requireStaff(
   if (!user) {
     return { response: NextResponse.json({ error: 'Unauthorized' }, { status: 401 }) };
   }
-  if (!STAFF_ROLES.includes(user.role)) {
+  if (!isStaffRole(user.role)) {
     return { response: NextResponse.json({ error: 'Forbidden' }, { status: 403 }) };
   }
 
