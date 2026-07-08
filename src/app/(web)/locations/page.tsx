@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
+import { LocalCourthouses } from '@/components/LocalCourthouses';
 
 export const metadata: Metadata = {
   title: 'California Service Areas | Wipe That Record',
@@ -46,6 +47,8 @@ export default function LocationsPage() {
           </Link>
         </div>
       </section>
+
+      <LocalCourthouses sourcePage="/locations" />
 
       <section className="py-16">
         <div className="mx-auto max-w-5xl px-4 sm:px-6">
